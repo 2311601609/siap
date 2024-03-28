@@ -1,0 +1,244 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">Profil</div>
+        </div>
+    </div>
+	
+	<div class="row" id="div-form">
+	    <div class="col-12">
+	        <div class="card">
+	            <div class="card-header">
+	                <h4 class="card-title mb-0" id="horz-layout-basic">Form</h4>
+	            </div>
+	            <div class="card-body">
+
+	                <div class="px-3">
+
+	                    <form id="form-ruh" class="form form-horizontal">
+	                    	<input type="hidden" id="inp-rekambaru" name="inp-rekambaru">
+							<input type="hidden" id="inp-id" name="inp-id">
+							<input type="hidden" id="_token" name="_token">
+
+							<div class="row">
+								<div class="col-md-6">
+
+									<fieldset class="form-group">
+										<label for="username">Username</label>
+										<input type="text" id="username" name="username" class="form-control" maxlength="255">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nama">Nama</label>
+										<input type="text" id="nama" name="nama" class="form-control" maxlength="255">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nik">NIK</label>
+										<input type="text" id="nik" name="nik" class="form-control val_num" maxlength="18">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="email">Email</label>
+										<input type="text" id="email" name="email" class="form-control" maxlength="255">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="fileupload1">Foto (*png|jpg max 2MB)</label>
+										<div id="div-image"></div>
+	                            		<span class="btn btn-primary fileinput-button">
+											<i class="fa fa-upload"></i>
+											<span>Browse File</span>
+											<input id="fileupload1" type="file" name="file">
+										</span>
+										<!-- The global progress bar -->
+										<div id="progress1" class="progress">
+											<div class="progress-bar progress-bar-danger"></div>
+										</div>
+										<div id="nmfile1" class="files"></div>
+									</fieldset>
+
+								</div>
+								<div class="col-md-6">
+
+									<fieldset class="form-group">
+										<label for="kdlevel">Kewenangan</label>
+										<select id="kdlevel" name="kdlevel" class="form-control chosen"></select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="kdunit">Unit</label>
+										<select id="kdunit" name="kdunit" class="form-control chosen"></select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="tahun">Tahun Anggaran</label>
+										<select id="tahun" name="tahun" class="form-control chosen"></select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="password">Password Lama</label>
+										<input type="password" id="password" name="password" class="form-control" maxlength="255">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="password1">Password Baru</label>
+										<input type="password" id="password1" name="password1" class="form-control" maxlength="255">
+									</fieldset>
+
+								</div>
+							</div>
+	                    </form>
+	                </div>
+	            </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2 batal">
+						<i class="ft-x m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Batal</span>
+					</button>
+					<button type="button" class="btn-send btn btn-primary" id="simpan">
+						<i class="ft-send m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Simpan</span>
+					</button>
+				</div>
+	        </div>
+	    </div>
+	</div>
+	
+</section>
+
+<script>
+	jQuery(document).ready(function(){
+	
+		var route = 'profile';
+	
+		jQuery('.chosen').select2();
+
+		//validasi isian form
+		function form_valid(str_id){
+			var arr_id = str_id.split(',');
+			var next = true;
+			for(x = 0; x < arr_id.length; x++){
+				if(jQuery('#'+arr_id[x]).val()==''){
+					jQuery('#'+arr_id[x]).addClass('is-invalid');
+					next = false;
+				}
+			}
+			return next;
+		}
+		
+		//tampilan default
+		function form_default() {
+			jQuery('input,textarea,select').val('');
+			jQuery('.warning').hide();
+			jQuery('#div-tabel').show();
+			jQuery('#simpan,#username').prop('disabled', false);
+			jQuery('.chosen').trigger('change');
+			jQuery('#div-image').html('');
+			jQuery.getJSON(route, function(result){
+				if(result.error==false) {
+					$('#username').val(result.message.username);
+					$('#nama').val(result.message.nama);
+					$('#nik').val(result.message.nik);
+					$('#email').val(result.message.email);
+					$('#aktif').val(result.message.aktif);
+					$('#kdlevel').html(result.kdlevel);
+					$('#kdunit').html(result.kdunit);
+					$('#tahun').html(result.tahun);
+					if(result.message.foto){
+                        jQuery('#div-image').html('<p><img src="data/user/'+result.message.foto+'" class="img-rounded img-responsive" style="width:100%;max-width:120px;"></p>');
+                    } else {
+                        jQuery('#div-image').html('-');
+                    }
+					$('.chosen').trigger('change');
+					$('#username').prop('disabled', true);
+				}
+				else{
+					alertify.log(result.message);
+				}
+			});
+		}
+		
+		form_default();
+
+		jQuery('#fileupload1').click(function(){
+			jQuery('#progress1 .progress-bar').css('width', 0);
+			jQuery('#progress1 .progress-bar').html('');
+			jQuery('#nmfile1').html('');
+		});
+		
+		jQuery.get('token', function(result){
+			$('#fileupload1').fileupload({
+				url:route+'/upload',
+				dataType: 'json',
+				formData:{
+					_token: result
+				},
+				done: function (e, data) {
+					jQuery('#nmfile1').html(data.files[0].name);
+					alertify.log('Data berhasil diupload!');
+				},
+				error: function(error) {
+					alertify.log(error.responseText);
+				},
+				progressall: function (e, data) {
+					var progress = parseInt(data.loaded / data.total * 100, 10);
+					jQuery('#progress1 .progress-bar').css('width',progress + '%');
+				}
+			}).prop('disabled', !$.support.fileInput)
+			  .parent().addClass($.support.fileInput ? undefined : 'disabled');
+		});
+
+		//klik batal
+		jQuery('.batal').click(function(){
+			form_default();
+		});
+		
+		//klik simpan
+		jQuery('#simpan').click(function(){
+			jQuery(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
+			jQuery(this).prop('disabled',true);
+			var next = form_valid('username,nama,email,nik');
+			if(next==true){
+				jQuery.get('token', function(token){
+					if(token){
+						jQuery('#_token').val(token);
+						var data = jQuery('#form-ruh').serialize();
+						jQuery.ajax({
+							url: route,
+							method: 'POST',
+							data: data,
+							success: function(result){
+								jQuery('#simpan').html('<i class="ft-send m-0 mr-sm-1"></i><span class="d-sm-inline-block d-none">Simpan</span>');
+								jQuery('#simpan').prop('disabled',false);
+								if(result=='success') {
+									alertify.log('Proses simpan berhasil');
+									location.reload();
+								} else {
+									alertify.log(result);
+								} 
+							},
+							error: function(result){
+								jQuery('#simpan').html('<i class="ft-send m-0 mr-sm-1"></i><span class="d-sm-inline-block d-none">Simpan</span>');
+								jQuery('#simpan').prop('disabled',false);
+								alertify.log('Data tidak dapat disimpan. Hubungi Admin!');
+							}
+						});
+					} 
+					else{
+						jQuery('#simpan').html('<i class="ft-send m-0 mr-sm-1"></i><span class="d-sm-inline-block d-none">Simpan</span>');
+						jQuery('#simpan').prop('disabled',false);
+						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
+					}
+				});
+			}
+			else{
+				jQuery('#simpan').html('<i class="ft-send m-0 mr-sm-1"></i><span class="d-sm-inline-block d-none">Simpan</span>');
+				jQuery('#simpan').prop('disabled',false);
+				alertify.log('Data tidak dapat dikosongkan!');
+			}
+		});
+		
+	});
+	
+</script>

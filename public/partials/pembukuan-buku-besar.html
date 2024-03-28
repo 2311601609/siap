@@ -1,0 +1,156 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">Pembukuan/ Buku Besar</div>
+        </div>
+    </div>
+	
+	<div class="row" id="div-form">
+	    <div class="col-md-12">
+	        <div class="card">
+	            <div class="card-header">
+	                <h4 class="card-title" id="horz-layout-basic">Form</h4>
+	            </div>
+	            <div class="card-body">
+	                <div class="px-3">
+	                    <form id="form-ruh" class="form form-horizontal">
+	                    	<input type="hidden" id="inp-rekambaru" name="inp-rekambaru">
+							<input type="hidden" id="inp-id" name="inp-id">
+							<input type="hidden" id="_token" name="_token">
+
+							<div class="row">
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="kdakun">Akun/ COA</label>
+										<select id="kdakun" name="kdakun" class="form-control chosen">
+										</select>
+									</fieldset>
+								</div>
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="periode">Periode</label>
+										<select id="periode" name="periode" class="form-control chosen">
+										</select>
+									</fieldset>
+								</div>
+							</div>
+							
+	                    </form>
+	                </div>
+	            </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button type="button" class="btn-send btn btn-primary" id="simpan">
+						<i class="ft-eye m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Cari</span>
+					</button>
+				</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<div class="row" id="div-tabel" style="display:none;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Data Buku Besar</h4>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard">
+                        <div class="table-responsive">
+							<table id="tabel-ruh" class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>No</th>
+										<th>Periode</th>
+										<th>Debet</th>
+										<th>Kredit</th>
+										<th>Saldo</th>
+										<th>Tgl.Posting</th>
+									</tr>
+								</thead>
+								<tbody id="tabel-data">
+								</tbody>
+							</table>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	jQuery(document).ready(function(){
+		
+		//aktivasi chosen
+		jQuery('.chosen').select2();
+		
+		jQuery.get('dropdown/periode', function(result){
+			jQuery('#periode').html(result).trigger('change');
+		});
+		
+		jQuery.get('dropdown/akun/html/all', function(result){
+			jQuery('#kdakun').html(result).trigger('change');
+		});
+		
+		//tampilan default
+		function form_default() {
+			jQuery('input,select').val('');
+			jQuery('.warning, #div-tabel').hide();
+			jQuery('#div-form').show();
+			jQuery('.chosen').trigger('change');
+		}
+		
+		//aktivasi tampilan default
+		form_default();
+		
+		//validasi isian form
+		function form_valid(str_id){
+			var arr_id = str_id.split(',');
+			var next = true;
+			for(x = 0; x < arr_id.length; x++){
+				if(jQuery('#'+arr_id[x]).val()==''){
+					jQuery('#'+arr_id[x]).addClass('is-invalid');
+					next = false;
+				}
+			}
+			return next;
+		}
+		
+		//klik simpan
+		jQuery('#simpan').click(function(){
+			jQuery(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
+			jQuery(this).prop('disabled',true);
+			var next = form_valid('kdakun');
+			if(next==true){
+				
+				jQuery('#tabel-data').html('Sedang proses.....');
+				jQuery.get('pembukuan/posting/buku-besar?kdakun='+jQuery('#kdakun').val()+'&periode='+jQuery('#periode').val(), function(result){
+					jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Cari');
+					jQuery('#simpan').prop('disabled',false);
+					jQuery('#tabel-data').html(result);
+					jQuery('#div-tabel').show();
+				});
+				
+			}
+			else{
+				jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Cari');
+				jQuery('#simpan').prop('disabled',false);
+				alertify.log('Data tidak dapat dikosongkan!');
+			}
+		});
+		
+	});
+	
+</script>

@@ -1,0 +1,148 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">Pembukuan/ Neraca Percobaan</div>
+        </div>
+    </div>
+	
+	<div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Form Pencarian</h4>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard">
+					
+						<form id="form-ruh" class="form form-horizontal">
+							<input type="hidden" id="_token" name="_token">
+
+							<div class="row">
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="tgawal">Periode dari</label>
+										<input type="date" id="tgawal" name="tgawal" class="form-control">
+									</fieldset>
+								</div>
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="tgakhir">Periode ke</label>
+										<input type="date" id="tgakhir" name="tgakhir" class="form-control">
+									</fieldset>
+								</div>
+							</div>
+
+						</form>
+					
+                    </div>
+                </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button id="cari" type="button" class="btn bg-light-secondary compose-cancel-btn mr-2 batal">
+						<i class="ft-eye m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Tampilkan</span>
+					</button>
+					<button id="download" type="button" class="btn-send btn btn-primary" id="simpan">
+						<i class="ft-download m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Excel</span>
+					</button>
+				</div>
+            </div>
+        </div>
+    </div>
+
+	<div class="row" id="div-tabel" style="display:none;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Hasil Pencarian</h4>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard">
+					
+						<div class="table-responsive">
+							<table class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>Akun</th>
+										<th>Uraian</th>
+										<th>Debet</th>
+										<th>Kredit</th>
+									</tr>
+								</thead>
+								<tbody id="tabel-ruh">
+									<tr>
+										<td colspan="4">Sedang proses......</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="2" style="text-align:center;">Total</td>
+										<td id="total-debet" style="text-align:right;">0</td>
+										<td id="total-kredit" style="text-align:right;">0</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+					
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	jQuery(document).ready(function(){
+		
+		jQuery('#cari').click(function(){
+			
+			jQuery('#div-tabel').show();
+			jQuery('#tabel-ruh').html('<td colspan="4">Sedang proses......</td>');
+			
+			var tgawal = 'xxx';
+			if($('#tgawal').val()!==''){
+				tgawal = $('#tgawal').val();
+			}
+			var tgakhir = 'xxx';
+			if($('#tgakhir').val()!==''){
+				tgakhir = $('#tgakhir').val();
+			}
+			
+			jQuery.getJSON('pembukuan/jurnal/'+tgawal+'/'+tgakhir, function(result){
+				jQuery('#tabel-ruh').html(result.data);
+				jQuery('#total-debet').html(result.total_debet);
+				jQuery('#total-kredit').html(result.total_kredit);
+			});
+		
+		});
+		
+		jQuery('#download').click(function(){
+			
+			var tgawal = 'xxx';
+			if($('#tgawal').val()!==''){
+				tgawal = $('#tgawal').val();
+			}
+			var tgakhir = 'xxx';
+			if($('#tgakhir').val()!==''){
+				tgakhir = $('#tgakhir').val();
+			}
+			
+			window.open('pembukuan/jurnal/'+tgawal+'/'+tgakhir+'/excel', '_blank');
+		
+		});
+		
+	});
+</script>

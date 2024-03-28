@@ -1,0 +1,103 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">Monitoring/ Realisasi Pendapatan</div>
+        </div>
+    </div>
+	
+	<div class="row">
+        <div class="col-5">
+            <div class="card">
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard">
+						<div id="grafik1" style="height:250px;">Loading....</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="col-7">
+            <div class="card">
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard">
+						<div id="grafik2" style="height:250px;">Loading....</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+	<div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard">
+						
+						<table id="tabel-ruh" class="table">
+							<thead>
+								<tr>
+									<th>No</th>
+									<th>Unit/ Divisi</th>
+									<th>Target</th>
+									<th>Realisasi</th>
+								</tr>
+							</thead>
+							<tbody id="tabel-ruh-body">
+							</tbody>
+							<tfoot style="background-color:#fdc900;">
+								<tr style="color:black !important;">
+									<td colspan="2" style="text-align:center;">Total</td>
+									<td id="total1" style="text-align:right;"></td>
+									<td id="total2" style="text-align:right;"></td>
+								</tr>
+							</tfoot>
+						</table>
+						
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	jQuery(document).ready(function(){
+	
+		//tabel init
+		function init(param){
+			jQuery('#tabel-ruh-body').html('Loading....');
+			jQuery('#total1,#total2').html('');
+			jQuery.getJSON('monitoring/realisasi/pendapatan/'+param, function(result){
+				if(result.data){
+					
+					//isi tabel
+					jQuery('#tabel-ruh-body').html(result.data);
+					jQuery('#total1').html(result.total1);
+					jQuery('#total2').html(result.total2);
+					
+					//isi grafik1
+					jQuery('#grafik1').html(result.grafik1);
+					
+					//isi grafik2
+					jQuery('#grafik2').html(result.grafik2);
+					
+				}
+				else{
+					jQuery('#tabel-ruh-body,#grafik1,#grafik2').html('Koneksi terputus...');
+				}
+			});
+		}
+		
+		//panggil function
+		init('xxx');
+		
+	});
+</script>

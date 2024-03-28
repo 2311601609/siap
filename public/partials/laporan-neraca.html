@@ -1,0 +1,112 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="content-header">Laporan/ Neraca</div>
+		</div>
+	</div>
+
+	<div class="row" id="div-form">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<h4 class="card-title" id="horz-layout-basic">Form</h4>
+				</div>
+				<div class="card-body">
+					<div class="px-3">
+						<form id="form-ruh" class="form form-horizontal">
+							<input type="hidden" id="_token" name="_token">
+
+							<div class="row">
+								<div class="col-md-12">
+									<fieldset class="form-group">
+										<label for="periode">Periode</label>
+										<select class="form-control chosen" id="periode" name="periode">
+											<option value="" style="display:none;">Pilih</option>
+										</select>
+									</fieldset>
+								</div>
+							</div>
+
+						</form>
+					</div>
+				</div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2 batal">
+						<i class="ft-x m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Batal</span>
+					</button>
+					<button type="button" class="btn-send btn btn-primary" id="proses">
+						<i class="ft-send m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Proses</span>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	jQuery(document).ready(function(){
+		//aktivasi chosen
+		jQuery('.chosen').select2();
+
+		//default tampilan
+		function form_default() {
+			jQuery('select').val('');
+			jQuery('.warning').hide();
+			jQuery('.chosen').trigger('change');
+			jQuery('#proses').prop('disabled', true);
+		};
+
+		//validasi isian form
+		function form_valid(str_id){
+			var arr_id = str_id.split(',');
+			var next = true;
+			for(x = 0; x < arr_id.length; x++){
+				if(jQuery('#'+arr_id[x]).val()==''){
+					jQuery('#'+arr_id[x]).addClass('is-invalid');
+					next = false;
+				}
+			}
+			return next;
+		}
+
+		jQuery.get('dropdown/periode', function(result){
+			jQuery('#periode').html(result).trigger('change');
+		});
+
+		form_default();
+
+		jQuery('#batal').click(function(){
+			form_default();
+		});
+
+		jQuery('#periode').on('select2:select', function(){
+			if(jQuery(this).val()!='') {
+				jQuery('#proses').prop('disabled', false);
+			} else {
+				jQuery('#proses').prop('disabled', true);
+			} 
+		});
+
+		jQuery('#proses').click(function(){
+			var lanjut = form_valid('periode');
+			var periode = jQuery('#periode').val();
+			
+			if(lanjut==true){
+				//~ jQuery.get('laporan/rkey?periode='+periode, function(rkey){
+					form_default();
+					//~ window.open('laporan/neraca?periode='+periode+'&rkey='+rkey, '_blank');
+					window.open('laporan/neraca?periode='+periode, '_blank');
+				//~ });
+			} 
+		});
+	});
+</script>
