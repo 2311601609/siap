@@ -1,0 +1,178 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">Pembukuan/ Neraca Lajur</div>
+        </div>
+    </div>
+	
+	<div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Form</h4>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard">
+                        
+						<form id="form-ruh" class="form form-horizontal">
+							<input type="hidden" id="_token" name="_token">
+
+							<div class="row">
+								<div class="col-md-12">
+									<fieldset class="form-group">
+										<label for="periode">Periode</label>
+										<select id="periode" name="periode" class="form-control chosen">
+										</select>
+									</fieldset>
+								</div>
+							</div>
+
+						</form>
+
+                    </div>
+                </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button type="button" class="btn-send btn btn-primary" id="download">
+						<i class="ft-download m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Excel</span>
+					</button>
+				</div>
+            </div>
+        </div>
+    </div>
+
+	<div class="row" id="div-tabel" style="display:none;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Data</h4>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard">
+                        <div class="table-responsive">
+							<table class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th rowspan="2">Akun</th>
+										<th rowspan="2">Uraian</th>
+										<th colspan="2">Neraca Disesuaikan</th>
+										<th colspan="3">Neraca Lajur</th>
+										<th colspan="2">Laporan Rugi Laba</th>
+									</tr>
+									<tr>
+										<th>Debet</th>
+										<th>Kredit</th>
+										<th>Debet</th>
+										<th>Kredit</th>
+										<th>Saldo</th>
+										<th>Debet</th>
+										<th>Kredit</th>
+									</tr>
+								</thead>
+								<tbody id="tabel-ruh">
+									<tr>
+										<td colspan="9">Sedang proses......</td>
+									</tr>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="2" style="text-align:center;">Total</td>
+										<td id="total-debet" style="text-align:right;">0</td>
+										<td id="total-kredit" style="text-align:right;">0</td>
+										<td id="total-debet1" style="text-align:right;">0</td>
+										<td id="total-kredit1" style="text-align:right;">0</td>
+										<td id="total-saldo" style="text-align:right;">0</td>
+										<td id="total-debet2" style="text-align:right;">0</td>
+										<td id="total-kredit2" style="text-align:right;">0</td>
+									</tr>
+									<tr>
+										<td colspan="2" style="text-align:center;">Laba/Rugi</td>
+										<td></td>
+										<td></td>
+										<td id="total-debet3" style="text-align:right;">0</td>
+										<td id="total-kredit3" style="text-align:right;">0</td>
+										<td></td>
+										<td id="total-debet4" style="text-align:right;">0</td>
+										<td id="total-kredit4" style="text-align:right;">0</td>
+									</tr>
+									<tr>
+										<td colspan="2" style="text-align:center;">Total Neraca dan Laba/Rugi</td>
+										<td></td>
+										<td></td>
+										<td id="total-debet5" style="text-align:right;">0</td>
+										<td id="total-kredit5" style="text-align:right;">0</td>
+										<td></td>
+										<td id="total-debet6" style="text-align:right;">0</td>
+										<td id="total-kredit6" style="text-align:right;">0</td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	jQuery(document).ready(function(){
+		
+		jQuery('.chosen').select2();
+		
+		jQuery.get('dropdown/periode', function(result){
+			jQuery('#periode').html(result).trigger('change');
+		});
+		
+		jQuery('#periode').on('select2:select', function(){
+			
+			var periode = jQuery(this).val();
+			
+			jQuery('#div-tabel').show();
+			jQuery('#tabel-ruh').html('<td colspan="8">Sedang proses......</td>');
+			
+			jQuery.getJSON('pembukuan/neraca-lajur/'+periode, function(result){
+				jQuery('#tabel-ruh').html(result.data);
+				jQuery('#total-debet').html(result.total_debet);
+				jQuery('#total-kredit').html(result.total_kredit);
+				jQuery('#total-debet1').html(result.total_debet1);
+				jQuery('#total-kredit1').html(result.total_kredit1);
+				jQuery('#total-debet2').html(result.total_debet2);
+				jQuery('#total-kredit2').html(result.total_kredit2);
+				jQuery('#total-debet3').html(result.total_debet3);
+				jQuery('#total-kredit3').html(result.total_kredit3);
+				jQuery('#total-debet4').html(result.total_debet4);
+				jQuery('#total-kredit4').html(result.total_kredit4);
+				jQuery('#total-debet5').html(result.total_debet5);
+				jQuery('#total-kredit5').html(result.total_kredit5);
+				jQuery('#total-debet6').html(result.total_debet6);
+				jQuery('#total-kredit6').html(result.total_kredit6);
+				jQuery('#total-saldo').html(result.total_saldo);
+			});
+			
+		});
+		
+		jQuery('#download').click(function(){
+			
+			if($('#periode').val()!==''){
+				var periode = $('#periode').val();
+				window.open('pembukuan/neraca-lajur/'+periode+'/excel', '_blank');
+			}			
+		
+		});
+		
+	});
+</script>

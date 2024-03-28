@@ -1,0 +1,584 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">BUK/ Hitung Pajak</div>
+        </div>
+    </div>
+	
+	<div class="row" id="div-form">
+	    <div class="col-md-12">
+	        <div class="card">
+	            <div class="card-header">
+	                <h4 class="card-title" id="horz-layout-basic">Form</h4>
+	            </div>
+	            <div class="card-body">
+	                <div class="px-3">
+	                    <form id="form-ruh" class="form form-horizontal">
+	                    	<input type="hidden" id="inp-rekambaru" name="inp-rekambaru">
+							<input type="hidden" id="inp-id" name="inp-id">
+							<input type="hidden" id="_token" name="_token">
+							<input type="hidden" id="id_alur" name="id_alur">
+							<input type="hidden" id="status" name="status">
+							<input type="hidden" id="x" name="x">
+							<input type="hidden" id="inp-akun">
+							<input type="hidden" id="kdakun_d" name="kdakun_d">
+							<input type="hidden" id="kdakun_k" name="kdakun_k">
+
+							<div class="row">
+								<div class="col-md-6">
+
+									<fieldset class="form-group">
+										<label for="nourut">Nomor Transaksi</label>
+										<input type="text" id="nourut" name="nourut" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="tgrekam">Tanggal Rekam</label>
+										<input type="date" id="tgrekam" name="tgrekam" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nmsdana">Sumber Dana</label>
+										<input id="nmsdana" name="nmsdana" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nmunit">Divisi/ Unit</label>
+										<input id="nmunit" name="nmunit" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nmproyek">Proyek</label>
+										<input id="nmproyek" name="nmproyek" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nmpelanggan">Penerima</label>
+										<input id="nmpelanggan" name="nmpelanggan" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nmalur">Jenis Kegiatan</label>
+										<input id="nmalur" name="nmalur" class="form-control" readonly>
+									</fieldset>
+								</div>
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="nmtrans">Jenis Pembayaran</label>
+										<input id="nmtrans" name="nmtrans" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nmtrans_dtl">Jenis Transaksi</label>
+										<input id="nmtrans_dtl" name="nmtrans_dtl" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="debet">Jenis Pengeluaran</label>
+										<input id="debet" name="debet" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nopks">Nomor Bukti</label>
+										<input type="text" id="nopks" name="nopks" class="form-control" maxlength="255" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="tgpks">Tanggal Bukti</label>
+										<input type="date" id="tgpks" name="tgpks" class="form-control" maxlength="10" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="tgjtempo">Tanggal Bayar</label>
+										<input type="date" id="tgjtempo" name="tgjtempo" class="form-control" maxlength="10" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="uraian">Uraian/ Keterangan</label>
+										<textarea id="uraian" name="uraian" class="form-control" maxlength="255" readonly></textarea>
+									</fieldset>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="nilai">Nilai</label>
+										<input type="text" id="nilai" name="nilai" class="form-control val_num" style="text-align:right;" maxlength="19" readonly>
+									</fieldset>
+								</div>
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="total">Total</label>
+										<div class="input-group">
+											<input type="text" id="total" name="total" class="form-control val_num" style="text-align:right;" maxlength="19" readonly>
+											<div class="input-group-append">
+												<button type="button" class="btn btn-danger" id="hitung-total">Hitung Total</button>
+											</div>
+										</div>
+									</fieldset>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-10">
+									<fieldset class="form-group">
+										<label>Pajak/ Biaya Lainnya</label>
+										<div class="col-md-12 table-responsive">
+											<table class="table table-bordered">
+												<thead>
+													<tr>
+														<th style="width:60%;">Jenis</th>
+														<th style="width:30%;">Nilai</th>
+														<th style="width:5%;">Des</th>
+														<th style="width:5%;">Hapus</th>
+													</tr>
+												</thead>
+												<tbody id="tabel-rincian">
+													
+												</tbody>
+											</table>
+										</div>
+									</fieldset>
+								</div>
+								<div class="col-md-2">
+									<fieldset class="form-group">
+										<label></label>
+										<br>
+										<button type="button" class="btn btn-primary mr-2" id="tambah-detil">
+											<span class="d-flex align-items-center">
+												<i class="ft-plus mr-1"></i>
+												<span>Tambah Rincian</span>
+											</span>
+										</button>
+									</fieldset>
+								</div>
+							</div>
+	                    </form>
+	                </div>
+	            </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2 batal">
+						<i class="ft-x m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Batal</span>
+					</button>
+					<button type="button" class="btn-send btn btn-primary" id="simpan">
+						<i class="ft-send m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Simpan</span>
+					</button>
+				</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<div class="row" id="div-tabel">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Data</h4>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard">
+                        <div class="table-responsive">
+							<table id="tabel-ruh" class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>No</th>
+										<th>No.Trans</th>
+										<th>Divisi</th>
+										<th>Pelanggan</th>
+										<th>Transaksi</th>
+										<th>Nilai</th>
+										<th>Pajak</th>
+										<th>Total</th>
+										<th>Aksi</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	jQuery(document).ready(function(){
+	
+		jQuery.fn.dataTable.ext.errMode = 'none';
+			
+		function digit_grouping(nStr){
+			nStr += '';
+			x = nStr.split('.');
+			x1 = x[0];
+			x2 = x.length > 1 ? '.' + x[1] : '';
+			var rgx = /(\d+)(\d{3})/;
+			while (rgx.test(x1)) {
+				x1 = x1.replace(rgx, '$1' + ',' + '$2');
+			}
+			return x1 + x2;
+		}
+		
+		function numberWithCommas(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+		
+		jQuery('.val_num').mask('000,000,000,000,000', {reverse: true});
+		
+		//aktivasi chosen
+		jQuery('.chosen').select2();
+		
+		//tampilan default
+		function form_default() {
+			jQuery('input,textarea,select').val('');
+			jQuery('.warning, #div-form').hide();
+			jQuery('#div-tabel').show();
+			jQuery('.chosen').trigger('change');
+			jQuery('#simpan').prop('disabled', false);
+			jQuery.getJSON('dropdown/akun-pajak/json', function(result){
+				var akun='<option value="" style="display:none;">Pilih Akun</option>';
+				jQuery.each(result, function(i,field){
+					akun+='<option value="'+field.kdakun+'|'+field.kddk+'|'+field.nilai+'">'+field.kdakun+' - '+field.nmakun+'</option>';
+				});
+				jQuery('#inp-akun').val(akun);
+			});
+		}
+		
+		//aktivasi tampilan default
+		form_default();
+		
+		//data tabel
+		var table=jQuery('#tabel-ruh').DataTable({
+			bProcessing:true,
+			language:{
+			    "decimal":        "",
+			    "emptyTable":     "Tidak ada data tersedia",
+			    "info":           "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+			    "infoEmpty":      "Menampilkan 0 sampai 0 dari 0 entri",
+			    "infoFiltered":   "(disaring dari _MAX_ total entri)",
+			    "infoPostFix":    "",
+			    "thousands":      ",",
+			    "lengthMenu":     "Tampilkan _MENU_ entri",
+			    "loadingRecords": "Proses Loading...",
+			    "processing":     "Sedang Proses...",
+			    "search":         "Cari:",
+			    "zeroRecords":    "Tidak ditemukan data yang sesuai",
+			    "paginate": {
+			        "first":      "Awal",
+			        "last":       "Akhir",
+			        "next":       "Sesudah",
+			        "previous":   "Sebelum"
+			    },
+			    "aria": {
+			        "sortAscending":  ": aktifkan untuk mengurutkan kolom (asc)",
+			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
+			    }
+			},
+			"columns": [
+				{},
+				{},
+				{},
+				{},
+				{},
+				{},
+				{},
+				{},
+				{}
+			],
+			bServerSide: true,
+			ajax:{
+				url: "pengeluaran/pajak", // Change this URL to where your json data comes from
+				type: "GET"
+			},
+			fnCreatedRow: function( nRow, aData, iDataIndex ) {
+				jQuery(nRow).attr('id', aData[0]);
+			}
+		});
+		
+		//validasi isian form
+		function form_valid(str_id){
+			var arr_id = str_id.split(',');
+			var next = true;
+			for(x = 0; x < arr_id.length; x++){
+				if(jQuery('#'+arr_id[x]).val()==''){
+					jQuery('#'+arr_id[x]).addClass('is-invalid');
+					next = false;
+				}
+			}
+			return next;
+		}
+		
+		//cari data user yang akan di edit berdasarkan id user
+		function cari_data(id){
+			jQuery('.chosen').val('').trigger('change');
+			jQuery.getJSON('pengeluaran/pajak/pilih/'+id, function(result){
+				if(result.error==false) {
+					jQuery('#inp-id').val(id);
+					jQuery('#inp-rekambaru').val('0');
+					jQuery('#x').val(result.x);
+					
+					jQuery('#tabel-rincian').html('');
+					jQuery.each(result.akun, function(x,row){
+						jQuery('#tabel-rincian').append(
+							'<tr id="tr-'+x+'">'+
+								'<td>'+
+									'<select id="chosen-'+x+'" class="form-control akun" name="rincian['+x+'][\'kdakun\']">'+
+										jQuery('#inp-akun').val()+
+									'</select>'+
+								'</td>'+
+								'<td><input id="nilai-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai\']" class="val_num" value="'+digit_grouping(row.nilai)+'"></td>'+
+								'<td><input id="nilai_des-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai_des\']" class="val_num" maxlength="2" value="00"></td>'+
+								'<td>'+
+									'<center><a href="javascript:;" id="'+x+'" class="btn btn-sm btn-danger hapus-detil"><i class="fa fa-minus"></i></a></center>'+
+								'</td>'+
+							'</tr>'
+						);
+						jQuery('#chosen-'+x).val(row.kdakun+'|'+row.kddk+'|'+row.nilai1);
+						jQuery('#chosen-'+x).select2({width:'100%'});
+						jQuery('.val_num').mask('000,000,000,000,000', {reverse: true});
+					});
+					
+					jQuery('#nmunit').val(result.message.nmunit);
+					jQuery('#id_alur').val(result.message.id_alur);
+					jQuery('#nourut').val(result.message.nourut);
+					jQuery('#status').val(result.message.status);
+					jQuery('#nmunit').val(result.message.nmunit);
+					jQuery('#nmalur').val(result.message.nmalur);
+					jQuery('#kdakun_d').val(result.message.kdakun_d);
+					jQuery('#kdakun_k').val(result.message.kdakun_k);
+					jQuery('#debet').val(result.message.debet);
+					jQuery('#kredit').val(result.message.kredit);
+					jQuery('#nmtrans').val(result.message.nmtrans);
+					jQuery('#nmtrans_dtl').val(result.message.nmtrans_dtl);
+					jQuery('#nmpelanggan').val(result.message.nmpelanggan);
+					jQuery('#nopks').val(result.message.nopks);
+					jQuery('#tgpks').val(result.message.tgpks);
+					jQuery('#tgjtempo').val(result.message.tgjtempo);
+					jQuery('#uraian').val(result.message.uraian);
+					jQuery('#nilai').val(digit_grouping(result.message.nilai));
+					jQuery('#ppn').val(digit_grouping(result.message.ppn));
+					jQuery('#pph21').val(digit_grouping(result.message.pph21));
+					jQuery('#pph22').val(digit_grouping(result.message.pph22));
+					jQuery('#pph23').val(digit_grouping(result.message.pph23));
+					jQuery('#pph25').val(digit_grouping(result.message.pph25));
+					jQuery('#total').val(digit_grouping(result.message.total));
+					jQuery('#div-lampiran').html(result.lampiran);
+					jQuery('#pajak').html(result.pajak).trigger('change');
+					jQuery('.chosen').trigger('change');
+					
+				}
+				else{
+					alertify.log(result.message);
+				}
+			});
+		}
+		
+		jQuery('#tambah-detil').click(function(){
+			var x=parseInt(jQuery('#x').val())+1;
+			jQuery('#tabel-rincian').append(
+				'<tr id="tr-'+x+'">'+
+					'<td>'+
+						'<select id="chosen-'+x+'" class="form-control akun" name="rincian['+x+'][\'kdakun\']">'+
+							jQuery('#inp-akun').val()+
+						'</select>'+
+					'</td>'+
+					'<td><input id="nilai-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai\']" class="val_num"></td>'+
+					'<td><input id="nilai_des-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai_des\']" class="val_num" maxlength="2" value="00"></td>'+
+					'<td>'+
+						'<center><a href="javascript:;" id="'+x+'" class="btn btn-sm btn-danger hapus-detil"><i class="fa fa-minus"></i></a></center>'+
+					'</td>'+
+				'</tr>'
+			);
+			jQuery('#chosen-'+x).select2({width:'100%'});
+			jQuery('.val_num').mask('000,000,000,000,000', {reverse: true});
+			jQuery('#x').val(x);
+		});
+		
+		jQuery('body').off('click', '.hapus-detil').on('click', '.hapus-detil', function(){
+			var id=this.id;
+			jQuery('#tr-'+id).remove();
+		});
+		
+		//klik ubah
+		jQuery('body').off('click', '.proses').on('click', '.proses', function(){
+			var id = this.id;
+			jQuery('#div-tabel').hide();
+			jQuery('#div-form').show();
+			cari_data(id);
+		});
+		
+		//klik batal
+		jQuery('.batal').click(function(){
+			form_default();
+		});
+		
+		//klik simpan
+		jQuery('#simpan').click(function(){
+			jQuery(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
+			jQuery(this).prop('disabled',true);
+			var next = form_valid('inp-id,pajak,nilai1');
+			if(next==true){
+				jQuery.get('token', function(token){
+					if(token){
+						jQuery('#_token').val(token);
+						var data = jQuery('#form-ruh').serialize();
+						jQuery.ajax({
+							url: 'pengeluaran/pajak',
+							method: 'POST',
+							data: data,
+							success: function(result){
+								if(result=='success') {
+									jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									jQuery('#simpan').prop('disabled',false);
+									alertify.log('Proses simpan berhasil');
+									form_default();
+									table.ajax.reload();
+								} else {
+									jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									jQuery('#simpan').prop('disabled',false);
+									alertify.log(result);
+								} 
+							},
+							error: function(result){
+								jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+								jQuery('#simpan').prop('disabled',false);
+								alertify.log('Data tidak dapat disimpan. Koneksi pada aplikasi/database terputus atau data sudah pernah direkam atau format data salah. Hubungi Administrator.');
+							}
+						})
+					} 
+					else{
+						jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+						jQuery('#simpan').prop('disabled',false);
+						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
+					}
+				});
+			}
+			else{
+				jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+				jQuery('#simpan').prop('disabled',false);
+				alertify.log('Data tidak dapat dikosongkan!');
+			}
+		});
+		
+		/*jQuery('#nilai').keyup(function (e){
+			var nilai = jQuery('#nilai').val().replace(/,/g, '');
+			
+			if(nilai==''){
+				nilai = 0;
+			}
+			else{
+				nilai = parseInt(nilai);
+			}
+			
+			var ppn = parseInt(10*nilai/100);
+			var total = nilai+ppn;
+			jQuery('#ppn').val(numberWithCommas(ppn));
+			jQuery('#total').val(numberWithCommas(total));
+		});
+		
+		jQuery('#ppn,#pph21,#pph22,#pph23,#pph25').keyup(function (e){
+			var nilai = jQuery('#nilai').val().replace(/,/g, '');
+			var ppn   = jQuery('#ppn').val().replace(/,/g, '');
+			var pph21 = jQuery('#pph21').val().replace(/,/g, '');
+			var pph22 = jQuery('#pph22').val().replace(/,/g, '');
+			var pph23 = jQuery('#pph23').val().replace(/,/g, '');
+			var pph25 = jQuery('#pph25').val().replace(/,/g, '');
+			
+			if(nilai==''){
+				nilai = 0;
+			}
+			else{
+				nilai = parseInt(nilai);
+			}
+			
+			if(ppn==''){
+				ppn = 0;
+			}
+			else{
+				ppn = parseInt(ppn);
+			}
+			
+			if(pph21==''){
+				pph21 = 0;
+			}
+			else{
+				pph21 = parseInt(pph21);
+			}
+			
+			if(pph22==''){
+				pph22 = 0;
+			}
+			else{
+				pph22 = parseInt(pph22);
+			}
+			
+			if(pph23==''){
+				pph23 = 0;
+			}
+			else{
+				pph23 = parseInt(pph23);
+			}
+			
+			if(pph25==''){
+				pph25 = 0;
+			}
+			else{
+				pph25 = parseInt(pph25);
+			}
+			
+			var total = nilai+ppn+pph21+pph22+pph23+pph25;
+			jQuery('#total').val(numberWithCommas(total));
+		});*/
+		
+		jQuery('#hitung-total').click(function(){
+			var next = form_valid('nilai');
+			if(next==true){
+				jQuery.get('token', function(token){
+					if(token){
+						jQuery('#_token').val(token);
+						var data = jQuery('#form-ruh').serialize();
+						jQuery.ajax({
+							url: 'pengeluaran/rekam/hitung-total?param=1',
+							method: 'POST',
+							data: data,
+							success: function(result){
+								jQuery('#nilai').val(result.nilai);
+								jQuery('#pajak').val(result.pajak);
+								jQuery('#total').val(result.total);
+							},
+							error: function(result){
+								jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+								jQuery('#simpan').prop('disabled',false);
+								alertify.log('Koneksi pada aplikasi/database terputus!');
+							}
+						})
+					}
+					else{
+						jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+						jQuery('#simpan').prop('disabled',false);
+						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
+					}
+				});
+			}
+			else{
+				jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+				jQuery('#simpan').prop('disabled',false);
+				alertify.log('Data tidak dapat dikosongkan!');
+			}
+		});
+		
+		jQuery('body').off('change', '.akun').on('change', '.akun', function(){
+			var arr_id = this.id.split('-');
+			var id = arr_id[1];
+			var arr_akun = jQuery(this).val().split('|');
+			var kdakun = arr_akun[0];
+			var kddk = arr_akun[1];
+			var persen = arr_akun[2];
+			var nilai = jQuery('#nilai').val().replace(/,/g, '');
+			var pajak = nilai*persen/100;
+			jQuery('#nilai-'+id).val(digit_grouping(pajak));
+		});
+		
+	});
+	
+</script>

@@ -1,0 +1,393 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">Referensi/ Pengguna</div>
+        </div>
+    </div>
+	
+	<div class="row" id="div-form">
+	    <div class="col-md-12">
+	        <div class="card">
+	            <div class="card-header">
+	                <h4 class="card-title" id="horz-layout-basic">Form</h4>
+	            </div>
+	            <div class="card-body">
+	                <div class="px-3">
+	                    <form id="form-ruh" class="form form-horizontal">
+	                    	<input type="hidden" id="inp-rekambaru" name="inp-rekambaru">
+							<input type="hidden" id="inp-id" name="inp-id">
+							<input type="hidden" id="_token" name="_token">
+
+							<div class="row">
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="username">Username</label>
+										<input type="text" id="username" name="username" class="form-control" maxlength="50">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nik">NIK</label>
+										<input type="text" id="nik" name="nik" class="form-control val_num" maxlength="16">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nama">Nama</label>
+										<input type="text" id="nama" name="nama" class="form-control" maxlength="255">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="email">Email</label>
+										<input type="text" id="email" name="email" class="form-control" maxlength="255">
+									</fieldset>
+								</div>
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="kdlevel">Kewenangan</label>
+										<select id="kdlevel" name="kdlevel[]" class="form-control chosen" multiple>
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="kdunit">Unit/ Divisi</label>
+										<select id="kdunit" name="kdunit[]" class="form-control chosen" multiple>
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="aktif">Status</label>
+										<select id="aktif" name="aktif" class="form-control chosen">
+											<option value="" style="display:none;">Pilih Data</option>
+											<option value="1">Aktif</option>
+											<option value="0">Tidak Aktif</option>
+											<option value="2">Default</option>
+										</select>
+									</fieldset>
+								</div>
+							</div>
+
+	                    </form>
+	                </div>
+	            </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2 batal">
+						<i class="ft-x m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Batal</span>
+					</button>
+					<button type="button" class="btn-send btn btn-primary" id="simpan">
+						<i class="ft-send m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Simpan</span>
+					</button>
+				</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<div class="row" id="div-tabel">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Data</h4>
+						<div class="actions float-right">
+							<button type="button" class="btn btn-primary mr-2" id="tambah" style="display:none;">
+								<span class="d-flex align-items-center">
+									<i class="ft-plus mr-1"></i>
+									<span>Tambah</span>
+								</span>
+							</button>
+						</div>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard">
+                        <div class="table-responsive">
+							<table id="tabel-ruh" class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>No</th>
+										<th>Username</th>
+										<th>Nama</th>
+										<th>NIK</th>
+										<th>Level</th>
+										<th>Unit</th>
+										<th>Status</th>
+										<th>Aksi</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	jQuery(document).ready(function(){
+	
+		jQuery.fn.dataTable.ext.errMode = 'none';
+		
+		//aktivasi chosen
+		jQuery('.chosen').select2();
+		
+		jQuery.get('cek/level', function(result){
+			if(result=='00'){ //admin
+				jQuery('#tambah').show();
+			}
+		});
+				
+		//ref level user
+		jQuery.get('dropdown/level', function(result){
+			jQuery('#kdlevel').html(result).trigger('change');
+		});
+		
+		//ref perusahaan
+		jQuery.get('dropdown/unit/4', function(result){
+			jQuery('#kdunit').html(result).trigger('change');
+		});
+		
+		jQuery.extend({
+			getValues: function(url) {
+				var result = null;
+				jQuery.ajax({
+					url: url,
+					type: 'get',
+					async: false,
+					success: function(data) {
+						result = data;
+					}
+				});
+			   return result;
+			}
+		});
+		
+		var token1 = jQuery.getValues('token');
+		
+		//tampilan default
+		function form_default() {
+			jQuery('input,select,textarea').val('');
+			jQuery('.warning, #div-form').hide();
+			jQuery('#div-tabel').show();
+			jQuery('.chosen').trigger('change');
+			jQuery('#simpan').prop('disabled', false);
+		}
+		
+		//aktivasi tampilan default
+		form_default();
+		
+		//klik tambah
+		jQuery('#tambah').click(function(){
+			jQuery('#username,#nik').prop('disabled',false);
+			jQuery('#inp-rekambaru').val('1');
+			jQuery('#div-form').show();
+			jQuery('#div-tabel').hide();
+		});
+		
+		//data tabel
+		var table=jQuery('#tabel-ruh').DataTable({
+			bProcessing:true,
+			language:{
+			    "decimal":        "",
+			    "emptyTable":     "Tidak ada data tersedia",
+			    "info":           "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+			    "infoEmpty":      "Menampilkan 0 sampai 0 dari 0 entri",
+			    "infoFiltered":   "(disaring dari _MAX_ total entri)",
+			    "infoPostFix":    "",
+			    "thousands":      ",",
+			    "lengthMenu":     "Tampilkan _MENU_ entri",
+			    "loadingRecords": "Proses Loading...",
+			    "processing":     "Sedang Proses...",
+			    "search":         "Cari:",
+			    "zeroRecords":    "Tidak ditemukan data yang sesuai",
+			    "paginate": {
+			        "first":      "Awal",
+			        "last":       "Akhir",
+			        "next":       "Sesudah",
+			        "previous":   "Sebelum"
+			    },
+			    "aria": {
+			        "sortAscending":  ": aktifkan untuk mengurutkan kolom (asc)",
+			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
+			    }
+			},
+			aaSorting: [],
+			bServerSide: true,
+			sAjaxSource: "ref/user"
+		});
+		
+		//validasi isian form
+		function form_valid(str_id){
+			var arr_id = str_id.split(',');
+			var next = true;
+			for(x = 0; x < arr_id.length; x++){
+				if(jQuery('#'+arr_id[x]).val()==''){
+					jQuery('#'+arr_id[x]).addClass('is-invalid');
+					next = false;
+				}
+			}
+			return next;
+		}
+		
+		//cari data user yang akan di edit berdasarkan id user
+		function cari_data(id){
+			jQuery('.chosen').val('').trigger('change');
+			jQuery.getJSON('ref/user/pilih/'+id, function(result){
+				if(result.error==false) {
+					var arr_level = result.kdlevel.split(",");
+					var arr_unit = result.kdunit.split(",");
+					jQuery('#inp-id').val(id);
+					jQuery('#inp-rekambaru').val('0');
+					jQuery('#username').val(result.username);
+					jQuery('#nama').val(result.nama);
+					jQuery('#nik').val(result.nik);
+					jQuery('#email').val(result.email);
+					jQuery('#kdlevel').val(arr_level);
+					jQuery('#kdunit').val(arr_unit);
+					jQuery('#aktif').val(result.aktif);
+					jQuery('.chosen').trigger('change');
+					jQuery('#username,#nik').prop('disabled', true);
+				}
+			});
+		}
+		
+		//klik ubah
+		jQuery('body').off('click', '.ubah').on('click', '.ubah', function(){
+			var id = this.id;
+			cari_data(id);
+			jQuery('#div-tabel').hide();
+			jQuery('#div-form').show();
+			jQuery('#inp-id').val(id);
+			jQuery('#inp-rekambaru').val('0');
+		});
+		
+		//klik batal
+		jQuery('.batal').click(function(){
+			form_default();
+		});
+		
+		//klik simpan
+		jQuery('#simpan').click(function(){
+			jQuery(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
+			jQuery(this).prop('disabled',true);
+			var next = form_valid('username,nik,nama,email,kdlevel,aktif');
+			if(next==true){
+				jQuery.get('token', function(token){
+					if(token){
+						jQuery('#_token').val(token);
+						var data = jQuery('#form-ruh').serialize();
+						jQuery.ajax({
+							url: 'ref/user',
+							method: 'POST',
+							data: data,
+							success: function(result){
+								if(result=='success') {
+									jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									jQuery('#simpan').prop('disabled',false);
+									alertify.log('Proses simpan berhasil');
+									form_default();
+									table.ajax.reload();
+								} else {
+									jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									jQuery('#simpan').prop('disabled',false);
+									alertify.log(result);
+								} 
+							},
+							error: function(result){
+								jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+								jQuery('#simpan').prop('disabled',false);
+								alertify.log('Data tidak dapat disimpan. Koneksi pada aplikasi/database terputus atau data sudah pernah direkam atau format data salah. Hubungi Administrator.');
+							}
+						})
+					} 
+					else{
+						jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+						jQuery('#simpan').prop('disabled',false);
+						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
+					}
+				});
+			}
+			else{
+				jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+				jQuery('#simpan').prop('disabled',false);
+				alertify.log('Data tidak dapat dikosongkan!');
+			}
+		});
+		
+		//hapus
+		jQuery('body').off('click', '.hapus').on('click', '.hapus', function(){
+			var id = this.id;
+			alertify.confirm('Hapus data ini?', function(c){
+				if(c) {
+					jQuery.get('token', function(token){
+						if(token) {
+							jQuery.ajax({
+								url:'ref/user/hapus',
+								method:'POST',
+								data:{
+									_token:token, 
+									id:id
+								},
+								success:function(result){
+									if(result=='success') {
+										alertify.log('Proses hapus berhasil.');
+										table.ajax.reload();
+									} else {
+										alertify.log(result);
+									} 
+								},
+								error:function(result){
+									alertify.log('Koneksi pada aplikasi/database terputus. Hubungi Administrator.');
+								}
+							});
+						} else {
+							alertify.log('Proses hapus gagal. Silahkan refresh halaman browser anda.');
+						} 
+					});
+				} 
+			});
+		});
+		
+		//reset
+		jQuery('body').off('click', '.reset').on('click', '.reset', function(){
+			var id = this.id;
+			alertify.confirm('Reset data ini?', function(c){
+				if(c) {
+					jQuery.get('token', function(token){
+						if(token) {
+							jQuery.ajax({
+								url:'ref/user/reset',
+								method:'POST',
+								data:{
+									_token:token, 
+									id:id
+								},
+								success:function(result){
+									if(result=='success') {
+										alertify.log('Proses reset berhasil.');
+										table.ajax.reload();
+									} else {
+										alertify.log(result);
+									} 
+								},
+								error:function(result){
+									alertify.log('Koneksi pada aplikasi/database terputus. Hubungi Administrator.');
+								}
+							});
+						} else {
+							alertify.log('Proses reset gagal. Silahkan refresh halaman browser anda.');
+						} 
+					});
+				} 
+			});
+		});
+		
+	});
+	
+</script>

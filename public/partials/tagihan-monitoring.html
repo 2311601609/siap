@@ -1,0 +1,357 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">Tagihan/ Monitoring</div>
+        </div>
+    </div>
+	
+	<div class="row" id="div-form">
+	    <div class="col-md-12">
+	        <div class="card">
+	            <div class="card-header">
+	                <h4 class="card-title" id="horz-layout-basic">Form</h4>
+	            </div>
+	            <div class="card-body">
+	                <div class="px-3">
+	                    <form id="form-ruh" class="form form-horizontal">
+	                    	<input type="hidden" id="inp-rekambaru" name="inp-rekambaru">
+							<input type="hidden" id="inp-id" name="inp-id">
+							<input type="hidden" id="_token" name="_token">
+							<input type="hidden" id="id_alur" name="id_alur">
+							<input type="hidden" id="status" name="status">
+							
+							<div class="row">
+								<div class="col-md-6">
+
+									<fieldset class="form-group">
+										<label for="nourut">Nomor Transaksi</label>
+										<input type="text" id="nourut" name="nourut" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="tgrekam">Tanggal Rekam</label>
+										<input type="date" id="tgrekam" name="tgrekam" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nmsdana">Sumber Dana</label>
+										<input id="nmsdana" name="nmsdana" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nmunit">Divisi/ Unit</label>
+										<input id="nmunit" name="nmunit" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nmproyek">Proyek</label>
+										<input id="nmproyek" name="nmproyek" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nmpelanggan">Pelanggan</label>
+										<input id="nmpelanggan" name="nmpelanggan" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nmalur">Jenis Kegiatan</label>
+										<input id="nmalur" name="nmalur" class="form-control" readonly>
+									</fieldset>
+
+								</div>
+								<div class="col-md-6">
+
+									<fieldset class="form-group">
+										<label for="nmtrans">Jenis Transaksi</label>
+										<input id="nmtrans" name="nmtrans" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="debet">Jenis Tagihan</label>
+										<input id="debet" name="debet" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="kredit">Tagihan Atas</label>
+										<input id="kredit" name="kredit" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nopks">Nomor PKS</label>
+										<input type="text" id="nopks" name="nopks" class="form-control" maxlength="255" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="tgpks">Tanggal PKS</label>
+										<input type="date" id="tgpks" name="tgpks" class="form-control" maxlength="10" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="tgjtempo">Tanggal Jatuh Tempo</label>
+										<input type="date" id="tgjtempo" name="tgjtempo" class="form-control" maxlength="10" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="uraian">Uraian/ Keterangan</label>
+										<textarea id="uraian" name="uraian" class="form-control" maxlength="255" readonly></textarea>
+									</fieldset>
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<fieldset class="form-group">
+										<label for="nilai">Nilai</label>
+										<input id="nilai" name="nilai" class="form-control" readonly style="text-align:right;">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="pajak">Pajak</label>
+										<input id="pajak" name="pajak" class="form-control" readonly style="text-align:right;">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="total">Total</label>
+										<input id="total" name="total" class="form-control" readonly style="text-align:right;">
+									</fieldset>
+								</div>
+								<div class="col-md-8">
+									<fieldset class="form-group">
+										<label>Rincian Akun</label>
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th>Kode Akun</th>
+													<th>Nama Akun</th>
+													<th>Debet</th>
+													<th>Kredit</th>
+												</tr>
+											</thead>
+											<tbody id="div-rincian-akun">
+											</tbody>
+										</table>
+									</fieldset>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+
+									<fieldset class="form-group">
+										<label>Catatan Sebelumnya</label>
+										<table class="table table-bordered">
+											<thead>
+												<tr>
+													<th>Tgl.Update</th>
+													<th>Status</th>
+													<th>Kewenangan</th>
+													<th>Catatan</th>
+												</tr>
+											</thead>
+											<tbody id="div-catatan">
+											</tbody>
+										</table>
+									</fieldset>
+
+								</div>
+							</div>
+
+	                    </form>
+	                </div>
+	            </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2 batal">
+						<i class="ft-x m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Kembali</span>
+					</button>
+				</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<div class="row" id="div-tabel">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Data</h4>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+				
+                    <div class="card-block card-dashboard">
+					
+						<form class="form form-horizontal">
+							<div class="form-body">
+
+								<div class="row">
+									<div class="col-md-6">
+	
+										<fieldset class="form-group">
+											<label for="status_filter">Status Data</label>
+											<select id="status_filter" name="status_filter" class="form-control chosen custom-filter">
+											</select>
+										</fieldset>
+	
+									</div>
+								</div>
+
+							</div>
+						</form>
+					
+                        <div class="table-responsive">
+							<table id="tabel-ruh" class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>No</th>
+										<th>No.Trans</th>
+										<th>Divisi</th>
+										<th>Pelanggan</th>
+										<th>Transaksi</th>
+										<th>PKS</th>
+										<th>Nilai</th>
+										<th>Posisi/ Status</th>
+										<th>Aksi</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	jQuery(document).ready(function(){
+	
+		jQuery.fn.dataTable.ext.errMode = 'none';
+			
+		function digit_grouping(nStr){
+			nStr += '';
+			x = nStr.split('.');
+			x1 = x[0];
+			x2 = x.length > 1 ? '.' + x[1] : '';
+			var rgx = /(\d+)(\d{3})/;
+			while (rgx.test(x1)) {
+				x1 = x1.replace(rgx, '$1' + ',' + '$2');
+			}
+			return x1 + x2;
+		}
+		
+		//tampilan default
+		function form_default() {
+			jQuery('input,textarea,select').val('');
+			jQuery('.warning, #div-form').hide();
+			jQuery('#div-tabel').show();
+		}
+		
+		//aktivasi tampilan default
+		form_default();
+		
+		//aktivasi chosen
+		jQuery('.chosen').select2();
+		
+		jQuery.get('dropdown/status?menu=1', function(result){
+			jQuery('#status_filter').html(result).trigger('change');
+		});
+		
+		jQuery('#status_filter').on('select2:select', function(){
+			var status = jQuery(this).val();
+			table.ajax.url( 'tagihan/monitoring?status='+status ).load();
+		});
+		
+		//data tabel
+		var table=jQuery('#tabel-ruh').DataTable({
+			bProcessing:true,
+			language:{
+			    "decimal":        "",
+			    "emptyTable":     "Tidak ada data tersedia",
+			    "info":           "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+			    "infoEmpty":      "Menampilkan 0 sampai 0 dari 0 entri",
+			    "infoFiltered":   "(disaring dari _MAX_ total entri)",
+			    "infoPostFix":    "",
+			    "thousands":      ",",
+			    "lengthMenu":     "Tampilkan _MENU_ entri",
+			    "loadingRecords": "Proses Loading...",
+			    "processing":     "Sedang Proses...",
+			    "search":         "Cari:",
+			    "zeroRecords":    "Tidak ditemukan data yang sesuai",
+			    "paginate": {
+			        "first":      "Awal",
+			        "last":       "Akhir",
+			        "next":       "Sesudah",
+			        "previous":   "Sebelum"
+			    },
+			    "aria": {
+			        "sortAscending":  ": aktifkan untuk mengurutkan kolom (asc)",
+			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
+			    }
+			},
+			aaSorting: [],
+			bServerSide: true,
+			sAjaxSource: "tagihan/monitoring"
+		});
+		
+		//validasi isian form
+		function form_valid(str_id){
+			var arr_id = str_id.split(',');
+			var next = true;
+			for(x = 0; x < arr_id.length; x++){
+				if(jQuery('#'+arr_id[x]).val()==''){
+					jQuery('#'+arr_id[x]).addClass('is-invalid');
+					next = false;
+				}
+			}
+			return next;
+		}
+		
+		//cari data user yang akan di edit berdasarkan id user
+		function cari_data(id){
+			jQuery('.chosen').val('').trigger('change');
+			jQuery.getJSON('tagihan/proses/pilih/'+id, function(result){
+				if(result.error==false) {
+					jQuery('#inp-id').val(id);
+					jQuery('#inp-rekambaru').val('0');
+					jQuery('#nourut').val(result.message.nourut);
+					jQuery('#nmunit').val(result.message.nmunit);
+					jQuery('#id_alur').val(result.message.id_alur);
+					jQuery('#status').val(result.message.status);
+					jQuery('#nmsdana').val(result.message.nmsdana);
+					jQuery('#nmunit').val(result.message.nmunit);
+					jQuery('#nmalur').val(result.message.nmalur);
+					jQuery('#nmtrans').val(result.message.nmtrans);
+					jQuery('#debet').val(result.message.debet);
+					jQuery('#kredit').val(result.message.kredit);
+					jQuery('#nmproyek').val(result.message.nmproyek);
+					jQuery('#nmpelanggan').val(result.message.nmpelanggan);
+					jQuery('#nopks').val(result.message.nopks);
+					jQuery('#tgpks').val(result.message.tgpks);
+					jQuery('#tgrekam').val(result.message.tgrekam);
+					jQuery('#tgjtempo').val(result.message.tgjtempo);
+					jQuery('#uraian').val(result.message.uraian);
+					jQuery('#nilai').val(digit_grouping(result.message.nilai));					
+					jQuery('#pajak').val(digit_grouping(result.message.pajak));
+					jQuery('#total').val(digit_grouping(result.message.total));
+					jQuery('#div-rincian-akun').html(result.akun);
+					jQuery('#div-catatan').html(result.catatan);
+				}
+				else{
+					alertify.log(result.message);
+				}
+			});
+		}
+		
+		//klik ubah
+		jQuery('body').off('click', '.proses').on('click', '.proses', function(){
+			var id = this.id;
+			jQuery('#div-tabel').hide();
+			jQuery('#div-form').show();
+			cari_data(id);
+		});
+		
+		//klik batal
+		jQuery('.batal').click(function(){
+			form_default();
+		});
+		
+	});
+	
+</script>

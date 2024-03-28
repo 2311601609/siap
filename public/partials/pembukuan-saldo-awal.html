@@ -1,0 +1,403 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">Pembukuan/ Saldo Awal</div>
+        </div>
+    </div>
+	
+	<div class="row" id="div-form">
+	    <div class="col-md-12">
+	        <div class="card">
+	            <div class="card-header">
+	                <h4 class="card-title" id="horz-layout-basic">Form</h4>
+	            </div>
+	            <div class="card-body">
+	                <div class="px-3">
+	                    <form id="form-ruh" class="form form-horizontal">
+	                    	<input type="hidden" id="inp-rekambaru" name="inp-rekambaru">
+							<input type="hidden" id="inp-id" name="inp-id">
+							<input type="hidden" id="_token" name="_token">
+
+							<div class="row">
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="id_proyek">Proyek</label>
+										<select id="id_proyek" name="id_proyek" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="kdakun">Akun/ COA</label>
+										<select id="kdakun" name="kdakun" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="kddk">Debet/ Kredit</label>
+										<select id="kddk" name="kddk" class="form-control chosen">
+											<option value="" style="display:none;">Pilih Data</option>
+											<option value="D">Debet</option>
+											<option value="K">Kredit</option>
+										</select>
+									</fieldset>
+								</div>
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="nilai">Nilai</label>
+										<input type="text" id="nilai" name="nilai" class="form-control uang" style="text-align:right;" maxlength="20">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="kdplus">Plus/ Minus</label>
+										<select id="kdplus" name="kdplus" class="form-control chosen">
+											<option value="">Plus</option>
+											<option value="-">Minus</option>
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="tgsawal">Tanggal Buku</label>
+										<input type="date" id="tgsawal" name="tgsawal" class="form-control" maxlength="10">
+									</fieldset>
+								</div>
+							</div>
+	                    </form>
+	                </div>
+	            </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2 batal">
+						<i class="ft-x m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Batal</span>
+					</button>
+					<button type="button" class="btn-send btn btn-primary" id="simpan">
+						<i class="ft-send m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Simpan</span>
+					</button>
+				</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<div class="row" id="div-tabel">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Data</h4>
+						<div class="actions float-right">
+							<button type="button" class="btn btn-primary mr-2" id="tambah" style="display:none;">
+								<span class="d-flex align-items-center">
+									<i class="ft-plus mr-1"></i>
+									<span>Tambah</span>
+								</span>
+							</button>
+						</div>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard">
+                        <div class="table-responsive">
+							<table id="tabel-ruh" class="table table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>No</th>
+										<th>Proyek</th>
+										<th>Akun</th>
+										<th>Debet</th>
+										<th>Kredit</th>
+										<th>Tgl.Posting</th>
+										<th>Tgl.Rekam</th>
+										<th>Aksi</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+								<tfoot class="text-primary">
+									<tr>
+										<td colspan="3" style="text-align:center;">Total</td>
+										<td id="debet" style="text-align:right;">0</td>
+										<td id="kredit" style="text-align:right;">0</td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr>
+								</tfoot>
+							</table>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	jQuery(document).ready(function(){
+	
+		jQuery.fn.dataTable.ext.errMode = 'none';
+		
+		function digit_grouping(nStr){
+			nStr += '';
+			x = nStr.split('.');
+			x1 = x[0];
+			x2 = x.length > 1 ? '.' + x[1] : '';
+			var rgx = /(\d+)(\d{3})/;
+			while (rgx.test(x1)) {
+				x1 = x1.replace(rgx, '$1' + ',' + '$2');
+			}
+			return x1 + x2;
+		}
+		
+		jQuery('.uang').mask('000,000,000,000,000', {reverse: true});
+		
+		//aktivasi chosen
+		jQuery('.chosen').select2();
+		
+		jQuery.get('dropdown/lap', function(result){
+			jQuery('#kdlap').html(result).trigger('change');
+		});
+		
+		jQuery.get('dropdown/akun/html/all?kdlap=NR', function(result){
+			jQuery('#kdakun').html(result).trigger('change');
+		});
+		
+		jQuery.get('dropdown/proyek', function(result){
+			jQuery('#id_proyek').html(result).trigger('change');
+		});
+		
+		jQuery('#kdlap').on('select2:select', function(){
+			var kdlap = jQuery(this).val();
+			jQuery.get('dropdown/akun/html/level1?kdlap='+kdlap, function(result){
+				jQuery('#kdakun').html(result).trigger('change');
+			});
+		});
+		
+		jQuery.get('cek/level', function(result){
+			if(result=='00' || result=='04'){ //admin
+				jQuery('#tambah').show();
+			}
+		});
+		
+		//tampilan default
+		function form_default() {
+			jQuery('input,select').val('');
+			jQuery('.warning, #div-form').hide();
+			jQuery('#div-tabel').show();
+			jQuery('.chosen').prop('disabled', false).trigger('change');
+			jQuery('#simpan').prop('disabled', false);
+		}
+		
+		//aktivasi tampilan default
+		form_default();
+		
+		//klik tambah
+		jQuery('#tambah').click(function(){
+			jQuery('#inp-rekambaru').val('1');
+			jQuery('#div-tabel').hide();
+			jQuery('#div-form').show();
+		});
+		
+		//data tabel
+		var table=jQuery('#tabel-ruh').DataTable({
+			bProcessing:true,
+			language:{
+			    "decimal":        "",
+			    "emptyTable":     "Tidak ada data tersedia",
+			    "info":           "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+			    "infoEmpty":      "Menampilkan 0 sampai 0 dari 0 entri",
+			    "infoFiltered":   "(disaring dari _MAX_ total entri)",
+			    "infoPostFix":    "",
+			    "thousands":      ",",
+			    "lengthMenu":     "Tampilkan _MENU_ entri",
+			    "loadingRecords": "Proses Loading...",
+			    "processing":     "Sedang Proses...",
+			    "search":         "Cari (tekan enter):",
+			    "zeroRecords":    "Tidak ditemukan data yang sesuai",
+			    "paginate": {
+			        "first":      "Awal",
+			        "last":       "Akhir",
+			        "next":       "Sesudah",
+			        "previous":   "Sebelum"
+			    },
+			    "aria": {
+			        "sortAscending":  ": aktifkan untuk mengurutkan kolom (asc)",
+			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
+			    }
+			},
+			aaSorting: [],
+			bServerSide: true,
+			sAjaxSource: "pembukuan/saldo-awal",
+			initComplete: function() {
+				jQuery.getJSON('pembukuan/saldo-awal/total', function(result){
+					if(result){
+						jQuery('#debet').html(result.debet);
+						jQuery('#kredit').html(result.kredit);
+					}
+				});
+			}
+		});
+		
+		//pencarian by enter
+		$('#tabel-ruh_filter input').unbind();
+		$('#tabel-ruh_filter input').bind('keyup', function(e) {
+			if(e.keyCode == 13) {
+				table.search(this.value).draw();
+				
+				jQuery.getJSON('pembukuan/saldo-awal/total?param='+this.value, function(result){
+					if(result){
+						jQuery('#debet').html(result.debet);
+						jQuery('#kredit').html(result.kredit);
+					}
+				});
+			}
+		});
+		
+		//validasi isian form
+		function form_valid(str_id){
+			var arr_id = str_id.split(',');
+			var next = true;
+			for(x = 0; x < arr_id.length; x++){
+				if(jQuery('#'+arr_id[x]).val()==''){
+					jQuery('#'+arr_id[x]).addClass('is-invalid');
+					next = false;
+				}
+			}
+			return next;
+		}
+		
+		//cari data user yang akan di edit berdasarkan id user
+		function cari_data(id){
+			jQuery('.chosen').val('').trigger('change');
+			jQuery.getJSON('pembukuan/saldo-awal/pilih/'+id, function(result){
+				if(result.error==false) {
+					jQuery('#inp-id').val(id);
+					jQuery('#inp-rekambaru').val('0');
+					jQuery('#kdakun').val(result.message.kdakun).prop('disabled', true);
+					jQuery('#kddk').val(result.message.kddk);
+					jQuery('#kdplus').val(result.message.kdplus);
+					jQuery('#id_proyek').val(result.message.id_proyek).prop('disabled', true);
+					jQuery('#nilai').val(digit_grouping(result.message.nilai));
+					jQuery('#tgsawal').val(result.message.tgsawal);
+					jQuery('.chosen').trigger('change');
+				}
+				else{
+					alertify.log(result.message);
+				}
+			});
+		}
+		
+		//klik ubah
+		jQuery('body').off('click', '.ubah').on('click', '.ubah', function(){
+			var id = this.id;
+			jQuery('#div-tabel').hide();
+			jQuery('#div-form').show();
+			cari_data(id);
+		});
+		
+		//klik batal
+		jQuery('.batal').click(function(){
+			form_default();
+		});
+		
+		//klik simpan
+		jQuery('#simpan').click(function(){
+			jQuery(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
+			jQuery(this).prop('disabled',true);
+			var next = form_valid('kdlap,kdakun,tgsawal,nilai,id_proyek');
+			if(next==true){
+				jQuery.get('token', function(token){
+					if(token){
+						jQuery('#_token').val(token);
+						var data = jQuery('#form-ruh').serialize();
+						jQuery.ajax({
+							url: 'pembukuan/saldo-awal',
+							method: 'POST',
+							data: data,
+							success: function(result){
+								if(result=='success') {
+									jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									jQuery('#simpan').prop('disabled',false);
+									alertify.log('Proses simpan berhasil');
+									form_default();
+									table.ajax.reload();
+									jQuery.getJSON('pembukuan/saldo-awal/total', function(result){
+										if(result){
+											jQuery('#debet').html(result.debet);
+											jQuery('#kredit').html(result.kredit);
+										}
+									});
+								} else {
+									jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									jQuery('#simpan').prop('disabled',false);
+									alertify.log(result);
+								} 
+							},
+							error: function(result){
+								jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+								jQuery('#simpan').prop('disabled',false);
+								alertify.log('Data tidak dapat disimpan. Koneksi pada aplikasi/database terputus atau data sudah pernah direkam atau format data salah. Hubungi Administrator.');
+							}
+						})
+					} 
+					else{
+						jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+						jQuery('#simpan').prop('disabled',false);
+						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
+					}
+				});
+			}
+			else{
+				jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+				jQuery('#simpan').prop('disabled',false);
+				alertify.log('Data tidak dapat dikosongkan!');
+			}
+		});
+		
+		//hapus
+		jQuery('body').off('click', '.hapus').on('click', '.hapus', function(){
+			var id = this.id;
+			alertify.confirm('Hapus data ini?', function(c){
+				if(c) {
+					jQuery.get('token', function(token){
+						if(token) {
+							jQuery.ajax({
+								url:'pembukuan/saldo-awal/hapus',
+								method:'POST',
+								data:{
+									_token:token, 
+									id:id
+								},
+								success:function(result){
+									if(result=='success') {
+										alertify.log('Proses hapus berhasil.');
+										table.ajax.reload();
+										jQuery.getJSON('pembukuan/saldo-awal/total', function(result){
+											if(result){
+												jQuery('#debet').html(result.debet);
+												jQuery('#kredit').html(result.kredit);
+											}
+										});
+									} else {
+										alertify.log(result);
+									}
+								},
+								error:function(result){
+									alertify.log('Koneksi pada aplikasi/database terputus. Hubungi Administrator.');
+								}
+							});
+						} else {
+							alertify.log('Proses hapus gagal. Silahkan refresh halaman browser anda.');
+						} 
+					});
+				} 
+			});
+		});
+		
+	});
+	
+</script>
