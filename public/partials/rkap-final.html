@@ -1,0 +1,252 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">RKAP/ Final</div>
+        </div>
+    </div>
+
+	<div class="row" id="div-tabel">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Data</h4>
+						<div class="actions float-right">
+							<button type="button" class="btn btn-primary mr-1" id="exportPrint">
+								<span class="d-flex align-items-center">
+									<span>Cetak</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPdf">
+								<span class="d-flex align-items-center">
+									<span>PDF</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportExcel">
+								<span class="d-flex align-items-center">
+									<span>XLS</span>
+								</span>
+							</button>
+						</div>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+
+					<form class="form form-horizontal">
+						<div class="form-body">
+
+							<div class="row">
+								<div class="col-md-6">
+
+									<fieldset class="form-group">
+										<label for="kdsdana1">Sumber Dana</label>
+										<select id="kdsdana1" name="kdsdana1" class="form-control chosen custom-filter">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="id_proyek1">Proyek</label>
+										<select id="id_proyek1" name="id_proyek1" class="form-control chosen custom-filter">
+										</select>
+									</fieldset>
+
+								</div>
+								<div class="col-md-6">
+
+									<fieldset class="form-group">
+										<label for="kdunit1">Unit/ Divisi</label>
+										<select id="kdunit1" name="kdunit1" class="form-control chosen custom-filter">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="kdakun1">Kode Akun</label>
+										<select id="kdakun1" name="kdakun1" class="form-control chosen custom-filter">
+										</select>
+									</fieldset>
+
+								</div>
+							</div>
+
+						</div>
+					</form>
+
+                    <div class="card-block card-dashboard table-responsive">
+                        <table id="tabel-ruh" class="table table-sm table-striped table-bordered small">
+                            <thead>
+                                <tr>
+									<th>No</th>
+									<th>Divisi</th>
+									<th>Sumber Dana</th>
+									<th>Proyek</th>
+									<th>Program</th>
+									<th>Kegiatan</th>
+									<th>Akun</th>
+									<th>Nama Akun</th>
+									<th>Anggaran</th>
+									<th>Realisasi</th>
+									<th>Sisa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	$(document).ready(function(){
+
+		//init route
+		var route = 'rkap-final';
+	
+		$.fn.dataTable.ext.errMode = 'none';
+
+		//fungsi dropdown
+		$('.chosen').select2();
+
+		$.get('dropdown/unit/4', function(result){
+			$('#kdunit,#kdunit1').html(result).trigger('change');
+		});
+		
+		$.get('dropdown/proyek', function(result){
+			$('#id_proyek,#id_proyek1').html(result).trigger('change');
+		});
+		
+		$.get('dropdown/sdana', function(result){
+			$('#kdsdana,#kdsdana1').html(result).trigger('change');
+		});
+		
+		$.get('dropdown/akun/html/all', function(result){
+			$('#kdakun,#kdakun1').html(result).trigger('change');
+		});
+
+		$('.custom-filter').on('select2:select', function(){
+			
+			var kdsdana = $('#kdsdana1').val();
+			var id_proyek = $('#id_proyek1').val();
+			var kdakun = $('#kdakun1').val();
+			var kdunit = $('#kdunit1').val();
+			
+			table.ajax.url( route + '/data?kdsdana='+kdsdana+'&id_proyek='+id_proyek+'&kdunit='+kdunit+'&kdakun='+kdakun ).load();
+			
+		});
+		
+		//tampilan default
+		function form_default() {
+			$('input,textarea,select').val('');
+			$('.warning, #div-form,#div-form-detil').hide();
+			$('#div-tabel').show();
+			$('#simpan,#kdunit').prop('disabled', false);
+			$('.chosen').trigger('change');
+		}
+		
+		//aktivasi tampilan default
+		form_default();
+
+		// datatable init
+        $("#exportPrint").on("click", function () {
+            table.button('.buttons-print').trigger();
+        });
+
+		$("#exportPdf").on("click", function () {
+            table.button('.buttons-pdf').trigger();
+        });
+
+		$("#exportExcel").on("click", function () {
+            table.button('.buttons-excel').trigger();
+        });
+		
+		//data tabel
+		var table=$('#tabel-ruh').DataTable({
+			buttons: [
+                {
+                    extend: 'print',
+                    title: 'RKA Final',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'RKA Final',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+				{
+                    extend: 'excel',
+					title: 'RKA Final',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+            ],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Semua"],
+            ],
+			processing: true,
+			language:{
+			    "decimal":        "",
+			    "emptyTable":     "Tidak ada data tersedia",
+			    "info":           "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+			    "infoEmpty":      "Menampilkan 0 sampai 0 dari 0 entri",
+			    "infoFiltered":   "(disaring dari _MAX_ total entri)",
+			    "infoPostFix":    "",
+			    "thousands":      ",",
+			    "lengthMenu":     "Tampilkan _MENU_ entri",
+			    "loadingRecords": "Proses Loading...",
+			    "processing":     "Sedang Proses...",
+			    "search":         "Cari:",
+			    "zeroRecords":    "Tidak ditemukan data yang sesuai",
+			    "paginate": {
+			        "first":      "Awal",
+			        "last":       "Akhir",
+			        "next":       "Sesudah",
+			        "previous":   "Sebelum"
+			    },
+			    "aria": {
+			        "sortAscending":  ": aktifkan untuk mengurutkan kolom (asc)",
+			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
+			    }
+			},
+			serverSide: true,
+			ajax: {
+				url: route + "/data",
+			},
+			columns: [
+				{ data: "DT_RowIndex", name: "DT_RowIndex", className: "t-center", orderable: false, searchable: false },
+				{ data: "nmunit", name: "nmunit", className: "t-left" },
+				{ data: "nmproyek", name: "nmproyek", className: "t-left" },
+				{ data: "nmsdana", name: "nmsdana", className: "t-right" },
+				{ data: "nmprogram", name: "nmprogram", className: "t-left" },
+				{ data: "nmgiat", name: "nmgiat", className: "t-left" },
+				{ data: "kdakun", name: "kdakun", className: "t-left" },
+				{ data: "nmakun", name: "nmakun", className: "t-left" },
+				{ data: "pagu", name: "pagu", className: "t-right" },
+				{ data: "realisasi", name: "realisasi", className: "t-right" },
+				{ data: "sisa", name: "sisa", className: "t-right" }
+			],
+		});
+		
+	});
+	
+</script>

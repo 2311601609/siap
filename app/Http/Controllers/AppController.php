@@ -67,41 +67,55 @@ class AppController extends Controller {
 				
 			}
 			else{
-				//jika ya, perlu buat sub menu dengan parameter parent_id ybs
-				$html_out .= '<li class="has-sub nav-item">
-								<a href="javascript:void(0);">
-									<i class="'.$menu->icon.'"></i>
-									<span data-i18n="" class="menu-title">'.$menu->nmmenu.'</span>
-								</a>
-								<ul class="menu-content">';
-				
-				$sub_menus = DB::select("
-					SELECT * FROM t_menu WHERE aktif='1' AND kdlevel LIKE '%+".session('kdlevel')."+%' AND parent_id='".$menu->id."' ORDER BY nourut
-				");
-				
-				//bentuk sub menu
-				foreach($sub_menus as $sub_menu){
-					
-					//apakah tab baru?
-					if($sub_menu->new_tab=='1'){
-						$html_out .= '<li>
-										<a id="submenu-'.$sub_menu->id.'" class="submenu-li" href="'.$sub_menu->url.'" class="waves-effect waves-block" target="_blank">'.$sub_menu->nmmenu.'</a>
-									</li>';
-					}
-					else{
-						$html_out .= '<li>
-										<a ui-sref="'.$sub_menu->url.'" class="menu-item">'.$sub_menu->nmmenu.'</a>
-										</li>';
-						$angular .= '.state("'.$sub_menu->url.'", {
-										url: "/'.$sub_menu->url.'",
-										templateUrl: "partials/'.$sub_menu->nmfile.'"
-									})';
-					}
-					
+
+				if($menu->nourut==0){
+
+					$angular .= '.state("'.$menu->url.'", {
+						url: "/'.$menu->url.'",
+						templateUrl: "partials/'.$menu->nmfile.'"
+					})';
+
 				}
-				
-				$html_out .= 	'</ul>
-							</li>';
+				else{
+
+					//jika ya, perlu buat sub menu dengan parameter parent_id ybs
+					$html_out .= '<li class="has-sub nav-item">
+									<a href="javascript:void(0);">
+										<i class="'.$menu->icon.'"></i>
+										<span data-i18n="" class="menu-title">'.$menu->nmmenu.'</span>
+									</a>
+									<ul class="menu-content">';
+
+					$sub_menus = DB::select("
+						SELECT * FROM t_menu WHERE aktif='1' AND kdlevel LIKE '%+".session('kdlevel')."+%' AND parent_id='".$menu->id."' ORDER BY nourut
+					");
+
+					//bentuk sub menu
+					foreach($sub_menus as $sub_menu){
+						
+						//apakah tab baru?
+						if($sub_menu->new_tab=='1'){
+							$html_out .= '<li>
+											<a id="submenu-'.$sub_menu->id.'" class="submenu-li" href="'.$sub_menu->url.'" class="waves-effect waves-block" target="_blank">'.$sub_menu->nmmenu.'</a>
+										</li>';
+						}
+						else{
+							$html_out .= '<li>
+											<a ui-sref="'.$sub_menu->url.'" class="menu-item">'.$sub_menu->nmmenu.'</a>
+											</li>';
+							$angular .= '.state("'.$sub_menu->url.'", {
+											url: "/'.$sub_menu->url.'",
+											templateUrl: "partials/'.$sub_menu->nmfile.'"
+										})';
+						}
+						
+					}
+
+					$html_out .= 	'</ul>
+								</li>';
+
+				}
+
 			}
 			
 		}
@@ -109,7 +123,8 @@ class AppController extends Controller {
 		$angular .=		'.state("profile", {
 							url: "/profile",
 							templateUrl: "partials/profile.html"
-						});
+						})
+						;
 					});';
 		
 		header("x-frame-options:SAMEORIGIN");

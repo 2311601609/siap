@@ -103,10 +103,7 @@
 									<fieldset class="form-group">
 										<label for="nilai">Nilai</label>
 										<div class="input-group">
-											<input type="text" id="nilai" name="nilai" class="form-control val_num" style="text-align:right;" maxlength="19" readonly>
-											<div class="input-group-append">
-												<input type="text" id="nilai_des" name="nilai_des" class="form-control val_num" maxlength="2" readonly>
-											</div>
+											<input type="text" id="nilai" name="nilai" class="form-control uang" style="text-align:right;" maxlength="19" readonly>
 										</div>
 									</fieldset>
 								</div>
@@ -114,7 +111,7 @@
 									<fieldset class="form-group">
 										<label for="total">Total</label>
 										<div class="input-group">
-											<input type="text" id="total" name="total" class="form-control val_num" style="text-align:right;" maxlength="19" readonly>
+											<input type="text" id="total" name="total" class="form-control uang" style="text-align:right;" maxlength="19" readonly>
 											<div class="input-group-append">
 												<button type="button" class="btn btn-danger" id="hitung-total">Hitung Total</button>
 											</div>
@@ -131,8 +128,7 @@
 												<thead>
 													<tr>
 														<th style="width:60%;">Jenis</th>
-														<th style="width:30%;">Nilai</th>
-														<th style="width:5%;">Des</th>
+														<th style="width:35%;">Nilai</th>
 														<th style="width:5%;">Hapus</th>
 													</tr>
 												</thead>
@@ -179,6 +175,23 @@
                 <div class="card-header">
 					<div class="clearfix">
 						<h4 class="card-title float-left">Data</h4>
+						<div class="actions float-right">
+							<button type="button" class="btn btn-primary mr-1" id="exportPrint">
+								<span class="d-flex align-items-center">
+									<span>Cetak</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPdf">
+								<span class="d-flex align-items-center">
+									<span>PDF</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportExcel">
+								<span class="d-flex align-items-center">
+									<span>XLS</span>
+								</span>
+							</button>
+						</div>
 					</div>
                 </div>
                 <div class="card-body collapse show">
@@ -212,6 +225,8 @@
 
 <script>
 	jQuery(document).ready(function(){
+
+		var route = 'tagihan/pajak';
 	
 		jQuery.fn.dataTable.ext.errMode = 'none';
 			
@@ -226,12 +241,19 @@
 			}
 			return x1 + x2;
 		}
-		
-		function numberWithCommas(x) {
-			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-		}
-		
-		jQuery('.val_num').mask('000,000,000,000,000', {reverse: true});
+
+		$('.uang').inputmask('numeric', {
+			radixPoint: '.',
+			groupSeparator: ',',
+			autoGroup: true,
+			prefix: '',
+			rightAlign: false,
+			digits: 2,
+			oncleared: function () {
+				// Fungsi ini akan dipanggil saat input dihapus
+				$(this).val('');
+			}
+		});
 		
 		//aktivasi chosen
 		jQuery('.chosen').select2();
@@ -243,7 +265,7 @@
 			jQuery('#div-tabel').show();
 			jQuery('.chosen').trigger('change');
 			jQuery('#simpan').prop('disabled', false);
-			jQuery.getJSON('dropdown/akun-pajak/json', function(result){
+			jQuery.getJSON('dropdown/akun-pajak-baru/json', function(result){
 				var akun='<option value="" style="display:none;">Pilih Akun</option>';
 				jQuery.each(result, function(i,field){
 					akun+='<option value="'+field.kdakun+'|'+field.kddk+'|'+field.nilai+'">'+field.kdakun+' - '+field.nmakun+'</option>';
@@ -255,9 +277,55 @@
 		//aktivasi tampilan default
 		form_default();
 		
+		// datatable init
+        $("#exportPrint").on("click", function () {
+            table.button('.buttons-print').trigger();
+        });
+
+		$("#exportPdf").on("click", function () {
+            table.button('.buttons-pdf').trigger();
+        });
+
+		$("#exportExcel").on("click", function () {
+            table.button('.buttons-excel').trigger();
+        });
+
 		//data tabel
-		var table=jQuery('#tabel-ruh').DataTable({
-			bProcessing:true,
+		var table = $('#tabel-ruh').DataTable({
+			buttons: [
+                {
+                    extend: 'print',
+                    title: 'Pajak Tagihan',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Pajak Tagihan',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+				{
+                    extend: 'excel',
+					title: 'Pajak Tagihan',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+            ],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Semua"],
+            ],
+			processing: true,
 			language:{
 			    "decimal":        "",
 			    "emptyTable":     "Tidak ada data tersedia",
@@ -282,25 +350,21 @@
 			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
 			    }
 			},
-			"columns": [
-				{},
-				{},
-				{},
-				{},
-				{},
-				{},
-				{},
-				{},
-				{}
-			],
-			bServerSide: true,
-			ajax:{
-				url: "tagihan/pajak", // Change this URL to where your json data comes from
-				type: "GET"
+			serverSide: true,
+			ajax: {
+				url: route,
 			},
-			fnCreatedRow: function( nRow, aData, iDataIndex ) {
-				jQuery(nRow).attr('id', aData[0]);
-			}
+			columns: [
+				{ data: "DT_RowIndex", name: "DT_RowIndex", className: "t-center", orderable: false, searchable: false },
+				{ data: "nourut", name: "nourut", className: "t-left" },
+				{ data: "nmunit", name: "nmunit", className: "t-left" },
+				{ data: "nama", name: "nama", className: "t-left" },
+				{ data: "nmtrans", name: "nmtrans", className: "t-left" },
+				{ data: "nilai", name: "nilai", className: "t-right" },
+				{ data: "pajak", name: "pajak", className: "t-right" },
+				{ data: "total", name: "total", className: "t-right" },
+				{ data: "aksi", name: "aksi", className: "t-center", orderable: false, searchable: false },
+			],
 		});
 		
 		//validasi isian form
@@ -334,8 +398,7 @@
 										jQuery('#inp-akun').val()+
 									'</select>'+
 								'</td>'+
-								'<td><input id="nilai-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai\']" class="val_num" value="'+digit_grouping(row.nilai)+'"></td>'+
-								'<td><input id="nilai_des-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai_des\']" class="val_num" maxlength="2" value="'+digit_grouping(row.nilai_des)+'"></td>'+
+								'<td><input id="nilai-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai\']" class="uang" value="'+digit_grouping(row.nilai)+'"></td>'+
 								'<td>'+
 									'<center><a href="javascript:;" id="'+x+'" class="btn btn-sm btn-danger hapus-detil"><i class="fa fa-minus"></i></a></center>'+
 								'</td>'+
@@ -343,7 +406,20 @@
 						);
 						jQuery('#chosen-'+x).val(row.kdakun+'|'+row.kddk+'|'+row.nilai1);
 						jQuery('#chosen-'+x).select2();
-						jQuery('.val_num').mask('000,000,000,000,000', {reverse: true});
+
+						$('#nilai-'+x).inputmask('numeric', {
+							radixPoint: '.',
+							groupSeparator: ',',
+							autoGroup: true,
+							prefix: '',
+							rightAlign: false,
+							digits: 2,
+							oncleared: function () {
+								// Fungsi ini akan dipanggil saat input dihapus
+								$(this).val('');
+							}
+						});
+						
 					});
 					
 					jQuery('#nmunit').val(result.message.nmunit);
@@ -363,7 +439,6 @@
 					jQuery('#tgjtempo').val(result.message.tgjtempo);
 					jQuery('#uraian').val(result.message.uraian);
 					jQuery('#nilai').val(digit_grouping(result.message.nilai));
-					jQuery('#nilai_des').val(digit_grouping(result.message.nilai_des));
 					jQuery('#ppn').val(digit_grouping(result.message.ppn));
 					jQuery('#pph21').val(digit_grouping(result.message.pph21));
 					jQuery('#pph22').val(digit_grouping(result.message.pph22));
@@ -391,14 +466,24 @@
 						'</select>'+
 					'</td>'+
 					'<td><input id="nilai-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai\']" class="val_num"></td>'+
-					'<td><input id="nilai_des-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai_des\']" class="val_num" maxlength="2"></td>'+
 					'<td>'+
 						'<center><a href="javascript:;" id="'+x+'" class="btn btn-sm btn-danger hapus-detil"><i class="fa fa-minus"></i></a></center>'+
 					'</td>'+
 				'</tr>'
 			);
 			jQuery('#chosen-'+x).select2();
-			jQuery('.val_num').mask('000,000,000,000,000', {reverse: true});
+			$('#nilai-'+x).inputmask('numeric', {
+				radixPoint: '.',
+				groupSeparator: ',',
+				autoGroup: true,
+				prefix: '',
+				rightAlign: false,
+				digits: 2,
+				oncleared: function () {
+					// Fungsi ini akan dipanggil saat input dihapus
+					$(this).val('');
+				}
+			});
 			jQuery('#x').val(x);
 		});
 		
@@ -501,76 +586,6 @@
 			});
 		});
 		
-		/*jQuery('#nilai').keyup(function (e){
-			var nilai = jQuery('#nilai').val().replace(/,/g, '');
-			
-			if(nilai==''){
-				nilai = 0;
-			}
-			else{
-				nilai = parseInt(nilai);
-			}
-			
-			var ppn = parseInt(10*nilai/100);
-			var total = nilai+ppn;
-			jQuery('#ppn').val(numberWithCommas(ppn));
-			jQuery('#total').val(numberWithCommas(total));
-		});
-		
-		jQuery('#ppn,#pph21,#pph22,#pph23,#pph25').keyup(function (e){
-			var nilai = jQuery('#nilai').val().replace(/,/g, '');
-			var ppn   = jQuery('#ppn').val().replace(/,/g, '');
-			var pph21 = jQuery('#pph21').val().replace(/,/g, '');
-			var pph22 = jQuery('#pph22').val().replace(/,/g, '');
-			var pph23 = jQuery('#pph23').val().replace(/,/g, '');
-			var pph25 = jQuery('#pph25').val().replace(/,/g, '');
-			
-			if(nilai==''){
-				nilai = 0;
-			}
-			else{
-				nilai = parseInt(nilai);
-			}
-			
-			if(ppn==''){
-				ppn = 0;
-			}
-			else{
-				ppn = parseInt(ppn);
-			}
-			
-			if(pph21==''){
-				pph21 = 0;
-			}
-			else{
-				pph21 = parseInt(pph21);
-			}
-			
-			if(pph22==''){
-				pph22 = 0;
-			}
-			else{
-				pph22 = parseInt(pph22);
-			}
-			
-			if(pph23==''){
-				pph23 = 0;
-			}
-			else{
-				pph23 = parseInt(pph23);
-			}
-			
-			if(pph25==''){
-				pph25 = 0;
-			}
-			else{
-				pph25 = parseInt(pph25);
-			}
-			
-			var total = nilai+ppn+pph21+pph22+pph23+pph25;
-			jQuery('#total').val(numberWithCommas(total));
-		});*/
-		
 		jQuery('#hitung-total').click(function(){
 			var next = form_valid('nilai');
 			if(next==true){
@@ -606,16 +621,23 @@
 			}
 		});
 		
-		jQuery('body').off('change', '.akun').on('change', '.akun', function(){
+		$('body').off('select2:select', '.akun').on('select2:select', '.akun', function(){
+			
 			var arr_id = this.id.split('-');
 			var id = arr_id[1];
-			var arr_akun = jQuery(this).val().split('|');
+			var arr_akun = $(this).val().split('|');
 			var kdakun = arr_akun[0];
 			var kddk = arr_akun[1];
 			var persen = arr_akun[2];
-			var nilai = jQuery('#nilai').val().replace(/,/g, '');
+			var nilai = $('#nilai').val();
+			nilai = nilai.split(',').join('');
+			console.log(nilai);
 			var pajak = nilai*persen/100;
-			jQuery('#nilai-'+id).val(digit_grouping(pajak));
+			console.log(pajak);
+			pajak = parseFloat(pajak.toFixed(2)) || 0;
+			console.log('hitung otomatis');
+			$('#nilai-'+id).val(pajak);
+			
 		});
 		
 	});

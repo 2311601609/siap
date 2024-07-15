@@ -1,0 +1,219 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">RKAP/ Usulan/ Perubahan</div>
+        </div>
+    </div>
+	
+	<div class="row" id="div-tabel">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Data <span class="sub-modul-title"></span></h4>
+						<div class="actions float-right">
+							<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2" id="kembali">
+								<span class="d-flex align-items-center">
+									<i class="ft-arrow-left mr-1"></i>
+									<span>Kembali</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPrint">
+								<span class="d-flex align-items-center">
+									<span>Cetak</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPdf">
+								<span class="d-flex align-items-center">
+									<span>PDF</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportExcel">
+								<span class="d-flex align-items-center">
+									<span>XLS</span>
+								</span>
+							</button>
+						</div>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard table-responsive">
+                        <table id="tabel-ruh" class="table table-sm table-striped table-bordered small">
+                            <thead>
+                                <tr>
+									<th>Sumber Dana</th>
+									<th>Program</th>
+									<th>Kegiatan</th>
+									<th>Proyek</th>
+									<th>Akun</th>
+									<th>Nilai ini</th>
+									<th>Nilai sebelumnya</th>
+									<th>Ket</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	$(document).ready(function(){
+
+		//init route
+		var route = 'rkap-perubahan';
+	
+		$.fn.dataTable.ext.errMode = 'none';
+
+		function getParameterByNameDetil(name, url) {
+			if (!url) url = window.location.href;
+			name = name.replace(/[\[\]]/g, '\\$&');
+			var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+				results = regex.exec(url);
+			if (!results) return null;
+			if (!results[2]) return '';
+			return decodeURIComponent(results[2].replace(/\+/g, ' '));
+		}
+
+		// default search
+		if(getParameterByNameDetil('id_rkap')){
+			var id_rkap = getParameterByNameDetil('id_rkap');
+			var nourut = getParameterByNameDetil('nourut');
+		}
+		else{
+			var id_rkap = '';
+			var nourut = '';
+		}
+
+		if(getParameterByNameDetil('back')){
+			var back = getParameterByNameDetil('back');
+		}
+		else{
+			var back = '';
+		}
+
+		$('.sub-modul-title').html(' : ' + nourut);
+		
+		//tampilan default
+		function form_default() {
+			$('input,textarea,select').val('');
+			$('.warning, #div-form').hide();
+			$('#div-tabel').show();
+			$('#simpan,#kdunit').prop('disabled', false);
+			$('.chosen').trigger('change');
+			$('#id_rkap').val(id_rkap);
+		}
+		
+		//aktivasi tampilan default
+		form_default();
+
+		// datatable init
+        $("#exportPrint").on("click", function () {
+            table.button('.buttons-print').trigger();
+        });
+
+		$("#exportPdf").on("click", function () {
+            table.button('.buttons-pdf').trigger();
+        });
+
+		$("#exportExcel").on("click", function () {
+            table.button('.buttons-excel').trigger();
+        });
+		
+		//data tabel
+		var table=$('#tabel-ruh').DataTable({
+			buttons: [
+                {
+                    extend: 'print',
+                    title: 'Histori Perubahan',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Histori Perubahan',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+				{
+                    extend: 'excel',
+                    title: 'Histori Perubahan',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+            ],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Semua"],
+            ],
+			processing: true,
+			language:{
+			    "decimal":        "",
+			    "emptyTable":     "Tidak ada data tersedia",
+			    "info":           "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+			    "infoEmpty":      "Menampilkan 0 sampai 0 dari 0 entri",
+			    "infoFiltered":   "(disaring dari _MAX_ total entri)",
+			    "infoPostFix":    "",
+			    "thousands":      ",",
+			    "lengthMenu":     "Tampilkan _MENU_ entri",
+			    "loadingRecords": "Proses Loading...",
+			    "processing":     "Sedang Proses...",
+			    "search":         "Cari:",
+			    "zeroRecords":    "Tidak ditemukan data yang sesuai",
+			    "paginate": {
+			        "first":      "Awal",
+			        "last":       "Akhir",
+			        "next":       "Sesudah",
+			        "previous":   "Sebelum"
+			    },
+			    "aria": {
+			        "sortAscending":  ": aktifkan untuk mengurutkan kolom (asc)",
+			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
+			    }
+			},
+			serverSide: true,
+			ajax: {
+				url: route + "/data?id_rkap=" + id_rkap,
+			},
+			columns: [
+				{ data: "nmsdana", name: "nmsdana", className: "t-left" },
+				{ data: "nmprogram", name: "nmprogram", className: "t-left" },
+				{ data: "nmgiat", name: "nmgiat", className: "t-left" },
+				{ data: "nmproyek", name: "nmproyek", className: "t-left" },
+				{ data: "nmakun", name: "nmakun", className: "t-left" },
+				{ data: "nilai1", name: "nilai1", className: "t-right" },
+				{ data: "nilai2", name: "nilai2", className: "t-right" },
+				{ data: "status", name: "status", className: "t-left" },
+			],
+		});
+
+		// kembali ke parent
+		$('#kembali').click(function(){
+			window.location.href = "#/" + back;
+		});
+		
+	});
+	
+</script>

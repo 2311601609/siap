@@ -1,0 +1,424 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">Kontrak/ Lampiran</div>
+        </div>
+    </div>
+	
+	<div class="row" id="div-form">
+	    <div class="col-md-12">
+	        <div class="card">
+	            <div class="card-header">
+	                <h4 class="card-title" id="horz-layout-basic">Form</h4>
+	            </div>
+	            <div class="card-body">
+	                <div class="px-3">
+	                    <form id="form-ruh" class="form form-horizontal">
+	                    	<input type="hidden" id="inp-rekambaru" name="inp-rekambaru">
+							<input type="hidden" id="inp-id" name="inp-id">
+							<input type="hidden" id="_token" name="_token">
+							<input type="hidden" id="id_kontrak" name="id_kontrak">
+							<input type="hidden" id="nmfile_baru" name="nmfile_baru">
+
+							<div class="row">
+								<div class="col-md-2">
+									<fieldset class="form-group">
+										<label for="fileupload">Upload Lampiran</label>
+										<div>
+											<span class="btn btn-primary fileinput-button">
+												<i class="fa fa-upload"></i>
+												<span>Browse File</span>
+												<input id="fileupload" type="file" name="file">
+											</span>
+										</div>
+									</fieldset>
+								</div>
+								<div class="col-md-5">
+									<fieldset class="form-group">
+										<label for="ket">Status Upload</label>
+										<input type="text" id="status-upload" name="status-upload" class="form-control" disabled>
+									</fieldset>									
+								</div>
+								<div class="col-md-5">
+									<fieldset class="form-group">
+										<label for="ket">Keterangan</label>
+										<textarea type="text" id="ket" name="ket" class="form-control"></textarea>
+									</fieldset>
+								</div>
+							</div>
+							
+	                    </form>
+	                </div>
+	            </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2 batal">
+						<i class="ft-x m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Batal</span>
+					</button>
+					<button type="button" class="btn-send btn btn-primary" id="simpan">
+						<i class="ft-send m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Simpan</span>
+					</button>
+				</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<div class="row" id="div-tabel">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Data <span class="sub-modul-title"></span></h4>
+						<div class="actions float-right">
+							<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2" id="kembali">
+								<span class="d-flex align-items-center">
+									<i class="ft-arrow-left mr-1"></i>
+									<span>Kembali</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPrint">
+								<span class="d-flex align-items-center">
+									<span>Cetak</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPdf">
+								<span class="d-flex align-items-center">
+									<span>PDF</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportExcel">
+								<span class="d-flex align-items-center">
+									<span>XLS</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-2" id="tambah" style="display:none;">
+								<span class="d-flex align-items-center">
+									<i class="ft-plus mr-1"></i>
+									<span>Tambah</span>
+								</span>
+							</button>
+						</div>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard table-responsive">
+                        <table id="tabel-ruh" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+									<th>No</th>
+									<th>Keterangan</th>
+									<th>Tgl. Upload</th>
+									<th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	$(document).ready(function(){
+
+		//init route
+		var route = 'kontrak-lampiran';
+	
+		$.fn.dataTable.ext.errMode = 'none';
+		
+		//cek permission create
+		$.get(route, function(result){
+			if(result==1){ //admin
+				$('#tambah').show();
+			}
+		});
+
+		function getParameterByNameDetil(name, url) {
+			if (!url) url = window.location.href;
+			name = name.replace(/[\[\]]/g, '\\$&');
+			var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+				results = regex.exec(url);
+			if (!results) return null;
+			if (!results[2]) return '';
+			return decodeURIComponent(results[2].replace(/\+/g, ' '));
+		}
+
+		// default search
+		if(getParameterByNameDetil('id_kontrak')){
+			var id_kontrak = getParameterByNameDetil('id_kontrak');
+			var nodok = getParameterByNameDetil('nodok');
+		}
+		else{
+			var id_kontrak = '';
+			var nodok = '';
+		}
+
+		if(getParameterByNameDetil('back')){
+			var back = getParameterByNameDetil('back');
+		}
+		else{
+			var back = '';
+		}
+
+		$('.sub-modul-title').html(' : ' + nodok);
+		
+		//tampilan default
+		function form_default() {
+			$('input,textarea,select').val('');
+			$('.warning, #div-form').hide();
+			$('#div-tabel').show();
+			$('#simpan,#kdunit').prop('disabled', false);
+			$('.chosen').trigger('change');
+			$('#id_kontrak').val(id_kontrak);
+		}
+
+		$('#fileupload').click(function(){
+			$('#status-upload').html('File belum diupload...');
+		});
+
+		function upload(token){
+
+			$('#fileupload').fileupload({
+				url: route+'/upload',
+				dataType: 'json',
+				formData:{
+					_token: token
+				},
+				done: function (e, data) {
+					$('#nmfile').html(data.files[0].name);
+					$('#nmfile_baru').val(data.result.nmfile);
+					$('#tahun').val(data.result.tahun);
+					$('#bulan').val(data.result.bulan);
+					$('#status-upload').val('File berhasil diupload, silahkan klik tombol simpan.');
+				},
+				error: function(error) {
+					$('#status-upload').val(error.responseJSON.message);
+				},
+				progressall: function (e, data) {
+					$('#status-upload').html('Sedang proses upload..');
+				}
+			}).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
+				
+		}
+		
+		//aktivasi tampilan default
+		form_default();
+		
+		//klik tambah
+		$('#tambah').click(function(){
+			$('#inp-rekambaru').val('1');
+			$('#div-form').show();
+			$('#div-tabel').hide();
+			$.get('token', function(token){
+				if(token){
+					upload(token);
+				}
+			});
+		});
+
+		// datatable init
+        $("#exportPrint").on("click", function () {
+            table.button('.buttons-print').trigger();
+        });
+
+		$("#exportPdf").on("click", function () {
+            table.button('.buttons-pdf').trigger();
+        });
+
+		$("#exportExcel").on("click", function () {
+            table.button('.buttons-excel').trigger();
+        });
+		
+		//data tabel
+		var table=$('#tabel-ruh').DataTable({
+			buttons: [
+                {
+                    extend: 'print',
+                    title: 'Lampiran Kontrak',
+                    exportOptions: {
+                        columns: [ 0, 1, 2 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Lampiran Kontrak',
+                    exportOptions: {
+                        columns: [ 0, 1, 2 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+				{
+                    extend: 'excel',
+					title: 'Lampiran Kontrak',
+                    exportOptions: {
+                        columns: [ 0, 1, 2 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+            ],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Semua"],
+            ],
+			processing: true,
+			language:{
+			    "decimal":        "",
+			    "emptyTable":     "Tidak ada data tersedia",
+			    "info":           "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+			    "infoEmpty":      "Menampilkan 0 sampai 0 dari 0 entri",
+			    "infoFiltered":   "(disaring dari _MAX_ total entri)",
+			    "infoPostFix":    "",
+			    "thousands":      ",",
+			    "lengthMenu":     "Tampilkan _MENU_ entri",
+			    "loadingRecords": "Proses Loading...",
+			    "processing":     "Sedang Proses...",
+			    "search":         "Cari:",
+			    "zeroRecords":    "Tidak ditemukan data yang sesuai",
+			    "paginate": {
+			        "first":      "Awal",
+			        "last":       "Akhir",
+			        "next":       "Sesudah",
+			        "previous":   "Sebelum"
+			    },
+			    "aria": {
+			        "sortAscending":  ": aktifkan untuk mengurutkan kolom (asc)",
+			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
+			    }
+			},
+			serverSide: true,
+			ajax: {
+				url: route + "/data?id_kontrak=" + id_kontrak,
+			},
+			columns: [
+				{ data: "DT_RowIndex", name: "DT_RowIndex", className: "t-center", orderable: false, searchable: false },
+				{ data: "ket", name: "ket", className: "t-left" },
+				{ data: "created_at", name: "created_at", className: "t-left" },
+				{ data: "aksi", name: "aksi", className: "t-center", orderable: false, searchable: false },
+			]
+		});
+		
+		//validasi isian form
+		function form_valid(str_id){
+			var arr_id = str_id.split(',');
+			var next = true;
+			for(x = 0; x < arr_id.length; x++){
+				if($('#'+arr_id[x]).val()==''){
+					$('#'+arr_id[x]).addClass('is-invalid');
+					next = false;
+				}
+			}
+			return next;
+		}
+		
+		//klik batal
+		$('.batal').click(function(){
+			form_default();
+		});
+		
+		//klik simpan
+		$('#simpan').click(function(){
+			$(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
+			$(this).prop('disabled',true);
+			var next = form_valid('ket');
+			if(next==true){
+				$.get('token', function(token){
+					if(token){
+						$('#_token').val(token);
+						var data = $('#form-ruh').serialize();
+						$.ajax({
+							url: route,
+							method: 'POST',
+							data: data,
+							success: function(result){
+								if(result=='success') {
+									$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan').prop('disabled',false);
+									alertify.log('Proses simpan berhasil');
+									form_default();
+									table.ajax.reload();
+								} else {
+									$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan').prop('disabled',false);
+									alertify.log(result);
+								} 
+							},
+							error: function(result){
+								$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+								$('#simpan').prop('disabled',false);
+								alertify.log('Data tidak dapat disimpan. Koneksi pada aplikasi/database terputus atau data sudah pernah direkam atau format data salah. Hubungi Administrator.');
+							}
+						})
+					} 
+					else{
+						$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+						$('#simpan').prop('disabled',false);
+						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
+					}
+				});
+			}
+			else{
+				$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+				$('#simpan').prop('disabled',false);
+				alertify.log('Data tidak dapat dikosongkan!');
+			}
+		});
+		
+		//hapus
+		$('body').off('click', '.hapus').on('click', '.hapus', function(){
+			var id = this.id;
+			alertify.confirm('Hapus data ini?', function(c){
+				if(c) {
+					$.get('token', function(token){
+						if(token) {
+							$.ajax({
+								url:route+'/hapus',
+								method:'POST',
+								data:{
+									_token:token, 
+									id:id
+								},
+								success:function(result){
+									if(result=='success') {
+										alertify.log('Proses hapus berhasil.');
+										table.ajax.reload();
+									} else {
+										alertify.log(result);
+									} 
+								},
+								error:function(result){
+									alertify.log('Koneksi pada aplikasi/database terputus. Hubungi Administrator.');
+								}
+							});
+						} else {
+							alertify.log('Proses hapus gagal. Silahkan refresh halaman browser anda.');
+						} 
+					});
+				} 
+			});
+		});
+
+		// kembali ke parent
+		$('#kembali').click(function(){
+			window.location.href = "#/" + back;
+		});
+		
+	});
+	
+</script>

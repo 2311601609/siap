@@ -1,0 +1,519 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">Tagihan Baru</div>
+        </div>
+    </div>
+	
+	<div class="row" id="div-form">
+	    <div class="col-md-12">
+	        <div class="card">
+	            <div class="card-header">
+	                <h4 class="card-title" id="horz-layout-basic">Form</h4>
+	            </div>
+	            <div class="card-body">
+	                <div class="px-3">
+	                    <form id="form-ruh" class="form form-horizontal">
+	                    	<input type="hidden" id="inp-rekambaru" name="inp-rekambaru">
+							<input type="hidden" id="inp-id" name="inp-id">
+							<input type="hidden" id="_token" name="_token">
+
+							<div class="row">
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="id_penerima">Vendor/ Pelanggan</label>
+										<select id="id_penerima" name="id_penerima" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="id_proyek">Proyek</label>
+										<select id="id_proyek" name="id_proyek" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nodok">Nomor Kontrak</label>
+										<input type="text" id="nodok" name="nodok" class="form-control">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="tgdok">Tanggal Kontrak</label>
+										<input type="date" id="tgdok" name="tgdok" class="form-control">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="tgjtempo">Tanggal Jatuh Tempo</label>
+										<input type="date" id="tgjtempo" name="tgjtempo" class="form-control">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="ket">Keterangan</label>
+										<textarea type="text" id="ket" name="ket" class="form-control" maxlength="4000"></textarea>
+									</fieldset>
+								</div>
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="tipe">Jenis Kontrak</label>
+										<select id="tipe" name="tipe" class="form-control chosen">
+											<option value="1">Penerimaan</option>
+											<option value="2">Pengeluaran</option>
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="jenis">Metode Pembayaran</label>
+										<select id="jenis" name="jenis" class="form-control chosen">
+											<option value="01">Periodik Bulanan</option>
+											<option value="02">Progres Fisik</option>
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nilai">Nilai Kontrak</label>
+										<input type="text" id="nilai" name="nilai" class="form-control uang" maxlength="255" style="text-align: right;">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="jmlbayar">Jumlah Tenor</label>
+										<input type="text" id="jmlbayar" name="jmlbayar" class="form-control uang" maxlength="255" style="text-align: right;">
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="tgjtempo">Tanggal Mulai Bayar</label>
+										<input type="date" id="tgmulai" name="tgmulai" class="form-control">
+									</fieldset>
+								</div>
+							</div>
+							
+	                    </form>
+	                </div>
+	            </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2 batal">
+						<i class="ft-x m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Batal</span>
+					</button>
+					<button type="button" class="btn-send btn btn-primary" id="simpan">
+						<i class="ft-send m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Simpan</span>
+					</button>
+				</div>
+	        </div>
+	    </div>
+	</div>
+
+	<div class="row" id="div-form-detil">
+	    <div class="col-md-12">
+	        <div class="card">
+	            <div class="card-header">
+	                <h4 class="card-title" id="horz-layout-basic">Form</h4>
+	            </div>
+	            <div class="card-body">
+	                <div class="px-3">
+	                    <form id="form-ruh-detil" class="form form-horizontal">
+	                    	<input type="hidden" id="inp-rekambaru-detil" name="inp-rekambaru">
+							<input type="hidden" id="inp-id-detil" name="inp-id">
+							<input type="hidden" id="_token-detil" name="_token">
+							<input type="hidden" id="status_lama" name="status_lama">
+
+							<div class="row">
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="nmunit">Unit/ Divisi</label>
+										<input type="text" id="nmunit" name="nmunit" class="form-control" readonly>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="nodok-detil">Nomor Kontrak</label>
+										<input type="text" id="nodok-detil" name="nodok-detil" class="form-control" readonly>
+									</fieldset>
+								</div>
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="status">Status</label>
+										<select id="status" name="status" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="ket_tolak">Keterangan Penolakan</label>
+										<textarea id="ket_tolak" name="ket_tolak" class="form-control"></textarea>
+									</fieldset>
+								</div>
+							</div>
+							
+	                    </form>
+	                </div>
+	            </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2 batal">
+						<i class="ft-x m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Batal</span>
+					</button>
+					<button type="button" class="btn-send btn btn-primary" id="simpan-detil">
+						<i class="ft-send m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Simpan</span>
+					</button>
+				</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<div class="row" id="div-tabel">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Data</h4>
+						<div class="actions float-right">
+							<button type="button" class="btn btn-primary mr-2" id="tambah" style="display:none;">
+								<span class="d-flex align-items-center">
+									<i class="ft-plus mr-1"></i>
+									<span>Tambah</span>
+								</span>
+							</button>
+						</div>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard table-responsive">
+                        <table id="tabel-ruh" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+									<th>No</th>
+									<th>Vendor</th>
+									<th>Unit/ Divisi</th>
+									<th>Nomor</th>
+									<th>Nilai</th>
+									<th>Jatuh Tempo</th>
+									<th>Status</th>
+									<th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	$(document).ready(function(){
+
+		//init route
+		var route = 'tagihan-baru';
+	
+		$.fn.dataTable.ext.errMode = 'none';
+
+		$('.uang').inputmask('numeric', {
+			radixPoint: ',',
+			groupSeparator: '.',
+			autoGroup: true,
+			prefix: '',
+			rightAlign: false,
+			digits: 2,
+			oncleared: function () {
+				// Fungsi ini akan dipanggil saat input dihapus
+				$(this).val('');
+			}
+		});
+		
+		//fungsi dropdown
+		$('.chosen').select2();
+
+		$.get('dropdown/penerima', function(result){
+			$('#id_penerima').html(result).trigger('change');
+		});
+
+		$.get('dropdown/proyek', function(result){
+			$('#id_proyek').html(result).trigger('change');
+		});
+		
+		//cek permission create
+		$.get(route, function(result){
+			if(result==1){ //admin
+				$('#tambah').show();
+			}
+		});
+		
+		//tampilan default
+		function form_default() {
+			$('input,textarea,select').val('');
+			$('.warning, #div-form, #div-form-detil').hide();
+			$('#div-tabel').show();
+			$('#simpan,#kdunit').prop('disabled', false);
+			$('.chosen').trigger('change');
+		}
+		
+		//aktivasi tampilan default
+		form_default();
+		
+		//klik tambah
+		$('#tambah').click(function(){
+			$('#inp-rekambaru').val('1');
+			$('#div-form').show();
+			$('#div-tabel').hide();
+		});
+		
+		//data tabel
+		var table=$('#tabel-ruh').DataTable({
+			buttons: [
+				{
+					extend: 'excel',
+					title: 'Header Kontrak'
+				},
+				{
+					extend: 'pdf',
+					title: 'Header Kontrak'
+				},
+				{
+					extend: 'print',
+					title: 'Header Kontrak'
+				}
+			],
+			processing: true,
+			language:{
+			    "decimal":        "",
+			    "emptyTable":     "Tidak ada data tersedia",
+			    "info":           "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+			    "infoEmpty":      "Menampilkan 0 sampai 0 dari 0 entri",
+			    "infoFiltered":   "(disaring dari _MAX_ total entri)",
+			    "infoPostFix":    "",
+			    "thousands":      ",",
+			    "lengthMenu":     "Tampilkan _MENU_ entri",
+			    "loadingRecords": "Proses Loading...",
+			    "processing":     "Sedang Proses...",
+			    "search":         "Cari:",
+			    "zeroRecords":    "Tidak ditemukan data yang sesuai",
+			    "paginate": {
+			        "first":      "Awal",
+			        "last":       "Akhir",
+			        "next":       "Sesudah",
+			        "previous":   "Sebelum"
+			    },
+			    "aria": {
+			        "sortAscending":  ": aktifkan untuk mengurutkan kolom (asc)",
+			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
+			    }
+			},
+			serverSide: true,
+			ajax: {
+				url: route + "/data",
+			},
+			columns: [
+				{ data: "DT_RowIndex", name: "DT_RowIndex", className: "t-center", orderable: false, searchable: false },
+				{ data: "vendor", name: "vendor", className: "t-left" },
+				{ data: "nmunit", name: "nmunit", className: "t-left" },
+				{ data: "nodok", name: "nodok", className: "t-left" },
+				{ data: "nilai", name: "nilai", className: "t-right" },
+				{ data: "tgjtempo", name: "tgjtempo", className: "t-left" },
+				{ data: "nmstatus", name: "nmstatus", className: "t-left" },
+				{ data: "aksi", name: "aksi", className: "t-center", orderable: false, searchable: false },
+			],
+		});
+		
+		//validasi isian form
+		function form_valid(str_id){
+			var arr_id = str_id.split(',');
+			var next = true;
+			for(x = 0; x < arr_id.length; x++){
+				if($('#'+arr_id[x]).val()==''){
+					$('#'+arr_id[x]).addClass('is-invalid');
+					next = false;
+				}
+			}
+			return next;
+		}
+		
+		//cari data user yang akan di edit berdasarkan id user
+		function cari_data(id){
+			$('.chosen').val('').trigger('change');
+			$.getJSON(route + '/pilih?id=' + id, function(result){
+				if(result) {
+					$('#inp-id').val(id);
+					$('#inp-rekambaru').val('0');
+					$('#id_penerima').val(result.id_penerima);
+					$('#id_proyek').val(result.id_proyek);
+					$('#nodok').val(result.nodok);
+					$('#tgdok').val(result.tgdok);
+					$('#tgjtempo').val(result.tgjtempo);
+					$('#tgmulai').val(result.tgmulai);
+					$('#ket').val(result.ket);
+					$('#tipe').val(result.tipe);
+					$('#jenis').val(result.jenis);
+					$('#jmlbayar').val(result.jmlbayar);
+					$('#nilai').val(result.nilai);
+					$('.chosen').trigger('change');
+				}
+			});
+		}
+
+		function cari_data_detil(id){
+			$.getJSON(route + '/detil?id=' + id, function(result){
+				if(result) {
+					$('#inp-id-detil').val(id);
+					$('#inp-rekambaru-detil').val('0');
+					$('#nodok-detil').val(result.nodok);
+					$('#nmunit').val(result.nmunit);
+					$('#status_lama').val(result.status);
+					$('#status').html(result.dropdown_status).trigger('change');
+				}
+			});
+		}
+		
+		//klik ubah
+		$('body').off('click', '.ubah').on('click', '.ubah', function(){
+			var id = this.id;
+			$('#div-tabel').hide();
+			$('#div-form').show();
+			cari_data(id);
+		});
+		
+		//klik batal
+		$('.batal').click(function(){
+			form_default();
+		});
+		
+		//klik simpan
+		$('#simpan').click(function(){
+			$(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
+			$(this).prop('disabled',true);
+			var next = form_valid('id_penerima,id_proyek,tipe,nodok,tgdok,tgjtempo,ket,jenis,nilai,tgmulai,jmlbayar');
+			if(next==true){
+				$.get('token', function(token){
+					if(token){
+						$('#_token').val(token);
+						var data = $('#form-ruh').serialize();
+						$.ajax({
+							url: route,
+							method: 'POST',
+							data: data,
+							success: function(result){
+								if(result=='success') {
+									$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan').prop('disabled',false);
+									alertify.log('Proses simpan berhasil');
+									form_default();
+									table.ajax.reload();
+								} else {
+									$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan').prop('disabled',false);
+									alertify.log(result);
+								} 
+							},
+							error: function(result){
+								$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+								$('#simpan').prop('disabled',false);
+								alertify.log('Data tidak dapat disimpan. Koneksi pada aplikasi/database terputus atau data sudah pernah direkam atau format data salah. Hubungi Administrator.');
+							}
+						})
+					} 
+					else{
+						$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+						$('#simpan').prop('disabled',false);
+						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
+					}
+				});
+			}
+			else{
+				$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+				$('#simpan').prop('disabled',false);
+				alertify.log('Data tidak dapat dikosongkan!');
+			}
+		});
+		
+		//klik simpan
+		$('#simpan-detil').click(function(){
+			$(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
+			$(this).prop('disabled',true);
+			var next = form_valid('status');
+			if(next==true){
+				$.get('token', function(token){
+					if(token){
+						$('#_token-detil').val(token);
+						var data = $('#form-ruh-detil').serialize();
+						$.ajax({
+							url: route + '/detil',
+							method: 'POST',
+							data: data,
+							success: function(result){
+								if(result=='success') {
+									$('#simpan-detil').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan-detil').prop('disabled',false);
+									alertify.log('Proses simpan berhasil');
+									form_default();
+									table.ajax.reload();
+								} else {
+									$('#simpan-detil').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan-detil').prop('disabled',false);
+									alertify.log(result);
+								} 
+							},
+							error: function(result){
+								$('#simpan-detil').html('<i class="fa fa-check-square-o"></i> Simpan');
+								$('#simpan-detil').prop('disabled',false);
+								alertify.log('Data tidak dapat disimpan. Koneksi pada aplikasi/database terputus atau data sudah pernah direkam atau format data salah. Hubungi Administrator.');
+							}
+						})
+					} 
+					else{
+						$('#simpan-detil').html('<i class="fa fa-check-square-o"></i> Simpan');
+						$('#simpan-detil').prop('disabled',false);
+						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
+					}
+				});
+			}
+			else{
+				$('#simpan-detil').html('<i class="fa fa-check-square-o"></i> Simpan');
+				$('#simpan-detil').prop('disabled',false);
+				alertify.log('Data tidak dapat dikosongkan!');
+			}
+		});
+
+		//hapus
+		$('body').off('click', '.hapus').on('click', '.hapus', function(){
+			var id = this.id;
+			alertify.confirm('Hapus data ini?', function(c){
+				if(c) {
+					$.get('token', function(token){
+						if(token) {
+							$.ajax({
+								url:route+'/hapus',
+								method:'POST',
+								data:{
+									_token:token, 
+									id:id
+								},
+								success:function(result){
+									if(result=='success') {
+										alertify.log('Proses hapus berhasil.');
+										table.ajax.reload();
+									} else {
+										alertify.log(result);
+									} 
+								},
+								error:function(result){
+									alertify.log('Koneksi pada aplikasi/database terputus. Hubungi Administrator.');
+								}
+							});
+						} else {
+							alertify.log('Proses hapus gagal. Silahkan refresh halaman browser anda.');
+						} 
+					});
+				} 
+			});
+		});
+
+		//klik ubah
+		$('body').off('click', '.proses').on('click', '.proses', function(){
+			var id = this.id;
+			$('#div-tabel').hide();
+			$('#div-form-detil').show();
+			cari_data_detil(id);
+		});
+		
+	});
+	
+</script>

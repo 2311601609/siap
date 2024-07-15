@@ -4,148 +4,63 @@ use DB;
 use Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use DataTables;
+use App\Libraries\PublicFunction;
 
 class TagihanPajakController extends Controller {
 
 	public function index(Request $request)
 	{
-		$aColumns = array('id','nourut','nmunit','nama','nmtrans','nilai','pajak','total');
-		/* Indexed column (used for fast and accurate table cardinality) */
-		$sIndexColumn = "id";
-		/* DB table to use */
-		$sTable = "select  	a.id,
-							lpad(a.nourut,5,'0') as nourut,
-							d.nmunit,
-							e.nama,
-							h.nmtrans,
-							a.nodok as pks,
-							to_char(a.tgdok1,'dd-mm-yyyy') as tgjtempo,
-							a.uraian,
-							nvl(a.nilai_bersih,0) as nilai,
-							b.nmalur||'<br>'||g.nmlevel||'<br>'||c.nmstatus as status,
-							nvl(a.nilai,0)-nvl(a.nilai_bersih,0) as pajak,
-							nvl(a.nilai,0)+nvl(a.ppn,0)+nvl(a.pph21,0)+nvl(a.pph22,0)+nvl(a.pph23,0)+nvl(a.pph25,0) as total
-					from d_trans a
-					left outer join t_alur b on(a.id_alur=b.id)
-					left outer join t_alur_status c on(a.id_alur=c.id_alur and a.status=c.status)
-					left outer join t_unit d on(a.kdunit=d.kdunit)
-					left outer join t_penerima e on(a.id_penerima=e.id)
-					left outer join t_level g on(c.kdlevel=g.kdlevel)
-					left outer join t_trans h on(a.kdtran=h.id)
-					where b.menu=1 and a.thang='".session('tahun')."' and c.is_pajak1='1'
-					";
-		
-		/*
-		 * Paging
-		 */ 
-		$sLimit = " ";
-		if((isset($_GET['iDisplayStart']))&&(isset($_GET['iDisplayLength']))){
-			$iDisplayStart=$_GET['iDisplayStart']+1;
-			$iDisplayLength=$_GET['iDisplayLength'];
-			$sSearch=$_GET['sSearch'];
-			if ((isset( $iDisplayStart )) &&  ($iDisplayLength != '-1' )) 
-			{
-				$iDisplayEnd=$iDisplayStart+$iDisplayLength-1;
-				$sLimit = " WHERE NO BETWEEN '$iDisplayStart' AND '$iDisplayEnd'";
-			}
-		}
-		
-		/*
-		 * Ordering
-		 */
-		$sOrder = " ";
-		if((isset($_GET['iSortCol_0']))&&(isset($_GET['sSortDir_0']))){
-			$iSortCol_0=$_GET['iSortCol_0'];
-			$iSortDir_0=$_GET['sSortDir_0'];
-			if ( isset($iSortCol_0  ) )
-			{		
-				//modified ordering
-				for($i=0;$i<count($aColumns);$i++){
-					if($iSortCol_0==$i){
-						if($iSortDir_0=='asc'){
-							$sOrder = " ORDER BY ".$aColumns[$i]." DESC ";
-						}
-						else{
-							$sOrder = " ORDER BY ".$aColumns[$i]." ASC ";
-						}
-					}
-				}
-			}
-		}
-		
-		//modified filtering
-		$sWhere="";
-		if(isset($_GET['sSearch'])){
-			$sSearch=$_GET['sSearch'];
-			if((isset($sSearch))&&($sSearch!='')){
-				$sWhere=" where lower(pks) like lower('".$sSearch."%') or lower(pks) like lower('%".$sSearch."%') or
-								lower(nourut) like lower('".$sSearch."%') or lower(nourut) like lower('%".$sSearch."%') ";
-			}
-		}
-		
-		/* Data set length after filtering */
-		$iFilteredTotal = 0;
-		$rows = DB::select("
-			SELECT COUNT(*) as JUMLAH FROM (".$sTable.") qry
-		");
-		$result = (array)$rows[0];
-		if($result){
-			$iFilteredTotal = $result['jumlah'];
-		}
-		
-		/* Total data set length */
-		$iTotal = 0;
-		$rows = DB::select("
-			SELECT COUNT(".$sIndexColumn.") as JUMLAH FROM (".$sTable.") qry
-		");
-		$result = (array)$rows[0];
-		if($result){
-			$iTotal = $result['jumlah'];
-		}
+		$sql = "
+			select  a.id,
+					lpad(a.nourut,5,'0') as nourut,
+					d.nmunit,
+					e.nama,
+					h.nmtrans,
+					a.nodok as pks,
+					to_char(a.tgdok1,'dd-mm-yyyy') as tgjtempo,
+					a.uraian,
+					nvl(a.nilai,0) as nilai,
+					abs(nvl(a.nilai,0)-nvl(a.nilai_bersih,0)) as pajak,
+					nvl(a.nilai_bersih,0) as total
+			from d_trans a
+			left outer join t_alur b on(a.id_alur=b.id)
+			left outer join t_alur_status c on(a.id_alur=c.id_alur and a.status=c.status)
+			left outer join t_unit d on(a.kdunit=d.kdunit)
+			left outer join t_penerima e on(a.id_penerima=e.id)
+			left outer join t_level g on(c.kdlevel=g.kdlevel)
+			left outer join t_trans h on(a.kdtran=h.id)
+			where b.menu=1 and a.thang='".session('tahun')."' and c.is_pajak1='1'
+		";
 
-		/*
-		 * Format Output
-		 */
-		$sEcho="";
-		if(isset($_GET['sEcho'])){
-			$sEcho=$_GET['sEcho'];
-		}
-		$output = array(
-			"sEcho" => intval($sEcho),
-			"iTotalRecords" => $iTotal,
-			"iTotalDisplayRecords" => $iFilteredTotal,
-			"aaData" => array()
-		);
-		
-		$str=str_replace(" , ", " ", implode(", ", $aColumns));
-		
-		$sQuery = "SELECT * FROM ( SELECT ROWNUM AS NO,".$str." FROM ( SELECT * FROM (".$sTable.") ".$sOrder.") ".$sWhere." ) a ".$sLimit." ";
-		
-		$rows = DB::select($sQuery);
-		
-		foreach( $rows as $row )
-		{
-			$aksi='<center>
-						<button type="button" class="btn btn-raised btn-sm btn-icon btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-check"></i></button>
-						<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-							<a id="'.$row->id.'" class="dropdown-item proses" href="javascript:;">Ubah Pajak</a>
-						</div>
-					</center>';
-			
-			$output['aaData'][] = array(
-				$row->no,
-				$row->nourut,
-				$row->nmunit,
-				$row->nama,
-				$row->nmtrans,
-				'<div style="text-align:right;">'.number_format($row->nilai).'</div>',
-				'<div style="text-align:right;">'.number_format($row->pajak).'</div>',
-				'<div style="text-align:right;">'.number_format($row->total).'</div>',
-				$aksi
-			);
-		}
-		
-		return response()->json($output);
+		$query = DB::table(DB::raw("($sql) a"))
+				->selectRaw('a.*');
+
+		$datatables = DataTables::of($query)
+					->addIndexColumn()
+					->editColumn('nilai', function($row){
+						return number_format($row->nilai, 0, ',', '.');
+					})
+					->editColumn('pajak', function($row){
+						return number_format($row->pajak, 0, ',', '.');
+					})
+					->editColumn('total', function($row){
+						return number_format($row->total, 0, ',', '.');
+					})
+					->addColumn('aksi', function($row){
+
+						return '<center>
+									<button type="button" class="btn btn-raised btn-sm btn-icon btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-check"></i></button>
+									<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+										<a id="'.$row->id.'" class="dropdown-item proses" href="javascript:;">Ubah Pajak</a>
+									</div>
+								</center>';
+
+					})
+					->rawColumns(['aksi'])
+					->make(true);
+
+		return $datatables;
 	}
 	
 	public function pilih(Request $request, $id)
@@ -161,13 +76,6 @@ class TagihanPajakController extends Controller {
 					to_char(a.tgdok,'yyyy-mm-dd') as tgpks,
 					to_char(a.tgdok1,'yyyy-mm-dd') as tgjtempo,
 					a.uraian,
-					nvl(f.nilai,0) as nilai,
-					nvl(a.ppn,0) as ppn,
-					nvl(a.pph21,0) as pph21,
-					nvl(a.pph22,0) as pph22,
-					nvl(a.pph23,0) as pph23,
-					nvl(a.pph25,0) as pph25,
-					nvl(i.nilai,0) as total,
 					nvl(f.nmakun,0) as debet,
 					nvl(i.nmakun,0) as kredit,
 					a.kredit as kdakun,
@@ -175,7 +83,8 @@ class TagihanPajakController extends Controller {
 					a.status,
 					f.kdakun as kdakun_d,
 					i.kdakun as kdakun_k,
-					(nvl(f.nilai,0)-(floor(nvl(f.nilai,0))))*100 as nilai_des
+					nvl(f.nilai,0) as total,
+					nvl(i.nilai,0) as nilai
 			from d_trans a
 			left outer join t_alur b on(a.id_alur=b.id)
 			left outer join t_unit c on(a.kdunit=c.kdunit)
@@ -279,103 +188,129 @@ class TagihanPajakController extends Controller {
 	
 	public function simpan(Request $request)
 	{
-		$total = str_replace(',', '', $request->input('total'));
+		DB::connection()->getPdo()->beginTransaction();
+
+		try{
+			$lanjut = false;
+			$error = '';
+
+			$id_trans = str_replace(',', '', $request->input('inp-id'));
+			$nilai = str_replace(',', '', $request->input('nilai'));
+			$total = str_replace(',', '', $request->input('total'));
 		
-		if($total>0){
-		
-			DB::beginTransaction();
-			
-			$update = DB::update("
-				update d_trans
-				set nilai=?,
-					nilai_bersih=?,
-					id_user=?,
-					updated_at=sysdate
-				where id=?
-			",[
-				str_replace(',', '', $request->input('total')),
-				str_replace(',', '', $request->input('nilai')),
-				session('id_user'),
-				$request->input('inp-id')
-			]);
-			
-			if($update){
+			if($total>0){
 				
-				$id_trans = $request->input('inp-id');
+				$update = DB::update("
+					update d_trans
+					set nilai=?,
+						nilai_bersih=?,
+						id_user=?,
+						updated_at=sysdate
+					where id=?
+				",[
+					str_replace(',', '', $request->input('nilai')),
+					str_replace(',', '', $request->input('total')),
+					session('id_user'),
+					$request->input('inp-id')
+				]);
 				
-				$arr_insert[] = "select	".$id_trans." as id_trans,
-										'".$request->input('kdakun_d')."' as kdakun,
-										'D' as kddk,
-										".str_replace(',', '', $request->input('nilai'))." as nilai,
-										1 as grup
-								 from dual";
-								 
-				$arr_insert[] = "select	".$id_trans." as id_trans,
-										'".$request->input('kdakun_k')."' as kdakun,
-										'K' as kddk,
-										".str_replace(',', '', $request->input('total'))." as nilai,
-										1 as grup
-								 from dual
-								 ";
-				
-				$lanjut = true;
-				$arr_pajak = $request->input('rincian');
-				$id_trans = $request->input('inp-id');
-				if(is_array($arr_pajak)){
-					if(count($arr_pajak)>0){
-						
-						$arr_keys = array_keys($arr_pajak);
-						
-						for($i=0;$i<count($arr_keys);$i++){
+				if($update){
+					
+					$arr_insert[] = "select	".$id_trans." as id_trans,
+											'".$request->input('kdakun_d')."' as kdakun,
+											'D' as kddk,
+											".$total." as nilai,
+											1 as grup
+									from dual";
+									
+					$arr_insert[] = "select	".$id_trans." as id_trans,
+											'".$request->input('kdakun_k')."' as kdakun,
+											'K' as kddk,
+											".$nilai." as nilai,
+											1 as grup
+									from dual
+									";
+					
+					$lanjut = true;
+					$arr_pajak = $request->input('rincian');
+					if(is_array($arr_pajak)){
+						if(count($arr_pajak)>0){
 							
-							if($arr_pajak[$arr_keys[$i]]["'nilai'"]>0){
+							$arr_keys = array_keys($arr_pajak);
 							
-								$arr_akun = explode("|", $arr_pajak[$arr_keys[$i]]["'kdakun'"]);
-								$kdakun = $arr_akun[0];
-								$kddk = $arr_akun[1];
+							for($i=0;$i<count($arr_keys);$i++){
 								
-								$arr_insert[] = "select	".$id_trans." as id_trans,
-														'".$kdakun."' as kdakun,
-														'".$kddk."' as kddk,
-														".str_replace(',', '', $arr_pajak[$arr_keys[$i]]["'nilai'"])." as nilai,
-														0 as grup
-												 from dual";
-												 
+								$pajak = (float)(str_replace(',', '', $arr_pajak[$arr_keys[$i]]["'nilai'"]));
+								
+								if($pajak>0){
+								
+									$arr_akun = explode("|", $arr_pajak[$arr_keys[$i]]["'kdakun'"]);
+									$kdakun = $arr_akun[0];
+
+									$kddk = $arr_akun[1];
+								
+									$arr_insert[] = "select	".$id_trans." as id_trans,
+															'".$kdakun."' as kdakun,
+															'".$kddk."' as kddk,
+															".$pajak." as nilai,
+															0 as grup
+													from dual";
+													
+								}
+								
 							}
 							
 						}
-						
 					}
-				}
-				
-				$delete = DB::delete("
-					delete from d_trans_akun
-					where id_trans=?
-				",[
-					$id_trans
-				]);
 					
-				$insert = DB::insert("
-					insert into d_trans_akun(id_trans,kdakun,kddk,nilai,grup)
-					".implode(" union all ", $arr_insert)."
-				");
-				
-				if($insert){
-					DB::commit();
-					return 'success';
+					$delete = DB::delete("
+						delete from d_trans_akun
+						where id_trans=?
+					",[
+						$id_trans
+					]);
+						
+					$insert = DB::insert("
+						insert into d_trans_akun(id_trans,kdakun,kddk,nilai,grup)
+						".implode(" union all ", $arr_insert)."
+					");
+					
+					if($insert){
+						$lanjut = true;
+					}
+					else{
+						$error = 'Simpan pajak gagal!';
+					}
+					
 				}
 				else{
-					return 'Simpan pajak gagal!';
+					$error = 'Data gagal diupdate!';
 				}
 				
 			}
 			else{
-				return 'Data gagal diupdate!';
+				$error = 'Hitung dulu total transaksi ini!';
 			}
-			
+
+			if($lanjut){
+				DB::connection()->getPdo()->commit();
+				return 'success';
+			}
+			else{
+				DB::connection()->getPdo()->rollBack();
+				return $error;
+			}
+
 		}
-		else{
-			return 'Hitung dulu total transaksi ini!';
+		catch(\Exception $e){
+			DB::connection()->getPdo()->rollBack();
+
+			if(PublicFunction::errorLog($request, substr($e->getMessage(),0,255))){
+				return 'Kesalahan lainnya, hubungi Administrator.';
+			}
+			else{
+				return 'Kesalahan lainnya, hubungi Administrator. Log error gagal disimpan.';
+			}
 		}
 	}
 	
