@@ -4,11 +4,19 @@ use DB;
 use Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use DataTables;
+use App\Libraries\PublicFunction;
 
 class PenerimaanRekamController extends Controller {
 
 	public function index(Request $request)
+	{
+		if(ession('kdlevel')=='10' || session('kdlevel')=='12'){
+			return 1;
+		}
+	}
+
+	public function data(Request $request)
 	{
 		$panjang = strlen(session('kdunit'));
 		
@@ -18,201 +26,83 @@ class PenerimaanRekamController extends Controller {
 		if(in_array(session('kdlevel'), $arrLevel)){
 			$and = " and substr(a.kdunit,1,".$panjang.")='".session('kdunit')."'";
 		}
-		
-		/*if(session('kdlevel')!=='04'){
-			$and .= " and b.kdlevel='".session('kdlevel')."' ";
-		}*/
-		
-		$aColumns = array('id','nourut','nama','nmtrans','pks','tgjtempo','nilai','status','lampiran','is_ubah','is_final');
-		/* Indexed column (used for fast and accurate table cardinality) */
-		$sIndexColumn = "id";
-		/* DB table to use */
-		$sTable = "select  	a.id,
-							lpad(a.nourut,5,'0') as nourut,
-							e.nama,
-							h.nmtrans,
-							a.nodok||'<br>'||to_char(a.tgdok,'dd-mm-yyyy') as pks,
-							to_char(a.tgdok1,'dd-mm-yyyy') as tgjtempo,
-							a.uraian,
-							a.nilai,
-							c.nmstatus as status,
-							i.lampiran,
-							c.is_ubah,
-							c.is_final
-					from d_trans a
-					left outer join t_alur b on(a.id_alur=b.id)
-					left outer join t_alur_status c on(a.id_alur=c.id_alur and a.status=c.status)
-					left outer join t_penerima e on(a.id_penerima=e.id)
-					left outer join t_level g on(c.kdlevel=g.kdlevel)
-					left outer join t_trans h on(a.kdtran=h.id)
-					left outer join(
-						select  a.id_trans,
-								rtrim(xmlagg(xmlelement(e, a.id||'|'||b.uraian, ',')).extract('//text()').getclobval(), ',') as lampiran
-						from d_trans_dok a
-						left outer join t_dok_dtl b on(a.id_dok_dtl=b.id)
-						group by a.id_trans
-					) i on(a.id=i.id_trans)
-					where b.menu=2 and a.thang='".session('tahun')."' ".$and."
-					order by a.id desc
-					";
-		
-		/*
-		 * Paging
-		 */ 
-		$sLimit = " ";
-		if((isset($_GET['iDisplayStart']))&&(isset($_GET['iDisplayLength']))){
-			$iDisplayStart=$_GET['iDisplayStart']+1;
-			$iDisplayLength=$_GET['iDisplayLength'];
-			$sSearch=$_GET['sSearch'];
-			if ((isset( $iDisplayStart )) &&  ($iDisplayLength != '-1' )) 
-			{
-				$iDisplayEnd=$iDisplayStart+$iDisplayLength-1;
-				$sLimit = " WHERE NO BETWEEN '$iDisplayStart' AND '$iDisplayEnd'";
-			}
-		}
-		
-		/*
-		 * Ordering
-		 */
-		$sOrder = " ";
-		if((isset($_GET['iSortCol_0']))&&(isset($_GET['sSortDir_0']))){
-			$iSortCol_0=$_GET['iSortCol_0'];
-			$iSortDir_0=$_GET['sSortDir_0'];
-			if ( isset($iSortCol_0  ) )
-			{		
-				//modified ordering
-				for($i=0;$i<count($aColumns);$i++){
-					if($iSortCol_0==$i){
-						if($iSortDir_0=='asc'){
-							$sOrder = " ORDER BY ".$aColumns[$i]." DESC ";
-						}
-						else{
-							$sOrder = " ORDER BY ".$aColumns[$i]." ASC ";
-						}
-					}
-				}
-			}
-		}
-		
-		//modified filtering
-		$sWhere="";
-		if(isset($_GET['sSearch'])){
-			$sSearch=$_GET['sSearch'];
-			if((isset($sSearch))&&($sSearch!='')){
-				$sWhere=" where lower(nourut) like lower('".$sSearch."%') or lower(nourut) like lower('%".$sSearch."%') or
-								lower(pks) like lower('".$sSearch."%') or lower(pks) like lower('%".$sSearch."%') or nilai=".$sSearch." ";
-			}
-		}
-		
-		/* Data set length after filtering */
-		$iFilteredTotal = 0;
-		$rows = DB::select("
-			SELECT COUNT(*) as JUMLAH FROM (".$sTable.") qry
-		");
-		$result = (array)$rows[0];
-		if($result){
-			$iFilteredTotal = $result['jumlah'];
-		}
-		
-		/* Total data set length */
-		$iTotal = 0;
-		$rows = DB::select("
-			SELECT COUNT(".$sIndexColumn.") as JUMLAH FROM (".$sTable.") qry
-		");
-		$result = (array)$rows[0];
-		if($result){
-			$iTotal = $result['jumlah'];
-		}
 
-		/*
-		 * Format Output
-		 */
-		$sEcho="";
-		if(isset($_GET['sEcho'])){
-			$sEcho=$_GET['sEcho'];
-		}
-		$output = array(
-			"sEcho" => intval($sEcho),
-			"iTotalRecords" => $iTotal,
-			"iTotalDisplayRecords" => $iFilteredTotal,
-			"aaData" => array()
-		);
-		
-		$str=str_replace(" , ", " ", implode(", ", $aColumns));
-		
-		$sQuery = "SELECT * FROM ( SELECT ROWNUM AS NO,".$str." FROM ( SELECT * FROM (".$sTable.") ".$sOrder.") ".$sWhere." ) a ".$sLimit." ";
-		
-		$rows = DB::select($sQuery);
-		
-		foreach( $rows as $row )
-		{
-			$ruh = '';
-			if(session('kdlevel')=='10' || session('kdlevel')=='12'){
-				
-				if($row->is_ubah==1){
-					$ruh = '<a id="'.$row->id.'" class="dropdown-item ubah" href="javascript:;">Ubah Data</a>
-							<a id="'.$row->id.'" class="dropdown-item hapus" href="javascript:;">Hapus Data</a>';
-				}
-				
-			}
-			elseif(session('kdlevel')=='04' || session('kdlevel')=='07'){
-				
-				if($row->is_final!=='1'){
-					$ruh = '<a id="'.$row->id.'" class="dropdown-item ubah" href="javascript:;">Ubah Data</a>';
-				}
-				
-			}
-			elseif(session('kdlevel')=='00'){
-				
-				$ruh = '<a id="'.$row->id.'" class="dropdown-item ubah" href="javascript:;">Ubah Data</a>';
-				
-			}
-			
-			$aksi='<center>
-						<button type="button" class="btn btn-raised btn-sm btn-icon btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-check"></i></button>
-						<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-							'.$ruh.'
-							<!--<a id="'.$row->id.'" class="dropdown-item upload" href="javascript:;">Upload Lampiran</a>-->
-							<a class="dropdown-item" href="bukti/uang-masuk/'.$row->id.'" target="_blank">Cetak Bukti</a>
-							<a class="dropdown-item" href="bukti/kuitansi/'.$row->id.'" target="_blank">Cetak Kuitansi</a>
-						</div>
-					</center>';
-			
-			$lampiran = '<ul>';
-			if($row->lampiran!==''){
-				
-				$arr_lampiran = explode(',', $row->lampiran);
-				for($i=0;$i<count($arr_lampiran);$i++){
-					
-					$arr_dok = explode('|', $arr_lampiran[$i]);
-					if(count($arr_dok)>1){
+		$sql = "
+			select  a.id,
+					lpad(a.nourut,5,'0') as nourut,
+					e.nama,
+					h.nmtrans,
+					a.nodok||'<br>'||to_char(a.tgdok,'dd-mm-yyyy') as pks,
+					to_char(a.tgdok1,'dd-mm-yyyy') as tgjtempo,
+					a.uraian,
+					a.nilai,
+					c.nmstatus as status,
+					i.lampiran,
+					c.is_ubah,
+					c.is_final
+			from d_trans a
+			left outer join t_alur b on(a.id_alur=b.id)
+			left outer join t_alur_status c on(a.id_alur=c.id_alur and a.status=c.status)
+			left outer join t_penerima e on(a.id_penerima=e.id)
+			left outer join t_level g on(c.kdlevel=g.kdlevel)
+			left outer join t_trans h on(a.kdtran=h.id)
+			left outer join(
+				select  a.id_trans,
+						rtrim(xmlagg(xmlelement(e, a.id||'|'||b.uraian, ',')).extract('//text()').getclobval(), ',') as lampiran
+				from d_trans_dok a
+				left outer join t_dok_dtl b on(a.id_dok_dtl=b.id)
+				group by a.id_trans
+			) i on(a.id=i.id_trans)
+			where b.menu=2 and a.thang='".session('tahun')."' ".$and."
+			order by a.id desc
+		";
+
+		$query = DB::table(DB::raw("($sql) a"))
+				->selectRaw('a.*');
+
+		$datatables = DataTables::of($query)
+					->addIndexColumn()
+					->editColumn('nilai', function($row){
+						return number_format($row->nilai, 0, ',', '.');
+					})
+					->addColumn('aksi', function($row){
+
+						$ruh = '';
+						if(session('kdlevel')=='10' || session('kdlevel')=='12'){
+							
+							if($row->is_ubah==1){
+								$ruh = '<a id="'.$row->id.'" class="dropdown-item ubah" href="javascript:;">Ubah Data</a>
+										<a id="'.$row->id.'" class="dropdown-item hapus" href="javascript:;">Hapus Data</a>';
+							}
+							
+						}
+						elseif(session('kdlevel')=='04' || session('kdlevel')=='07'){
+							
+							if($row->is_final!=='1'){
+								$ruh = '<a id="'.$row->id.'" class="dropdown-item ubah" href="javascript:;">Ubah Data</a>';
+							}
+							
+						}
+						elseif(session('kdlevel')=='00'){
+							
+							$ruh = '<a id="'.$row->id.'" class="dropdown-item ubah" href="javascript:;">Ubah Data</a>';
+							
+						}
 						
-						$lampiran .= '<li>'.$arr_dok[1].'
-										<a id="'.$arr_dok[0].'" href="javascript:;" class="hapus-dok" title="Hapus Lampiran"><i class="fa fa-times"></i></a>
-										<a href="penerimaan/rekam/download/'.$arr_dok[0].'" target="_blank" title="Download Lampiran"><i class="fa fa-download"></i></a>
-									 </li>';
-						
-					}
-					
-				}
-				
-			}
-			$lampiran .= '</ul>';
-			
-			$output['aaData'][] = array(
-				$row->no,
-				$row->nourut,
-				$row->nama,
-				$row->nmtrans,
-				$row->pks,
-				'<div style="text-align:right;">'.number_format($row->nilai,2).'</div>',
-				$row->status,
-				//$lampiran,
-				$aksi
-			);
-		}
-		
-		return response()->json($output);
+						return '<center>
+									<button type="button" class="btn btn-raised btn-sm btn-icon btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-check"></i></button>
+									<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+										'.$ruh.'
+										<a class="dropdown-item" href="bukti/uang-masuk/'.$row->id.'" target="_blank">Cetak Bukti</a>
+										<a class="dropdown-item" href="bukti/kuitansi/'.$row->id.'" target="_blank">Cetak Kuitansi</a>
+									</div>
+								</center>';
+
+					})
+					->rawColumns(['aksi'])
+					->make(true);
+
+		return $datatables;
 	}
 	
 	public function pilih(Request $request, $id)
@@ -399,7 +289,7 @@ class PenerimaanRekamController extends Controller {
 			}
 		}
 		
-		$nilai = (float)(str_replace(',', '', $request->input('nilai')).'.'.str_replace(',', '', $request->input('nilai_des')));
+		$nilai = (float)(str_replace(',', '', $request->input('nilai')));
 		$pajak = 0;
 		$arr_pajak = $request->input('rincian');
 		if(is_array($arr_pajak)){
@@ -408,7 +298,7 @@ class PenerimaanRekamController extends Controller {
 				$arr_keys = array_keys($arr_pajak);
 				
 				for($i=0;$i<count($arr_keys);$i++){
-					$pajak1 = (float)(str_replace(',', '', $arr_pajak[$arr_keys[$i]]["'nilai'"]).'.'.str_replace(',', '', $arr_pajak[$arr_keys[$i]]["'nilai_des'"]));
+					$pajak1 = (float)(str_replace(',', '', $arr_pajak[$arr_keys[$i]]["'nilai'"]));
 					$arr_akun = explode("|", $arr_pajak[$arr_keys[$i]]["'kdakun'"]);
 					
 					if(isset($arr_akun[1])){

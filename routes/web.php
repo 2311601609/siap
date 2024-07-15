@@ -46,6 +46,16 @@ use App\Http\Controllers\RefProyekController;
 use App\Http\Controllers\RefPejabatController;
 use App\Http\Controllers\RefRekeningController;
 
+use App\Http\Controllers\RKAPController;
+use App\Http\Controllers\RKAPAkunController;
+use App\Http\Controllers\RKAPPerubahanController;
+use App\Http\Controllers\RKAPFinalController;
+use App\Http\Controllers\KontrakController;
+use App\Http\Controllers\KontrakDetilController;
+use App\Http\Controllers\KontrakLampiranController;
+use App\Http\Controllers\TagihanBaruController;
+use App\Http\Controllers\RefAkunDivisiController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -91,6 +101,79 @@ Route::middleware(['auth'])->group(function () {
 		Route::post('', [ProfileController::class, 'ubah']);
 		Route::post('/upload', [ProfileController::class, 'upload']);
 		
+	});
+
+	//RKAP
+	Route::group(['prefix' => 'rkap'], function () {
+			
+		Route::get('', [RKAPController::class, 'index']);
+		Route::get('data', [RKAPController::class, 'data']);
+		Route::get('nourut', [RKAPController::class, 'nourut']);
+		Route::get('pilih', [RKAPController::class, 'pilih'])->middleware('role:11');
+		Route::get('detil', [RKAPController::class, 'detil']);
+		Route::post('', [RKAPController::class, 'simpan'])->middleware('role:11');
+		Route::post('hapus', [RKAPController::class, 'hapus'])->middleware('role:11');
+		Route::post('detil', [RKAPController::class, 'detilSimpan']);
+	});
+
+	//RKAP - Akun
+	Route::group(['prefix' => 'rkap-akun'], function () {
+			
+		Route::get('', [RKAPAkunController::class, 'index']);
+		Route::get('data', [RKAPAkunController::class, 'data']);
+		Route::get('pilih', [RKAPAkunController::class, 'pilih'])->middleware('role:11');
+		Route::get('bulan', [RKAPAkunController::class, 'bulan']);
+		Route::post('', [RKAPAkunController::class, 'simpan'])->middleware('role:11');
+		Route::post('hapus', [RKAPAkunController::class, 'hapus'])->middleware('role:11');
+	});
+
+	//RKAP - Akun
+	Route::group(['prefix' => 'rkap-perubahan'], function () {
+			
+		Route::get('', [RKAPPerubahanController::class, 'index']);
+		Route::get('data', [RKAPPerubahanController::class, 'data']);
+	});
+
+	//RKAP - Akun
+	Route::group(['prefix' => 'rkap-final'], function () {
+			
+		Route::get('', [RKAPFinalController::class, 'index']);
+		Route::get('data', [RKAPFinalController::class, 'data']);
+	});
+
+	//Kontrak
+	Route::group(['prefix' => 'kontrak'], function () {
+			
+		Route::get('', [KontrakController::class, 'index']);
+		Route::get('data', [KontrakController::class, 'data']);
+		Route::get('nourut', [KontrakController::class, 'nourut']);
+		Route::get('pilih', [KontrakController::class, 'pilih'])->middleware('role:11');
+		Route::get('detil', [KontrakController::class, 'detil']);
+		Route::post('', [KontrakController::class, 'simpan'])->middleware('role:11');
+		Route::post('hapus', [KontrakController::class, 'hapus'])->middleware('role:11');
+		Route::post('detil', [KontrakController::class, 'detilSimpan']);
+	});
+
+	//Kontrak detil
+	Route::group(['prefix' => 'kontrak-detil'], function () {
+			
+		Route::get('', [KontrakDetilController::class, 'index']);
+		Route::get('data', [KontrakDetilController::class, 'data']);
+		Route::get('pilih', [KontrakDetilController::class, 'pilih'])->middleware('role:11');
+		Route::post('', [KontrakDetilController::class, 'simpan'])->middleware('role:11');
+		Route::post('hapus', [KontrakDetilController::class, 'hapus'])->middleware('role:11');
+	});
+
+	//Kontrak dok
+	Route::group(['prefix' => 'kontrak-lampiran'], function () {
+			
+		Route::get('', [KontrakLampiranController::class, 'index']);
+		Route::get('data', [KontrakLampiranController::class, 'data']);
+		Route::get('pilih', [KontrakLampiranController::class, 'pilih'])->middleware('role:11');
+		Route::post('', [KontrakLampiranController::class, 'simpan'])->middleware('role:11');
+		Route::post('upload', [KontrakLampiranController::class, 'upload'])->middleware('role:11');
+		Route::post('hapus', [KontrakLampiranController::class, 'hapus'])->middleware('role:11');
+		Route::get('download', [KontrakLampiranController::class, 'download'])->middleware('role:11');
 	});
 
     //anggaran
@@ -170,13 +253,15 @@ Route::middleware(['auth'])->group(function () {
 		Route::group(['prefix' => 'rekam'], function () {
 			
 			Route::get('', [TagihanRekamController::class, 'index']);
-			Route::get('/pilih/{param}', [TagihanRekamController::class, 'pilih'])->middleware('role:00.04.07.12');
-			Route::get('/nomor', [TagihanRekamController::class, 'nomor'])->middleware('role:04.07.12');
-			Route::get('/detil/{param}', [TagihanRekamController::class, 'detil']);
-			Route::get('/download/{param}', [TagihanRekamController::class, 'download']);
+			Route::get('data', [TagihanRekamController::class, 'data']);
+			Route::get('pilih/{param}', [TagihanRekamController::class, 'pilih'])->middleware('role:00.04.07.12');
+			Route::get('nomor', [TagihanRekamController::class, 'nomor'])->middleware('role:04.07.12');
+			Route::get('detil/{param}', [TagihanRekamController::class, 'detil']);
+			Route::get('download/{param}', [TagihanRekamController::class, 'download']);
 			Route::post('', [TagihanRekamController::class, 'simpan'])->middleware('role:00.04.07.12');
-			Route::post('/hapus', [TagihanRekamController::class, 'hapus'])->middleware('role:12');
-			Route::post('/upload', [TagihanRekamController::class, 'upload'])->middleware('role:12');
+			Route::post('hapus', [TagihanRekamController::class, 'hapus'])->middleware('role:12');
+			Route::post('upload', [TagihanRekamController::class, 'upload'])->middleware('role:12');
+			Route::post('hitung-total', [TagihanRekamController::class, 'hitungTotal'])->middleware('role:12');
 			
 		});
 		
@@ -211,6 +296,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::group(['prefix' => 'rekam'], function () {
 			
 			Route::get('', [PenerimaanRekamController::class, 'index']);
+			Route::get('data', [PenerimaanRekamController::class, 'data']);
 			Route::get('/pilih/{param}', [PenerimaanRekamController::class, 'pilih'])->middleware('role:00.04.07.10.12');
 			Route::get('/nomor', [PenerimaanRekamController::class, 'nomor'])->middleware('role:04.07.10.12');
 			Route::get('/tagihan/{param}', [PenerimaanRekamController::class, 'tagihan']);
@@ -567,6 +653,16 @@ Route::middleware(['auth'])->group(function () {
 			Route::post('/hapus', [RefRekeningController::class, 'hapus'])->middleware('role:00.01');
 			
 		});
+
+		Route::group(['prefix' => 'akun-divisi'], function(){
+			
+			Route::get('', [RefAkunDivisiController::class, 'index']);
+			Route::get('data', [RefAkunDivisiController::class, 'data']);
+			Route::get('pilih', [RefAkunDivisiController::class, 'pilih'])->middleware('role:00');
+			Route::post('', [RefAkunDivisiController::class, 'simpan'])->middleware('role:00');
+			Route::post('hapus', [RefAkunDivisiController::class, 'hapus'])->middleware('role:00');
+			
+		});
 		
 	});
 
@@ -597,7 +693,9 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('/akun/html/level1', [DropdownController::class, 'akun_html_level1']);
 		Route::get('/akun/json', [DropdownController::class, 'akun_json']);
 		Route::get('/akun-pajak/json', [DropdownController::class, 'akun_pajak_json']);
+		Route::get('/akun-pajak-baru/json', [DropdownController::class, 'akun_pajak_baru_json']);
 		Route::get('/akun/html/all', [DropdownController::class, 'akun_html_all']);
+		Route::get('/akun/html/all-unit', [DropdownController::class, 'akun_html_all_unit']);
 		Route::get('/akun/html/all1', [DropdownController::class, 'akun_html_all_lvl']);
 		Route::get('/akun/debet/{param}', [DropdownController::class, 'akun_debet']);
 		Route::get('/akun/debet/{param}/json', [DropdownController::class, 'akun_debet_json']);
@@ -615,6 +713,11 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('/saldo-kas-kecil', [DropdownController::class, 'saldoKasKecil']);
 		Route::get('/tanggal', [DropdownController::class, 'tanggal']);
 		Route::get('/status', [DropdownController::class, 'status']);
+		Route::get('/program', [DropdownController::class, 'program']);
+		Route::get('/kegiatan', [DropdownController::class, 'kegiatan']);
+		Route::get('/kontrak', [DropdownController::class, 'kontrak']);
+		Route::get('/kontrak-dtl', [DropdownController::class, 'kontrakDtl']);
+		Route::get('/kontrak-dtl-info', [DropdownController::class, 'kontrakDtlInfo']);
 		
 	});
 

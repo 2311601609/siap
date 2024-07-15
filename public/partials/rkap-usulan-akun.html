@@ -1,0 +1,495 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">RKAP/ Usulan/ Akun</div>
+        </div>
+    </div>
+	
+	<div class="row" id="div-form">
+	    <div class="col-md-12">
+	        <div class="card">
+	            <div class="card-header">
+	                <h4 class="card-title" id="horz-layout-basic">Form</h4>
+	            </div>
+	            <div class="card-body">
+	                <div class="px-3">
+	                    <form id="form-ruh" class="form form-horizontal">
+	                    	<input type="hidden" id="inp-rekambaru" name="inp-rekambaru">
+							<input type="hidden" id="inp-id" name="inp-id">
+							<input type="hidden" id="_token" name="_token">
+							<input type="hidden" id="id_rkap" name="id_rkap">
+
+							<div class="row">
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="kdsdana">Sumber Dana</label>
+										<select id="kdsdana" name="kdsdana" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="id_program">Kode Program</label>
+										<select id="id_program" name="id_program" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="id_giat">Kode Kegiatan</label>
+										<select id="id_giat" name="id_giat" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="id_proyek">Kode Proyek</label>
+										<select id="id_proyek" name="id_proyek" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="kdakun">Kode Akun (COA)</label>
+										<select id="kdakun" name="kdakun" class="form-control chosen">
+										</select>
+									</fieldset>
+								</div>
+								<div class="col-md-6">
+									<div class="row" id="div-bulan">
+									</div>
+								</div>
+							</div>
+							
+	                    </form>
+	                </div>
+	            </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2 batal">
+						<i class="ft-x m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Batal</span>
+					</button>
+					<button type="button" class="btn-send btn btn-primary" id="simpan">
+						<i class="ft-send m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Simpan</span>
+					</button>
+				</div>
+	        </div>
+	    </div>
+	</div>
+	
+	<div class="row" id="div-tabel">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Data <span class="sub-modul-title"></span></h4>
+						<div class="actions float-right">
+							<button type="button" class="btn bg-light-secondary compose-cancel-btn mr-2" id="kembali">
+								<span class="d-flex align-items-center">
+									<i class="ft-arrow-left mr-1"></i>
+									<span>Kembali</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPrint">
+								<span class="d-flex align-items-center">
+									<span>Cetak</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPdf">
+								<span class="d-flex align-items-center">
+									<span>PDF</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportExcel">
+								<span class="d-flex align-items-center">
+									<span>XLS</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-2" id="tambah" style="display:none;">
+								<span class="d-flex align-items-center">
+									<i class="ft-plus mr-1"></i>
+									<span>Tambah</span>
+								</span>
+							</button>
+						</div>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard table-responsive">
+                        <table id="tabel-ruh" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+									<th>No</th>
+									<th>Program</th>
+									<th>Kegiatan</th>
+									<th>Proyek</th>
+									<th>Akun</th>
+									<th>Nilai</th>
+									<th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	$(document).ready(function(){
+
+		//init route
+		var route = 'rkap-akun';
+	
+		$.fn.dataTable.ext.errMode = 'none';
+		
+		//fungsi dropdown
+		$('.chosen').select2();
+
+		$.get('dropdown/sdana', function(result){
+			$('#kdsdana').html(result).trigger('change');
+		});
+
+		$.get('dropdown/proyek', function(result){
+			$('#id_proyek').html(result).trigger('change');
+		});
+
+		$.get('dropdown/program', function(result){
+			$('#id_program').html(result).trigger('change');
+		});
+
+		$.get('dropdown/akun/html/all-unit', function(result){
+			$('#kdakun').html(result).trigger('change');
+		});
+
+		$('#id_program,#id_giat').select2({
+			tags: true,
+			allowClear: true
+		});
+
+		$('#id_program').on('select2:select', function(){
+			var arr_program = $(this).val().split('|');
+			var id_program = 0;
+			if(arr_program.length>1){
+				id_program = arr_program[0];
+			}
+			$.get('dropdown/kegiatan?id_program=' + id_program, function(result){
+				$('#id_giat').html(result).trigger('change');
+			});
+		});
+		
+		//cek permission create
+		$.get(route, function(result){
+			if(result==1){ //admin
+				$('#tambah').show();
+			}
+		});
+
+		function getParameterByNameDetil(name, url) {
+			if (!url) url = window.location.href;
+			name = name.replace(/[\[\]]/g, '\\$&');
+			var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+				results = regex.exec(url);
+			if (!results) return null;
+			if (!results[2]) return '';
+			return decodeURIComponent(results[2].replace(/\+/g, ' '));
+		}
+
+		// default search
+		if(getParameterByNameDetil('id_rkap')){
+			var id_rkap = getParameterByNameDetil('id_rkap');
+			var nourut = getParameterByNameDetil('nourut');
+		}
+		else{
+			var id_rkap = '';
+			var nourut = '';
+		}
+
+		if(getParameterByNameDetil('back')){
+			var back = getParameterByNameDetil('back');
+		}
+		else{
+			var back = '';
+		}
+
+		$('.sub-modul-title').html(' : ' + nourut);
+		
+		//tampilan default
+		function form_default() {
+			$('input,textarea,select').val('');
+			$('.warning, #div-form').hide();
+			$('#div-tabel').show();
+			$('#simpan,#kdunit').prop('disabled', false);
+			$('.chosen').trigger('change');
+			$('#id_rkap').val(id_rkap);
+		}
+		
+		//aktivasi tampilan default
+		form_default();
+		
+		//klik tambah
+		$('#tambah').click(function(){
+			$('#inp-rekambaru').val('1');
+			$('#div-form').show();
+			$('#div-tabel').hide();
+			cari_bulan(0);
+		});
+
+		// datatable init
+        $("#exportPrint").on("click", function () {
+            table.button('.buttons-print').trigger();
+        });
+
+		$("#exportPdf").on("click", function () {
+            table.button('.buttons-pdf').trigger();
+        });
+
+		$("#exportExcel").on("click", function () {
+            table.button('.buttons-excel').trigger();
+        });
+		
+		//data tabel
+		var table=$('#tabel-ruh').DataTable({
+			buttons: [
+                {
+                    extend: 'print',
+                    title: 'Detil Akun',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Detil Akun',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+				{
+                    extend: 'excel',
+					title: 'Detil Akun',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+            ],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Semua"],
+            ],
+			processing: true,
+			language:{
+			    "decimal":        "",
+			    "emptyTable":     "Tidak ada data tersedia",
+			    "info":           "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+			    "infoEmpty":      "Menampilkan 0 sampai 0 dari 0 entri",
+			    "infoFiltered":   "(disaring dari _MAX_ total entri)",
+			    "infoPostFix":    "",
+			    "thousands":      ",",
+			    "lengthMenu":     "Tampilkan _MENU_ entri",
+			    "loadingRecords": "Proses Loading...",
+			    "processing":     "Sedang Proses...",
+			    "search":         "Cari:",
+			    "zeroRecords":    "Tidak ditemukan data yang sesuai",
+			    "paginate": {
+			        "first":      "Awal",
+			        "last":       "Akhir",
+			        "next":       "Sesudah",
+			        "previous":   "Sebelum"
+			    },
+			    "aria": {
+			        "sortAscending":  ": aktifkan untuk mengurutkan kolom (asc)",
+			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
+			    }
+			},
+			serverSide: true,
+			ajax: {
+				url: route + "/data?id_rkap=" + id_rkap,
+			},
+			columns: [
+				{ data: "DT_RowIndex", name: "DT_RowIndex", className: "t-center", orderable: false, searchable: false },
+				{ data: "nmprogram", name: "nmprogram", className: "t-left" },
+				{ data: "nmgiat", name: "nmgiat", className: "t-left" },
+				{ data: "nmproyek", name: "nmproyek", className: "t-left" },
+				{ data: "kdakun", name: "kdakun", className: "t-left" },
+				{ data: "nilai", name: "nilai", className: "t-right" },
+				{ data: "aksi", name: "aksi", className: "t-center", orderable: false, searchable: false },
+			],
+		});
+		
+		//validasi isian form
+		function form_valid(str_id){
+			var arr_id = str_id.split(',');
+			var next = true;
+			for(x = 0; x < arr_id.length; x++){
+				if($('#'+arr_id[x]).val()==''){
+					$('#'+arr_id[x]).addClass('is-invalid');
+					next = false;
+				}
+			}
+			return next;
+		}
+		
+		//cari data user yang akan di edit berdasarkan id user
+		function cari_data(id){
+			$('.chosen').val('').trigger('change');
+			$.getJSON(route + '/pilih?id=' + id, function(result){
+				if(result) {
+					$('#inp-id').val(id);
+					$('#inp-rekambaru').val('0');
+					$('#id_rkap').val(result.id_rkap);
+					$('#kdsdana').val(result.kdsdana);
+					$('#kdakun').val(result.kdakun);
+					$('#id_proyek').val(result.id_proyek);
+					$('#id_program').val(result.id_program);
+
+					var arr_program = result.id_program.split('|');
+					var id_program = arr_program[0];
+
+					$.get('dropdown/kegiatan?id_program=' + id_program, function(result1){
+						$('#id_giat').html(result1);
+						$('#id_giat').val(result.id_giat).trigger('change');
+					});
+
+					$('#nilai').val(result.nilai);
+					$('.chosen').trigger('change');
+				}
+			});
+		}
+
+		function cari_bulan(id){
+			$('#div-bulan').html('Sedang proses.....');
+			$.get(route + '/bulan?id=' + id, function(result){
+				$('#div-bulan').html(result);
+
+				$('.uang').inputmask('numeric', {
+					radixPoint: ',',
+					groupSeparator: '.',
+					autoGroup: true,
+					prefix: '',
+					rightAlign: false,
+					digits: 2,
+					oncleared: function () {
+						// Fungsi ini akan dipanggil saat input dihapus
+						$(this).val('');
+					}
+				});
+
+			});
+		}
+		
+		//klik ubah
+		$('body').off('click', '.ubah').on('click', '.ubah', function(){
+			var id = this.id;
+			$('#div-tabel').hide();
+			$('#div-form').show();
+			cari_data(id);
+			cari_bulan(id);
+		});
+		
+		//klik batal
+		$('.batal').click(function(){
+			form_default();
+		});
+		
+		//klik simpan
+		$('#simpan').click(function(){
+			$(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
+			$(this).prop('disabled',true);
+			var next = form_valid('id_rkap,kdsdana,id_program,id_giat,id_proyek,kdakun,nilai');
+			if(next==true){
+				$.get('token', function(token){
+					if(token){
+						$('#_token').val(token);
+						var data = $('#form-ruh').serialize();
+						$.ajax({
+							url: route,
+							method: 'POST',
+							data: data,
+							success: function(result){
+								if(result=='success') {
+									$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan').prop('disabled',false);
+									alertify.log('Proses simpan berhasil');
+									form_default();
+									table.ajax.reload();
+								} else {
+									$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan').prop('disabled',false);
+									alertify.log(result);
+								} 
+							},
+							error: function(result){
+								$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+								$('#simpan').prop('disabled',false);
+								alertify.log('Data tidak dapat disimpan. Koneksi pada aplikasi/database terputus atau data sudah pernah direkam atau format data salah. Hubungi Administrator.');
+							}
+						})
+					} 
+					else{
+						$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+						$('#simpan').prop('disabled',false);
+						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
+					}
+				});
+			}
+			else{
+				$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+				$('#simpan').prop('disabled',false);
+				alertify.log('Data tidak dapat dikosongkan!');
+			}
+		});
+		
+		//hapus
+		$('body').off('click', '.hapus').on('click', '.hapus', function(){
+			var id = this.id;
+			alertify.confirm('Hapus data ini?', function(c){
+				if(c) {
+					$.get('token', function(token){
+						if(token) {
+							$.ajax({
+								url:route+'/hapus',
+								method:'POST',
+								data:{
+									_token:token, 
+									id:id
+								},
+								success:function(result){
+									if(result=='success') {
+										alertify.log('Proses hapus berhasil.');
+										table.ajax.reload();
+									} else {
+										alertify.log(result);
+									} 
+								},
+								error:function(result){
+									alertify.log('Koneksi pada aplikasi/database terputus. Hubungi Administrator.');
+								}
+							});
+						} else {
+							alertify.log('Proses hapus gagal. Silahkan refresh halaman browser anda.');
+						} 
+					});
+				} 
+			});
+		});
+
+		// kembali ke parent
+		$('#kembali').click(function(){
+			window.location.href = "#/" + back;
+		});
+		
+	});
+	
+</script>

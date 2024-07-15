@@ -15,10 +15,23 @@ class DropdownController extends Controller {
 	
 	public function unit_all()
 	{
+		$arr_where = array();
+		if(isset($_GET['param'])){
+			if($_GET['param']!==null && $_GET['param']!==''){
+				$arr_where[] = " length(kdunit)=".$_GET['param']." ";
+			}
+		}
+
+		$where = "";
+		if(count($arr_where)>0){
+			$where = "where ".implode(" and ", $arr_where);
+		}	
+
 		$rows = DB::select("
 			select  kdunit,
 					nmunit
 			from t_unit
+			".$where."
 			order by to_number(kdunit) asc
 		");
 		
@@ -173,23 +186,6 @@ class DropdownController extends Controller {
 		$rows = DB::select("
 			select  *
 			from t_output
-			order by id asc
-		");
-		
-		$data = '<option value="" style="display:none;">Pilih Data</option>';
-		foreach($rows as $row){
-			$data .= '<option value="'.$row->id.'">'.$row->uraian.'</option>';
-		}
-		
-		return $data;
-		
-	}
-	
-	public function kegiatan()
-	{
-		$rows = DB::select("
-			select  *
-			from t_kegiatan
 			order by id asc
 		");
 		
@@ -540,6 +536,26 @@ class DropdownController extends Controller {
 		return $data;
 		
 	}
+
+	public function akun_html_all_unit()
+	{	
+		$rows = DB::select("
+			select  a.kdakun,
+					b.nmakun
+			from t_akun_unit a
+			left join t_akun b on(a.kdakun=b.kdakun)
+			where a.kdunit='".session('kdunit')."'
+			order by a.kdakun
+		");
+		
+		$data = '<option value="" style="display:none;">Pilih Data</option>';
+		foreach($rows as $row){
+			$data .= '<option value="'.$row->kdakun.'"> '.$row->nmakun.' | '.$row->kdakun.'</option>';
+		}
+		
+		return $data;
+		
+	}
 	
 	public function akun_html_all_lvl()
 	{
@@ -599,6 +615,34 @@ class DropdownController extends Controller {
 					a.nilai,
 					a.kddk
 			from t_akun_pajak a
+			left join t_akun b on(a.kdakun=b.kdakun)
+			order by a.nourut
+		");
+		
+		return response()->json($rows);
+		
+	}
+
+	public function akun_pajak_baru_json()
+	{
+		$arr_where = array();
+		if(isset($_GET['id_trans'])){
+			if($_GET['id_trans']!==null && $_GET['id_trans']!==''){
+				$arr_where[] = " a.id_trans=".$_GET['id_trans'];
+			}
+		}
+
+		$where = "";
+		if(count($arr_where)>0){
+			$where = " where ".implode(" and ", $arr_where);
+		}
+
+		$rows = DB::select("
+			select  a.kdakun,
+					b.nmakun,
+					a.nilai,
+					a.kddk
+			from t_trans_pajak a
 			left join t_akun b on(a.kdakun=b.kdakun)
 			order by a.nourut
 		");
@@ -873,6 +917,173 @@ class DropdownController extends Controller {
 		$now = date("Y-m-d");
 		
 		return $now;
+	}
+
+	public function program()
+	{
+		$rows = DB::select("
+			select	*
+			from t_program
+		");
+		
+		$data = '<option value="" style="display:none;">Pilih Data</option>';
+		foreach($rows as $row){
+			$data .= '<option value="'.$row->id.'|'.$row->uraian.'"> '.$row->uraian.'</option>';
+		}
+		
+		return $data;
+		
+	}
+
+	public function kegiatan()
+	{
+		$id_program = 0;
+		if(isset($_GET['id_program'])){
+			if($_GET['id_program']!==null && $_GET['id_program']!==''){
+				$id_program = $_GET['id_program'];
+			}
+		}
+
+		$rows = DB::select("
+			select	*
+			from t_kegiatan
+			where id_program=?
+		",[
+			$id_program
+		]);
+		
+		$data = '<option value="" style="display:none;">Pilih Data</option>';
+		foreach($rows as $row){
+			$data .= '<option value="'.$row->id.'|'.$row->uraian.'"> '.$row->uraian.'</option>';
+		}
+		
+		return $data;
+		
+	}
+
+	public function kontrak()
+	{
+		$arr_where = array();
+		if(isset($_GET['kdunit'])){
+			if($_GET['kdunit']!==null && $_GET['kdunit']!==''){
+				$arr_where[] = " a.kdunit='".$_GET['kdunit']."' ";
+			}
+		}
+
+		$where = "";
+		if(count($arr_where)>0){
+			$where = " and ".implode(" and ", $arr_where);
+		}	
+
+		$rows = DB::select("
+			select  a.id,
+					a.nodok,
+					a.nilai
+			from d_kontrak a
+			where a.status=3 ".$where."
+			order by a.id desc
+		");
+		
+		$data = '<option value="">Pilih Data</option>';
+		foreach($rows as $row){
+			$data .= '<option value="'.$row->id.'">'.$row->nodok.'</option>';
+		}
+		
+		return $data;
+		
+	}
+
+	public function kontrakDtl()
+	{
+		$arr_where = array();
+		if(isset($_GET['id_kontrak'])){
+			if($_GET['id_kontrak']!==null && $_GET['id_kontrak']!==''){
+				$arr_where[] = " a.id_kontrak=".$_GET['id_kontrak'];
+			}
+		}
+
+		if(isset($_GET['update'])){
+			if($_GET['update']=='0'){
+				$arr_where[] = " c.id_kontrak_dtl is null ";
+			}
+		}
+
+		$where = "";
+		if(count($arr_where)>0){
+			$where = " where ".implode(" and ", $arr_where);
+		}	
+
+		$rows = DB::select("
+			select  a.id,
+					a.nourut,
+					a.tahun,
+					a.bulan,
+					a.fisik,
+					a.nilai,
+					b.jenis
+			from d_kontrak_dtl a
+			left join d_kontrak b on(a.id_kontrak=b.id)
+			left join(
+
+				select	distinct id_kontrak_dtl
+				from d_trans
+
+			) c on(a.id=c.id_kontrak_dtl)
+			".$where."
+			order by a.nourut asc
+		");
+		
+		$data = '<option value="">Pilih Data</option>';
+		foreach($rows as $row){
+
+			if($row->jenis='01'){ //bulanan
+				$data .= '<option value="'.$row->id.'">Termin ke-'.$row->nourut.' : '.$row->tahun.' - '.$row->bulan.'</option>';
+			}
+			elseif($row->jenis=='02'){ //fisik
+				$data .= '<option value="'.$row->id.'">Termin ke-'.$row->nourut.' : '.$row->fisik.'%</option>';
+			}
+
+		}
+		
+		return $data;
+		
+	}
+
+	public function kontrakDtlInfo()
+	{
+		$arr_where = array();
+		if(isset($_GET['id_kontrak_dtl'])){
+			if($_GET['id_kontrak_dtl']!==null && $_GET['id_kontrak_dtl']!==''){
+				$arr_where[] = " a.id_kontrak_dtl=".$_GET['id_kontrak_dtl'];
+			}
+		}
+
+		$where = "";
+		if(count($arr_where)>0){
+			$where = " where ".implode(" and ", $arr_where);
+		}	
+
+		$rows = DB::select("
+			select  a.id,
+					c.nama,
+					b.nodok,
+					to_char(b.tgdok,'yyyy-mm-dd') as tgdok,
+					b.ket,
+					b.nilai as nilai_kontrak,
+					to_char(a.tgjtempo,'yyyy-mm-dd') as tgjtempo,
+					a.nilai,
+					c.id as id_pelanggan,
+					b.id_proyek,
+					1 as id_alur,
+					1 as kdtran
+			from d_kontrak_dtl a
+			left join d_kontrak b on(a.id_kontrak=b.id)
+			left join t_penerima c on(b.id_penerima=c.id)
+			".$where."
+		");
+		
+		return response()->json($rows[0]);
+		
 	}
 	
 }
