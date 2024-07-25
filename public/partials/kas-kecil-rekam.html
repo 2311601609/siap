@@ -78,11 +78,11 @@
 									</fieldset>
 									<fieldset class="form-group">
 										<label for="saldo">Saldo Kas Kecil</label>
-										<input type="text" id="saldo" name="saldo" class="form-control val_num" style="text-align:right;" readonly>
+										<input type="text" id="saldo" name="saldo" class="form-control uang" style="text-align:right;" readonly>
 									</fieldset>
 									<fieldset class="form-group">
 										<label for="nilai">Nilai</label>
-										<input type="text" id="nilai" name="nilai" class="form-control val_num" style="text-align:right;" maxlength="19">
+										<input type="text" id="nilai" name="nilai" class="form-control uang" style="text-align:right;" maxlength="19">
 									</fieldset>
 								</div>
 							</div>
@@ -156,6 +156,21 @@
 					<div class="clearfix">
 						<h4 class="card-title float-left">Data</h4>
 						<div class="actions float-right">
+							<button type="button" class="btn btn-primary mr-1" id="exportPrint">
+								<span class="d-flex align-items-center">
+									<span>Cetak</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPdf">
+								<span class="d-flex align-items-center">
+									<span>PDF</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportExcel">
+								<span class="d-flex align-items-center">
+									<span>XLS</span>
+								</span>
+							</button>
 							<button type="button" class="btn btn-primary mr-2" id="tambah" style="display:none;">
 								<span class="d-flex align-items-center">
 									<i class="ft-plus mr-1"></i>
@@ -193,7 +208,9 @@
 </section>
 
 <script>
-	jQuery(document).ready(function(){
+	$(document).ready(function(){
+
+		var route = 'kas-kecil/rekam';
 	
 		function digit_grouping(nStr){
 			nStr += '';
@@ -208,96 +225,107 @@
 		}
 		
 		function cariNourut(){
-			jQuery.get('dropdown/nourut/6', function(result){
-				jQuery('#nourut').val(result);
+			$.get('dropdown/nourut/6', function(result){
+				$('#nourut').val(result);
 			});
 		}
 		
 		function cariSaldo(){
-			jQuery.get('dropdown/saldo-kas-kecil', function(result){
-				jQuery('#saldo').val(result);
+			$.get('dropdown/saldo-kas-kecil', function(result){
+				$('#saldo').val(result);
 			});
 		}
 	
-		jQuery.fn.dataTable.ext.errMode = 'none';
+		$.fn.dataTable.ext.errMode = 'none';
 		
-		jQuery('.val_num').mask('000,000,000,000,000', {reverse: true});
+		$('.uang').inputmask('numeric', {
+			radixPoint: '.',
+			groupSeparator: ',',
+			autoGroup: true,
+			prefix: '',
+			rightAlign: false,
+			digits: 2,
+			oncleared: function () {
+				// Fungsi ini akan dipanggil saat input dihapus
+				$(this).val('');
+			}
+		});
 		
 		//aktivasi chosen
-		jQuery('.chosen').select2();
+		$('.chosen').select2();
 		
-		jQuery.get('dropdown/sdana', function(result){
-			jQuery('#kdsdana').html(result).trigger('change');
+		$.get('dropdown/sdana', function(result){
+			$('#kdsdana').html(result).trigger('change');
 		});
 		
-		jQuery.get('dropdown/proyek', function(result){
-			jQuery('#id_proyek').html(result).trigger('change');
+		$.get('dropdown/proyek', function(result){
+			$('#id_proyek').html(result).trigger('change');
 		});
 		
-		jQuery.get('dropdown/alur-kas-kecil', function(result){
-			jQuery('#id_alur').html(result).trigger('change');
+		$.get('dropdown/alur-kas-kecil', function(result){
+			$('#id_alur').html(result).trigger('change');
 		});
 		
-		jQuery.get('dropdown/penerima', function(result){
-			jQuery('#id_pelanggan').html(result).trigger('change');
+		$.get('dropdown/penerima', function(result){
+			$('#id_pelanggan').html(result).trigger('change');
 		});
 		
-		jQuery.get('dropdown/transaksi', function(result){
-			jQuery('#kdtran').html(result).trigger('change');
+		$.get('dropdown/transaksi', function(result){
+			$('#kdtran').html(result).trigger('change');
 		});
 		
-		jQuery.get('cek/level', function(result){
-			if(result=='10'){ //admin
-				jQuery('#tambah').show();
+		$.get(route, function(result){
+			if(result=='1'){ //admin
+				$('#tambah').show();
 			}
 		});
 		
-		jQuery('#id_alur').on('select2:select', function(){
+		$('#id_alur').on('select2:select', function(){
 			if($(this).val()){
 
-				var id_alur = jQuery(this).val();
-				jQuery.get('dropdown/transaksi/'+id_alur, function(result){
-					jQuery('#kdtran').html(result).trigger('change');
+				var id_alur = $(this).val();
+				$.get('dropdown/transaksi/'+id_alur, function(result){
+					$('#kdtran').html(result).trigger('change');
 				});
 
 			}
 		});
 		
-		jQuery('#kdtran').on('select2:select', function(){
+		$('#kdtran').on('select2:select', function(){
 			if($(this).val()){
-				var kdtran = jQuery(this).val();
-				jQuery('#debet,#kredit').html('').trigger('change');
-				jQuery.get('dropdown/akun/debet/'+kdtran, function(result){
-					jQuery('#debet').html(result).trigger('change');
+				var kdtran = $(this).val();
+				$('#debet,#kredit').html('').trigger('change');
+				$.get('dropdown/akun/debet/'+kdtran, function(result){
+					$('#debet').html(result).trigger('change');
 				});
-				jQuery.get('dropdown/akun/kredit/'+kdtran, function(result){
-					jQuery('#kredit').html(result).trigger('change');
+				$.get('dropdown/akun/kredit/'+kdtran, function(result){
+					$('#kredit').html(result).trigger('change');
 				});
 			}
 		});
 		
 		//tampilan default
 		function form_default() {
-			jQuery('input,select,textarea').val('');
-			jQuery('.warning, #div-form, #cari-nourut').hide();
-			jQuery('#div-tabel').show();
-			jQuery('.chosen').prop('disabled', false).trigger('change');
-			jQuery('#simpan').prop('disabled', false);
-			jQuery('#tabel-rincian').html('');
-			jQuery.get('dropdown/ttd/06', function(result){
-				jQuery('#ttd1').html(result).trigger('change');
+			$('input,select,textarea').val('');
+			$('.warning, #div-form, #cari-nourut').hide();
+			$('#div-tabel').show();
+			$('.chosen').prop('disabled', false).trigger('change');
+			$('#simpan').prop('disabled', false);
+			$('#tabel-rincian').html('');
+			$.get('dropdown/ttd/06', function(result){
+				$('#ttd1').html(result).trigger('change');
 			});
 			
-			jQuery.get('dropdown/ttd/04', function(result){
-				jQuery('#ttd2').html(result).trigger('change');
+			$.get('dropdown/ttd/04', function(result){
+				$('#ttd2').html(result).trigger('change');
 			});
 			
-			jQuery.get('dropdown/ttd/02', function(result){
-				jQuery('#ttd3').html(result).trigger('change');
+			$.get('dropdown/ttd/02', function(result){
+				$('#ttd3').html(result).trigger('change');
 			});
 			
-			jQuery.get('dropdown/ttd/01', function(result){
-				jQuery('#ttd4').html(result).trigger('change');
+			$.get('dropdown/ttd/01', function(result){
+				$('#ttd4').html(result).trigger('change');
 			});
 		}
 		
@@ -305,18 +333,64 @@
 		form_default();
 		
 		//klik tambah
-		jQuery('#tambah').click(function(){
-			jQuery('#div-tabel').hide();
-			jQuery('#inp-rekambaru').val('1');
-			jQuery('#div-form,#cari-nourut').show();
-			jQuery('#nilai,#ppn,#total').val(0);
+		$('#tambah').click(function(){
+			$('#div-tabel').hide();
+			$('#inp-rekambaru').val('1');
+			$('#div-form,#cari-nourut').show();
+			$('#nilai,#ppn,#total').val(0);
 			cariNourut();
 			cariSaldo();
 		});
-		
+
+		// datatable init
+        $("#exportPrint").on("click", function () {
+            table.button('.buttons-print').trigger();
+        });
+
+		$("#exportPdf").on("click", function () {
+            table.button('.buttons-pdf').trigger();
+        });
+
+		$("#exportExcel").on("click", function () {
+            table.button('.buttons-excel').trigger();
+        });
+
 		//data tabel
-		var table=jQuery('#tabel-ruh').DataTable({
-			bProcessing:true,
+		var table = $('#tabel-ruh').DataTable({
+			buttons: [
+                {
+                    extend: 'print',
+                    title: 'Rekam Kas Kecil',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Rekam Kas Kecil',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+				{
+                    extend: 'excel',
+					title: 'Rekam Kas Kecil',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+            ],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Semua"],
+            ],
+			processing: true,
 			language:{
 			    "decimal":        "",
 			    "emptyTable":     "Tidak ada data tersedia",
@@ -341,9 +415,19 @@
 			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
 			    }
 			},
-			aaSorting: [],
-			bServerSide: true,
-			sAjaxSource: "kas-kecil/rekam"
+			serverSide: true,
+			ajax: {
+				url: route + "/data",
+			},
+			columns: [
+				{ data: "DT_RowIndex", name: "DT_RowIndex", className: "t-center", orderable: false, searchable: false },
+				{ data: "nourut", name: "nourut", className: "t-left" },
+				{ data: "nmtrans", name: "nmtrans", className: "t-left" },
+				{ data: "pks", name: "pks", className: "t-left" },
+				{ data: "nilai", name: "nilai", className: "t-right" },
+				{ data: "status", name: "status", className: "t-left" },
+				{ data: "aksi", name: "aksi", className: "t-center", orderable: false, searchable: false },
+			],
 		});
 		
 		//validasi isian form
@@ -351,8 +435,8 @@
 			var arr_id = str_id.split(',');
 			var next = true;
 			for(x = 0; x < arr_id.length; x++){
-				if(jQuery('#'+arr_id[x]).val()==''){
-					jQuery('#'+arr_id[x]).addClass('is-invalid');
+				if($('#'+arr_id[x]).val()==''){
+					$('#'+arr_id[x]).addClass('is-invalid');
 					next = false;
 				}
 			}
@@ -361,37 +445,37 @@
 		
 		//cari data user yang akan di edit berdasarkan id user
 		function cari_data(id){
-			jQuery('.chosen').val('').trigger('change');
+			$('.chosen').val('').trigger('change');
 			cariSaldo();
-			jQuery.getJSON('kas-kecil/rekam/pilih/'+id, function(result){
+			$.getJSON(route + '/pilih/' + id, function(result){
 				if(result.error==false) {
 				
-					jQuery.get('dropdown/transaksi/'+result.message.id_alur, function(result1){
-						jQuery('#kdtran').html(result1).trigger('change');
-						jQuery('#kdtran').val(result.message.kdtran).trigger('change');
+					$.get('dropdown/transaksi/'+result.message.id_alur, function(result1){
+						$('#kdtran').html(result1).trigger('change');
+						$('#kdtran').val(result.message.kdtran).trigger('change');
 					});
 					
-					jQuery('#debet').html(result.dropdown_d).trigger('change');
-					jQuery('#kredit').html(result.dropdown_k).trigger('change');
+					$('#debet').html(result.dropdown_d).trigger('change');
+					$('#kredit').html(result.dropdown_k).trigger('change');
 					
-					jQuery('#kdsdana').val(result.message.kdsdana).trigger('change');
-					jQuery('#id_proyek').val(result.message.id_proyek).trigger('change');
-					jQuery('#ttd1').val(result.message.ttd1);
-					jQuery('#ttd2').val(result.message.ttd2);
-					jQuery('#ttd3').val(result.message.ttd3);
-					jQuery('#ttd4').val(result.message.ttd4);
-					jQuery('#inp-id').val(id);
-					jQuery('#inp-rekambaru').val('0');
-					jQuery('#nourut').val(result.message.nourut);
-					jQuery('#kdunit').val(result.message.kdunit);
-					jQuery('#id_alur').val(result.message.id_alur);
-					jQuery('#id_pelanggan').val(result.message.id_pelanggan);
-					jQuery('#nopks').val(result.message.nopks);
-					jQuery('#tgpks').val(result.message.tgpks);
-					jQuery('#tgjtempo').val(result.message.tgjtempo);
-					jQuery('#uraian').val(result.message.uraian);
-					jQuery('#nilai').val(digit_grouping(result.message.nilai));
-					jQuery('.chosen').trigger('change');
+					$('#kdsdana').val(result.message.kdsdana).trigger('change');
+					$('#id_proyek').val(result.message.id_proyek).trigger('change');
+					$('#ttd1').val(result.message.ttd1);
+					$('#ttd2').val(result.message.ttd2);
+					$('#ttd3').val(result.message.ttd3);
+					$('#ttd4').val(result.message.ttd4);
+					$('#inp-id').val(id);
+					$('#inp-rekambaru').val('0');
+					$('#nourut').val(result.message.nourut);
+					$('#kdunit').val(result.message.kdunit);
+					$('#id_alur').val(result.message.id_alur);
+					$('#id_pelanggan').val(result.message.id_pelanggan);
+					$('#nopks').val(result.message.nopks);
+					$('#tgpks').val(result.message.tgpks);
+					$('#tgjtempo').val(result.message.tgjtempo);
+					$('#uraian').val(result.message.uraian);
+					$('#nilai').val(digit_grouping(result.message.nilai));
+					$('.chosen').trigger('change');
 				}
 				else{
 					alertify.log(result.message);
@@ -400,80 +484,80 @@
 		}
 		
 		//klik ubah
-		jQuery('body').off('click', '.ubah').on('click', '.ubah', function(){
+		$('body').off('click', '.ubah').on('click', '.ubah', function(){
 			var id = this.id;
-			jQuery('#div-tabel').hide();
-			jQuery('#div-form').show();
+			$('#div-tabel').hide();
+			$('#div-form').show();
 			cari_data(id);
 		});
 		
 		//klik batal
-		jQuery('.batal').click(function(){
+		$('.batal').click(function(){
 			form_default();
 		});
 		
 		//klik refresh nomor transaksi
-		jQuery('#cari-nourut').click(function(){
+		$('#cari-nourut').click(function(){
 			cariNourut();
 		});
 		
 		//klik simpan
-		jQuery('#simpan').click(function(){
-			jQuery(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
-			jQuery(this).prop('disabled',true);
+		$('#simpan').click(function(){
+			$(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
+			$(this).prop('disabled',true);
 			var next = form_valid('nourut,id_alur,id_pelanggan,kdtran,nopks,tgpks,uraian,tgjtempo,nilai');
 			if(next==true){
-				jQuery.get('token', function(token){
+				$.get('token', function(token){
 					if(token){
-						jQuery('#_token').val(token);
-						var data = jQuery('#form-ruh').serialize();
-						jQuery.ajax({
-							url: 'kas-kecil/rekam',
+						$('#_token').val(token);
+						var data = $('#form-ruh').serialize();
+						$.ajax({
+							url: route,
 							method: 'POST',
 							data: data,
 							success: function(result){
 								if(result=='success') {
-									jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-									jQuery('#simpan').prop('disabled',false);
+									$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan').prop('disabled',false);
 									alertify.log('Proses simpan berhasil');
 									form_default();
 									table.ajax.reload();
 								} else {
-									jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-									jQuery('#simpan').prop('disabled',false);
+									$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan').prop('disabled',false);
 									alertify.log(result);
 								} 
 							},
 							error: function(result){
-								jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-								jQuery('#simpan').prop('disabled',false);
+								$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+								$('#simpan').prop('disabled',false);
 								alertify.log('Data tidak dapat disimpan. Koneksi pada aplikasi/database terputus atau data sudah pernah direkam atau format data salah. Hubungi Administrator.');
 							}
 						})
 					}
 					else{
-						jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-						jQuery('#simpan').prop('disabled',false);
+						$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+						$('#simpan').prop('disabled',false);
 						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
 					}
 				});
 			}
 			else{
-				jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-				jQuery('#simpan').prop('disabled',false);
+				$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+				$('#simpan').prop('disabled',false);
 				alertify.log('Data tidak dapat dikosongkan!');
 			}
 		});
 		
 		//hapus
-		jQuery('body').off('click', '.hapus').on('click', '.hapus', function(){
+		$('body').off('click', '.hapus').on('click', '.hapus', function(){
 			var id = this.id;
 			alertify.confirm('Hapus data ini?', function(c){
 				if(c) {
-					jQuery.get('token', function(token){
+					$.get('token', function(token){
 						if(token) {
-							jQuery.ajax({
-								url:'kas-kecil/rekam/hapus',
+							$.ajax({
+								url:route + '/hapus',
 								method:'POST',
 								data:{
 									_token:token, 

@@ -53,8 +53,11 @@ use App\Http\Controllers\RKAPFinalController;
 use App\Http\Controllers\KontrakController;
 use App\Http\Controllers\KontrakDetilController;
 use App\Http\Controllers\KontrakLampiranController;
+use App\Http\Controllers\KasKecilLampiranController;
 use App\Http\Controllers\TagihanBaruController;
 use App\Http\Controllers\RefAkunDivisiController;
+use App\Http\Controllers\NotifikasiController;
+use App\Http\Controllers\PengeluaranLampiranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,6 +88,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/token', [AppController::class, 'token']);
 	Route::get('cek/level', [AuthenticateController::class, 'cek_level']);
 	Route::get('hapus/sesi/upload', [AuthenticateController::class, 'hapus_sesi_upload']);
+
+	//Notifikasi
+	Route::group(['prefix' => 'notifikasi'], function(){
+
+		Route::get('', [NotifikasiController::class, 'index']);
+	});
 
     //Beranda
 	Route::group(['prefix' => 'home'], function(){
@@ -262,6 +271,7 @@ Route::middleware(['auth'])->group(function () {
 			Route::post('hapus', [TagihanRekamController::class, 'hapus'])->middleware('role:12');
 			Route::post('upload', [TagihanRekamController::class, 'upload'])->middleware('role:12');
 			Route::post('hitung-total', [TagihanRekamController::class, 'hitungTotal'])->middleware('role:12');
+			Route::get('cetak', [TagihanRekamController::class, 'cetak']);
 			
 		});
 		
@@ -334,6 +344,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::group(['prefix' => 'rekam'], function () {
 			
 			Route::get('', [KasKecilRekamController::class, 'index']);
+			Route::get('data', [KasKecilRekamController::class, 'data']);
 			Route::get('/pilih/{param}', [KasKecilRekamController::class, 'pilih'])->middleware('role:00.04.07.10');
 			Route::get('/nomor', [KasKecilRekamController::class, 'nomor'])->middleware('role:04.07.10');
 			Route::get('/detil/{param}', [KasKecilRekamController::class, 'detil']);
@@ -344,6 +355,18 @@ Route::middleware(['auth'])->group(function () {
 			
 		});
 		
+	});
+
+	//kas kecil lampiran
+	Route::group(['prefix' => 'kas-kecil-lampiran'], function () {
+
+		Route::get('', [KasKecilLampiranController::class, 'index']);
+		Route::get('data', [KasKecilLampiranController::class, 'data']);
+		Route::get('pilih', [KasKecilLampiranController::class, 'pilih'])->middleware('role:10');
+		Route::post('', [KasKecilLampiranController::class, 'simpan'])->middleware('role:10');
+		Route::post('upload', [KasKecilLampiranController::class, 'upload'])->middleware('role:10');
+		Route::post('hapus', [KasKecilLampiranController::class, 'hapus'])->middleware('role:10');
+		Route::get('download', [KasKecilLampiranController::class, 'download'])->middleware('role:10');
 	});
 
 	//umk
@@ -366,6 +389,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::group(['prefix' => 'rekam'], function () {
 			
 			Route::get('', [UMKRekamController::class, 'index']);
+			Route::get('data', [UMKRekamController::class, 'data']);
 			Route::get('/pilih/{param}', [UMKRekamController::class, 'pilih'])->middleware('role:00.04.07.11');
 			Route::get('/nomor', [UMKRekamController::class, 'nomor'])->middleware('role:04.07.11');
 			Route::get('/detil/{param}', [UMKRekamController::class, 'detil']);
@@ -409,6 +433,7 @@ Route::middleware(['auth'])->group(function () {
 			Route::get('', [PengeluaranBayarController::class, 'index']);
 			Route::get('/pilih/{param}', [PengeluaranBayarController::class, 'pilih']);
 			Route::post('', [PengeluaranBayarController::class, 'simpan']);
+			Route::post('upload', [PengeluaranBayarController::class, 'upload']);
 			Route::post('/hapus', [PengeluaranBayarController::class, 'hapus']);
 			
 		});
@@ -416,6 +441,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::group(['prefix' => 'rekam'], function () {
 			
 			Route::get('', [PengeluaranRekamController::class, 'index']);
+			Route::get('data', [PengeluaranRekamController::class, 'data']);
 			Route::get('/pilih/{param}', [PengeluaranRekamController::class, 'pilih'])->middleware('role:00.04.07.11');
 			Route::get('/nomor', [PengeluaranRekamController::class, 'nomor'])->middleware('role:04.07.11');
 			Route::get('/tagihan/{param}', [PengeluaranRekamController::class, 'tagihan']);
@@ -424,7 +450,6 @@ Route::middleware(['auth'])->group(function () {
 			Route::post('/hitung-total', [PengeluaranRekamController::class, 'hitungTotal']);
 			Route::get('/upload/{param}', [PengeluaranRekamController::class, 'dok'])->middleware('role:00.04.07.11');
 			Route::post('', [PengeluaranRekamController::class, 'simpan'])->middleware('role:00.04.07.11');
-			Route::post('/beta', [PengeluaranRekamController::class, 'simpanBeta'])->middleware('role:00.04.07.11');
 			Route::post('/hapus', [PengeluaranRekamController::class, 'hapus'])->middleware('role:11');
 			Route::post('/upload/{param}', [PengeluaranRekamController::class, 'upload'])->middleware('role:00.04.07.11');
 			Route::post('/upload-simpan', [PengeluaranRekamController::class, 'uploadSimpan'])->middleware('role:00.04.07.11');
@@ -432,6 +457,20 @@ Route::middleware(['auth'])->group(function () {
 			
 		});
 		
+	});
+
+	//pengeluaran lampiran
+	Route::group(['prefix' => 'pengeluaran-lampiran'], function () {
+
+		Route::get('', [PengeluaranLampiranController::class, 'index']);
+		Route::get('data', [PengeluaranLampiranController::class, 'data']);
+		Route::get('dok/{param}', [PengeluaranLampiranController::class, 'dok']);
+		Route::get('dok-detil/{param}', [PengeluaranLampiranController::class, 'dokDetil']);
+		Route::get('pilih', [PengeluaranLampiranController::class, 'pilih'])->middleware('role:00.04.07.11');
+		Route::post('', [PengeluaranLampiranController::class, 'simpan'])->middleware('role:00.04.07.11');
+		Route::post('upload', [PengeluaranLampiranController::class, 'upload'])->middleware('role:00.04.07.11');
+		Route::post('hapus', [PengeluaranLampiranController::class, 'hapus'])->middleware('role:00.04.07.11');
+		Route::get('download', [PengeluaranLampiranController::class, 'download']);
 	});
 
 	//koreksi transaksi

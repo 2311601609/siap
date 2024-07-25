@@ -110,6 +110,23 @@
                 <div class="card-header">
 					<div class="clearfix">
 						<h4 class="card-title float-left">Data</h4>
+						<div class="actions float-right">
+							<button type="button" class="btn btn-primary mr-1" id="exportPrint">
+								<span class="d-flex align-items-center">
+									<span>Cetak</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPdf">
+								<span class="d-flex align-items-center">
+									<span>PDF</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportExcel">
+								<span class="d-flex align-items-center">
+									<span>XLS</span>
+								</span>
+							</button>
+						</div>
 					</div>
                 </div>
                 <div class="card-body collapse show">
@@ -161,9 +178,11 @@
 </section>
 
 <script>
-	jQuery(document).ready(function(){
+	$(document).ready(function(){
+
+		var route = 'umk/monitoring';
 	
-		jQuery.fn.dataTable.ext.errMode = 'none';
+		$.fn.dataTable.ext.errMode = 'none';
 			
 		function digit_grouping(nStr){
 			nStr += '';
@@ -179,29 +198,75 @@
 		
 		//tampilan default
 		function form_default() {
-			jQuery('input,textarea,select').val('');
-			jQuery('.warning, #div-form').hide();
-			jQuery('#div-tabel').show();
+			$('input,textarea,select').val('');
+			$('.warning, #div-form').hide();
+			$('#div-tabel').show();
 		}
 		
 		//aktivasi tampilan default
 		form_default();
 		
 		//aktivasi chosen
-		jQuery('.chosen').select2();
+		$('.chosen').select2();
 		
-		jQuery.get('dropdown/status?menu=3', function(result){
-			jQuery('#status_filter').html(result).trigger('change');
+		$.get('dropdown/status?menu=3', function(result){
+			$('#status_filter').html(result).trigger('change');
 		});
 		
-		jQuery('#status_filter').on('select2:select', function(){
-			var status = jQuery(this).val();
+		$('#status_filter').on('select2:select', function(){
+			var status = $(this).val();
 			table.ajax.url( 'umk/monitoring?status='+status ).load();
 		});
 		
+		// datatable init
+        $("#exportPrint").on("click", function () {
+            table.button('.buttons-print').trigger();
+        });
+
+		$("#exportPdf").on("click", function () {
+            table.button('.buttons-pdf').trigger();
+        });
+
+		$("#exportExcel").on("click", function () {
+            table.button('.buttons-excel').trigger();
+        });
+
 		//data tabel
-		var table=jQuery('#tabel-ruh').DataTable({
-			bProcessing:true,
+		var table = $('#tabel-ruh').DataTable({
+			buttons: [
+                {
+                    extend: 'print',
+                    title: 'Monitoring UMK',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Monitoring UMK',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+				{
+                    extend: 'excel',
+					title: 'Monitoring UMK',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+            ],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Semua"],
+            ],
+			processing: true,
 			language:{
 			    "decimal":        "",
 			    "emptyTable":     "Tidak ada data tersedia",
@@ -226,9 +291,21 @@
 			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
 			    }
 			},
-			aaSorting: [],
-			bServerSide: true,
-			sAjaxSource: "umk/monitoring"
+			serverSide: true,
+			ajax: {
+				url: route,
+			},
+			columns: [
+				{ data: "DT_RowIndex", name: "DT_RowIndex", className: "t-center", orderable: false, searchable: false },
+				{ data: "nourut", name: "nourut", className: "t-left" },
+				{ data: "nmunit", name: "nmunit", className: "t-left" },
+				{ data: "nama", name: "nama", className: "t-left" },
+				{ data: "nmtrans", name: "nmtrans", className: "t-left" },
+				{ data: "pks", name: "pks", className: "t-left" },
+				{ data: "nilai", name: "nilai", className: "t-right" },
+				{ data: "status", name: "status", className: "t-left" },
+				{ data: "aksi", name: "aksi", className: "t-center", orderable: false, searchable: false },
+			],
 		});
 		
 		//validasi isian form
@@ -236,8 +313,8 @@
 			var arr_id = str_id.split(',');
 			var next = true;
 			for(x = 0; x < arr_id.length; x++){
-				if(jQuery('#'+arr_id[x]).val()==''){
-					jQuery('#'+arr_id[x]).addClass('is-invalid');
+				if($('#'+arr_id[x]).val()==''){
+					$('#'+arr_id[x]).addClass('is-invalid');
 					next = false;
 				}
 			}
@@ -246,29 +323,29 @@
 		
 		//cari data user yang akan di edit berdasarkan id user
 		function cari_data(id){
-			jQuery('.chosen').val('').trigger('change');
-			jQuery.getJSON('umk/proses/pilih/'+id, function(result){
+			$('.chosen').val('').trigger('change');
+			$.getJSON('umk/proses/pilih/'+id, function(result){
 				if(result.error==false) {
-					jQuery('#inp-id').val(id);
-					jQuery('#inp-rekambaru').val('0');
-					jQuery('#nmunit').val(result.message.nmunit);
-					jQuery('#id_alur').val(result.message.id_alur);
-					jQuery('#nourut').val(result.message.nourut);
-					jQuery('#status').val(result.message.status);
-					jQuery('#nmunit').val(result.message.nmunit);
-					jQuery('#nmalur').val(result.message.nmalur);
-					jQuery('#nmtrans').val(result.message.nmtrans);
-					jQuery('#debet').val(result.message.debet);
-					jQuery('#kredit').val(result.message.kredit);
-					jQuery('#nmpelanggan').val(result.message.nmpelanggan);
-					jQuery('#nopks').val(result.message.nopks);
-					jQuery('#tgpks').val(result.message.tgpks);
-					jQuery('#tgjtempo').val(result.message.tgjtempo);
-					jQuery('#uraian').val(result.message.uraian);
-					jQuery('#tgcek').val(result.message.tgcek);
-					jQuery('#nilai').val(digit_grouping(result.message.nilai));
-					jQuery('#div-catatan').html(result.catatan);			
-					jQuery('#div-rincian-akun').html(result.akun);						
+					$('#inp-id').val(id);
+					$('#inp-rekambaru').val('0');
+					$('#nmunit').val(result.message.nmunit);
+					$('#id_alur').val(result.message.id_alur);
+					$('#nourut').val(result.message.nourut);
+					$('#status').val(result.message.status);
+					$('#nmunit').val(result.message.nmunit);
+					$('#nmalur').val(result.message.nmalur);
+					$('#nmtrans').val(result.message.nmtrans);
+					$('#debet').val(result.message.debet);
+					$('#kredit').val(result.message.kredit);
+					$('#nmpelanggan').val(result.message.nmpelanggan);
+					$('#nopks').val(result.message.nopks);
+					$('#tgpks').val(result.message.tgpks);
+					$('#tgjtempo').val(result.message.tgjtempo);
+					$('#uraian').val(result.message.uraian);
+					$('#tgcek').val(result.message.tgcek);
+					$('#nilai').val(digit_grouping(result.message.nilai));
+					$('#div-catatan').html(result.catatan);			
+					$('#div-rincian-akun').html(result.akun);						
 				}
 				else{
 					alertify.log(result.message);
@@ -277,15 +354,15 @@
 		}
 		
 		//klik ubah
-		jQuery('body').off('click', '.proses').on('click', '.proses', function(){
+		$('body').off('click', '.proses').on('click', '.proses', function(){
 			var id = this.id;
-			jQuery('#div-tabel').hide();
-			jQuery('#div-form').show();
+			$('#div-tabel').hide();
+			$('#div-form').show();
 			cari_data(id);
 		});
 		
 		//klik batal
-		jQuery('.batal').click(function(){
+		$('.batal').click(function(){
 			form_default();
 		});
 		

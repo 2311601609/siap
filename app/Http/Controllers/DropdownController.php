@@ -644,6 +644,7 @@ class DropdownController extends Controller {
 					a.kddk
 			from t_trans_pajak a
 			left join t_akun b on(a.kdakun=b.kdakun)
+			".$where."
 			order by a.nourut
 		");
 		

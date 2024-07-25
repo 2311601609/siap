@@ -19,6 +19,8 @@ return [
     'name' => env('APP_NAME', ''),
     'version' => env('APP_VERSION', ''),
     'desc' => env('APP_DESC', ''),
+    'umk_jatuh_tempo' => env('UMK_JATUH_TEMPO', ''),
+    'umk_reminder' => env('UMK_REMINDER', ''),
 
     /*
     |--------------------------------------------------------------------------

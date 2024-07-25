@@ -276,7 +276,26 @@ class TagihanPajakController extends Controller {
 					");
 					
 					if($insert){
-						$lanjut = true;
+						
+						$rows_balance = DB::select("
+							select	count(*) as jml
+							from(
+								select	sum(decode(a.kddk,'D',a.nilai,0)) as debet,
+										sum(decode(a.kddk,'K',a.nilai,0)) as kredit
+								from(
+									".implode(" union all ", $arr_insert)."
+								) a
+							) a
+							where a.debet=a.kredit
+						");
+
+						if($rows_balance[0]->jml==1){
+							$lanjut = true;
+						}
+						else{
+							$error = 'Jurnal tidak balance, silahkan cek perhitungan total.';
+						}
+
 					}
 					else{
 						$error = 'Simpan pajak gagal!';

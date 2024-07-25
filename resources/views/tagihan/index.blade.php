@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta charset="utf-8" />
+</head>
+
+<body style="margin: 0;">
+
+<div id="p1" style="overflow: hidden; position: relative; background-color: white; width: 908px; height: 1286px;">
+
+<!-- Begin shared CSS values -->
+<style class="shared-css" type="text/css" >
+.t {
+	transform-origin: bottom left;
+	z-index: 2;
+	position: absolute;
+	white-space: pre;
+	overflow: visible;
+	line-height: 1.5;
+}
+.text-container {
+	white-space: pre;
+}
+@supports (-webkit-touch-callout: none) {
+	.text-container {
+		white-space: normal;
+	}
+}
+</style>
+<!-- End shared CSS values -->
+
+
+<!-- Begin inline CSS -->
+<style type="text/css" >
+
+#t1_1{left:120px;bottom:960px;}
+#t2_1{left:168px;bottom:960px;letter-spacing:0.18px;}
+#t3_1{left:529px;bottom:960px;letter-spacing:0.3px;}
+#t4_1{left:637px;bottom:960px;letter-spacing:0.18px;}
+#t5_1{left:766px;bottom:960px;letter-spacing:-0.34px;}
+#t6_1{left:120px;bottom:892px;letter-spacing:0.2px;}
+#t7_1{left:168px;bottom:914px;letter-spacing:-0.05px;word-spacing:0.06px;}
+#t8_1{left:168px;bottom:898px;letter-spacing:0.16px;word-spacing:0.01px;}
+#t9_1{left:168px;bottom:880px;letter-spacing:0.15px;}
+#ta_1{left:571px;bottom:897px;}
+#tb_1{left:605px;bottom:897px;letter-spacing:0.01px;}
+#tc_1{left:727px;bottom:897px;letter-spacing:0.01px;}
+#td_1{left:600px;bottom:837px;letter-spacing:-0.35px;word-spacing:0.37px;}
+#te_1{left:723px;bottom:837px;letter-spacing:0.01px;}
+#tf_1{left:633px;bottom:798px;letter-spacing:-0.18px;}
+#tg_1{left:732px;bottom:798px;letter-spacing:0.01px;}
+#th_1{left:557px;bottom:755px;letter-spacing:-0.51px;word-spacing:0.33px;}
+#ti_1{left:710px;bottom:755px;letter-spacing:-0.15px;}
+#tj_1{left:107px;bottom:663px;letter-spacing:-0.01px;word-spacing:0.16px;}
+#tk_1{left:117px;bottom:608px;letter-spacing:0.08px;}
+#tl_1{left:139px;bottom:592px;letter-spacing:-0.01px;word-spacing:0.01px;}
+#tm_1{left:139px;bottom:575px;word-spacing:0.01px;}
+#tn_1{left:139px;bottom:558px;letter-spacing:-0.01px;word-spacing:0.01px;}
+#to_1{left:139px;bottom:542px;letter-spacing:0.01px;}
+#tp_1{left:487px;bottom:1173px;letter-spacing:-0.05px;word-spacing:0.07px;}
+#tq_1{left:642px;bottom:1160px;letter-spacing:-0.07px;}
+#tr_1{left:535px;bottom:1144px;letter-spacing:-0.07px;}
+#ts_1{left:575px;bottom:1129px;letter-spacing:-0.07px;}
+#tt_1{left:107px;bottom:1085px;letter-spacing:-0.2px;word-spacing:0.13px;}
+#tu_1{left:107px;bottom:1050px;letter-spacing:-0.41px;word-spacing:0.27px;}
+#tv_1{left:107px;bottom:1038px;letter-spacing:-0.07px;}
+#tw_1{left:107px;bottom:1022px;letter-spacing:-0.07px;}
+#tx_1{left:107px;bottom:1007px;letter-spacing:-0.07px;}
+#ty_1{left:492px;bottom:1072px;letter-spacing:-0.06px;word-spacing:0.07px;}
+#tz_1{left:615px;bottom:1049px;letter-spacing:-0.27px;word-spacing:0.13px;}
+#t10_1{left:582px;bottom:1032px;letter-spacing:-0.25px;word-spacing:0.11px;}
+
+.s0{font-size:13px;font-family:SegoeUI_2u;color:#212529;}
+.s1{font-size:21px;font-family:SegoeUI_2u;color:#FFF;}
+.s2{font-size:16px;font-family:SegoeUI_2u;color:#3989C6;}
+.s3{font-size:16px;font-family:SegoeUI_2u;color:#212529;}
+.s4{font-size:16px;font-family:SegoeUI_2u;color:#FFF;}
+.s5{font-size:19px;font-family:SegoeUI_2u;color:#3989C6;}
+.s6{font-size:18px;font-family:SegoeUI_2u;color:#212529;}
+.s7{font-size:9px;font-family:SegoeUI_2u;color:#212529;}
+.s8{font-size:11px;font-family:SegoeUI_2u;color:#212529;}
+.s9{font-size:20px;font-family:SegoeUI-Semibold_2y;color:#212529;}
+.sa{font-size:27px;font-family:SegoeUI-Semibold_2y;color:#212529;}
+.sb{font-size:22px;font-family:SegoeUI-Semibold_2y;color:#3989C6;}
+.sc{font-size:15px;font-family:SegoeUI_2u;color:#212529;}
+</style>
+<!-- End inline CSS -->
+
+<!-- Begin embedded font definitions -->
+<style id="fonts1" type="text/css" >
+
+@font-face {
+	font-family: SegoeUI-Semibold_2y;
+	src: url("../../cetakan/tagihan/fonts/SegoeUI-Semibold_2y.woff") format("woff");
+}
+
+@font-face {
+	font-family: SegoeUI_2u;
+	src: url("../../cetakan/tagihan/fonts/SegoeUI_2u.woff") format("woff");
+}
+
+</style>
+<!-- End embedded font definitions -->
+
+<!-- Begin page background -->
+<div id="pg1Overlay" style="width:100%; height:100%; position:absolute; z-index:1; background-color:rgba(0,0,0,0); -webkit-user-select: none;"></div>
+<div id="pg1" style="-webkit-user-select: none;"><object width="908" height="1286" data="../../cetakan/tagihan/1/1.svg" type="image/svg+xml" id="pdf1" style="width:908px; height:1286px; -moz-transform:scale(1); z-index: 0;"></object></div>
+<!-- End page background -->
+
+
+<!-- Begin text definitions (Positioned/styled in CSS) -->
+<div class="text-container"><span id="t1_1" class="t s0"># </span><span id="t2_1" class="t s0">DESKRIPSI </span><span id="t3_1" class="t s0">JUMLAH </span><span id="t4_1" class="t s0">HARGA </span><span id="t5_1" class="t s0">TOTAL </span>
+<span id="t6_1" class="t s1">01 </span>
+<span id="t7_1" class="t s2">{{ $tagihan->uraian }} </span>
+<span id="ta_1" class="t s3">1 </span><span id="tb_1" class="t s3">{{ number_format($tagihan->nilai) }} </span><span id="tc_1" class="t s4">{{ number_format($tagihan->nilai) }} </span>
+<span id="td_1" class="t s3">SUB TOTAL </span><span id="te_1" class="t s3">{{ number_format($tagihan->nilai) }} </span>
+<span id="tf_1" class="t s3">PAJAK </span><span id="tg_1" class="t s3">{{ number_format($tagihan->pajak) }} </span>
+<span id="th_1" class="t s5">GRAND TOTAL </span><span id="ti_1" class="t s5">{{ number_format($tagihan->total) }} </span>
+<span id="tj_1" class="t s6">Terima kasih! </span>
+<span id="tk_1" class="t s7">Catatan: </span>
+<span id="tl_1" class="t s8">1. Pembayaran dapat dilakukan melalui : - Bank Mandiri KCP Jakarta Graha 55 No. Rek. 121.00.4303455.6 a/n PD Pembangunan Sarana Jaya </span>
+<span id="tm_1" class="t s8">2. Kwitansi akan dikeluarkan setelah dana diterima </span>
+<span id="tn_1" class="t s8">3. Pembayaran dengan cek dan giro agar dibuat a/n PD. Pembangunan Sarana Jaya </span>
+<span id="to_1" class="t s8">4. Untuk menghindari denda keterlambatan, pembayaran dilakukan sebelum jatuh tempo </span>
+<span id="tp_1" class="t s9">Perumda Pembangunan Sarana Jaya </span>
+<span id="tq_1" class="t s0">Gedung Sarana Jaya Lantai 3-4 </span>
+<span id="tr_1" class="t s0">Jl. Budi Kemuliaan I No. 1 Jakarta Pusat, Indonesia </span>
+<span id="ts_1" class="t s0">+6221 - 352 2667 - info@sarana-jaya.co.id </span>
+<span id="tt_1" class="t s0">DITAGIH KE: </span>
+<span id="tu_1" class="t sa">{{ $tagihan->nama }}</span>
+<span id="tv_1" class="t s0">{{ $tagihan->ket_kontrak }}</span>
+<span id="ty_1" class="t sb">TAGIHAN #{{ $tagihan->nourut }}/INV/2024 </span>
+<span id="tz_1" class="t sc">Tanggal Tagihan : {{ $tagihan->tgdok }} </span>
+<span id="t10_1" class="t sc">Tanggal Jatuh Tempo : {{ $tagihan->tgjtempo }} </span></div>
+<!-- End text definitions -->
+
+
+</div>
+</body>
+</html>

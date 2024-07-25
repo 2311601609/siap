@@ -439,11 +439,6 @@
 					jQuery('#tgjtempo').val(result.message.tgjtempo);
 					jQuery('#uraian').val(result.message.uraian);
 					jQuery('#nilai').val(digit_grouping(result.message.nilai));
-					jQuery('#ppn').val(digit_grouping(result.message.ppn));
-					jQuery('#pph21').val(digit_grouping(result.message.pph21));
-					jQuery('#pph22').val(digit_grouping(result.message.pph22));
-					jQuery('#pph23').val(digit_grouping(result.message.pph23));
-					jQuery('#pph25').val(digit_grouping(result.message.pph25));
 					jQuery('#total').val(digit_grouping(result.message.total));
 					jQuery('#div-lampiran').html(result.lampiran);
 					jQuery('#pajak').html(result.pajak).trigger('change');
@@ -619,25 +614,6 @@
 				jQuery('#simpan').prop('disabled',false);
 				alertify.log('Data tidak dapat dikosongkan!');
 			}
-		});
-		
-		$('body').off('select2:select', '.akun').on('select2:select', '.akun', function(){
-			
-			var arr_id = this.id.split('-');
-			var id = arr_id[1];
-			var arr_akun = $(this).val().split('|');
-			var kdakun = arr_akun[0];
-			var kddk = arr_akun[1];
-			var persen = arr_akun[2];
-			var nilai = $('#nilai').val();
-			nilai = nilai.split(',').join('');
-			console.log(nilai);
-			var pajak = nilai*persen/100;
-			console.log(pajak);
-			pajak = parseFloat(pajak.toFixed(2)) || 0;
-			console.log('hitung otomatis');
-			$('#nilai-'+id).val(pajak);
-			
 		});
 		
 	});
