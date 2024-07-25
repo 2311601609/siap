@@ -62,6 +62,25 @@
             <div class="navbar-container">
                 <div class="collapse navbar-collapse d-block" id="navbarSupportedContent">
                     <ul class="navbar-nav">
+                        <li class="dropdown nav-item">
+                          <a class="nav-link dropdown-toggle dropdown-notification p-0 mt-2" id="dropdownBasic1" href="javascript:;" data-toggle="dropdown"><i class="ft-bell font-medium-3"></i><span class="notification badge badge-pill badge-danger">0</span></a>
+                          <ul class="notification-dropdown dropdown-menu dropdown-menu-media dropdown-menu-right m-0 overflow-hidden">
+                                <li class="dropdown-menu-header">
+                                    <div class="dropdown-header d-flex justify-content-between m-0 px-3 py-2 white bg-primary">
+                                        <div class="d-flex"><i class="ft-bell font-medium-3 d-flex align-items-center mr-2"></i><span id="judul-notifikasi" class="noti-title">0 Notifikasi</span></div>
+                                    </div>
+                                </li>
+                                <li class="scrollable-container" id="isi-notifikasi">
+                                <a class="d-flex justify-content-between" href="javascript:void(0)">
+                                  <div class="media d-flex align-items-center">
+                                      <div class="media-body">
+                                          <h6 class="m-0"><span>Data tidak ditemukan.</span></h6>
+                                      </div>
+                                  </div>
+                                </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="dropdown nav-item mr-1">
                             <a class="nav-link dropdown-toggle user-dropdown d-flex align-items-end" id="dropdownBasic2" href="javascript:;" data-toggle="dropdown">
                               <div class="user d-md-flex d-none mr-2"><span class="text-right">{{ $info_username }}</span><span class="text-right text-muted font-small-3">{{ $info_nmlevel }}</span></div><img class="avatar" src="data/user/foto/no-image.png" alt="avatar" height="35" width="35">
@@ -139,218 +158,6 @@
         </div>
     </div>
     <!-- ////////////////////////////////////////////////////////////////////////////-->
-
-    <!-- START Notification Sidebar-->
-    <aside class="notification-sidebar d-none d-sm-none d-md-block" id="notification-sidebar"><a class="notification-sidebar-close"><i class="ft-x font-medium-3 grey darken-1"></i></a>
-        <div class="side-nav notification-sidebar-content">
-            <div class="row">
-                <div class="col-12 notification-nav-tabs">
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item"><a class="nav-link active" id="base-tab1" data-toggle="tab" aria-controls="activity-tab" href="#activity-tab" aria-expanded="true">Activity</a></li>
-                        <li class="nav-item"><a class="nav-link" id="base-tab2" data-toggle="tab" aria-controls="settings-tab" href="#settings-tab" aria-expanded="false">Settings</a></li>
-                    </ul>
-                </div>
-                <div class="col-12 notification-tab-content">
-                    <div class="tab-content">
-                        <div class="row tab-pane active" id="activity-tab" role="tabpanel" aria-expanded="true" aria-labelledby="base-tab1">
-                            <div class="col-12" id="activity">
-                                <h5 class="my-2 text-bold-500">System Logs</h5>
-                                <div class="timeline-left timeline-wrapper mb-3" id="timeline-1">
-                                    <ul class="timeline">
-                                        <li class="timeline-line mt-4"></li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-badge"><span class="bg-primary bg-lighten-4" data-toggle="tooltip" data-placement="right" title="Portfolio project work"><i class="ft-download primary"></i></span></div>
-                                            <div class="activity-list-text">
-                                                <h6 class="mb-1"><span>New Update Available</span><span class="float-right grey font-italic font-small-2">1 min ago</span></h6>
-                                                <p class="mt-0 mb-2 font-small-3">Android Pie 9.0.0_r52v availabe (658MB).</p>
-                                                <div class="notification-note">
-                                                    <div class="p-1 pl-2"><span class="text-bold-500">Download Now!</span></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-badge"><span class="bg-primary bg-lighten-4" data-toggle="tooltip" data-placement="right" title="Portfolio project work"><img class="avatar" src="template/Apex6/app-assets/img/portrait/small/avatar-s-15.png" alt="avatar" width="40"></span></div>
-                                            <div class="activity-list-text">
-                                                <h6 class="mb-1"><span>Reminder!</span><span class="float-right grey font-italic font-small-2">52 min ago</span></h6>
-                                                <p class="mt-0 mb-2 font-small-3">Your meeting is scheduled with Mr. Derrick Walters at 16:00.</p>
-                                                <div class="notification-note">
-                                                    <div class="p-1 pl-2"><span class="text-bold-500">Snooze</span></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-badge"><span class="bg-primary bg-lighten-4" data-toggle="tooltip" data-placement="right" title="Portfolio project work"><img class="avatar" src="template/Apex6/app-assets/img/portrait/small/avatar-s-16.png" alt="avatar" width="40"></span></div>
-                                            <div class="activity-list-text">
-                                                <h6 class="mb-1"><span>Recieved a File</span><span class="float-right grey font-italic font-small-2">4 hours ago</span></h6>
-                                                <p class="mt-0 mb-2 font-small-3">Christina Rogers sent you a file for the next conference.</p>
-                                                <div class="notification-note">
-                                                    <div class="p-1 pl-2"><img src="template/Apex6/app-assets/img/icons/sketch-mac-icon.png" alt="icon" width="20"><span class="text-bold-500 ml-2">Diamond.sketch</span></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-badge"><span class="bg-primary bg-lighten-4" data-toggle="tooltip" data-placement="right" title="Portfolio project work"><i class="ft-mic primary"></i></span></div>
-                                            <div class="activity-list-text">
-                                                <h6 class="mb-1"><span>Voice Message</span><span class="float-right grey font-italic font-small-2">10 hours ago</span></h6>
-                                                <p class="mt-0 mb-2 font-small-3">Natalya Parker sent you a voice message.</p>
-                                                <div class="notification-note">
-                                                    <div class="p-1 pl-2"><span class="text-bold-500">Listen</span></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-badge"><span class="bg-primary bg-lighten-4" data-toggle="tooltip" data-placement="right" title="Portfolio project work"><i class="ft-cloud-drizzle primary"></i></span></div>
-                                            <div class="activity-list-text">
-                                                <h6 class="mb-1"><span>Weather Update</span><span class="float-right grey font-italic font-small-2">Yesterday</span></h6>
-                                                <p class="mt-0 mb-2 font-small-3">Hi John! It is a rainy day with 16&deg;C.</p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <h5 class="my-2 text-bold-500">Applications Logs</h5>
-                                <div class="timeline-left timeline-wrapper" id="timeline-2">
-                                    <ul class="timeline">
-                                        <li class="timeline-line mt-4"></li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-badge"><span class="bg-primary bg-lighten-4" data-toggle="tooltip" data-placement="right" title="Portfolio project work"><img class="avatar" src="template/Apex6/app-assets/img/portrait/small/avatar-s-26.png" alt="avatar" width="40"></span></div>
-                                            <div class="activity-list-text">
-                                                <h6 class="mb-1"><span>Gmail</span><span class="float-right grey font-italic font-small-2">Just now</span></h6>
-                                                <p class="mt-0 mb-2 font-small-3">Victoria Hampton sent you a mail and has a file attachment with it.</p>
-                                                <div class="notification-note">
-                                                    <div class="p-1 pl-2"><img src="template/Apex6/app-assets/img/icons/pdf.png" alt="pdf icon" width="20"><span class="text-bold-500 ml-2">Register.pdf</span></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-badge"><span class="bg-primary bg-lighten-4" data-toggle="tooltip" data-placement="right" title="Portfolio project work"><i class="ft-droplet primary"></i></span></div>
-                                            <div class="activity-list-text">
-                                                <h6 class="mb-1"><span>MakeMyTrip</span><span class="float-right grey font-italic font-small-2">7 hours ago</span></h6>
-                                                <p class="mt-0 mb-2 font-small-3">Your next flight for San Francisco will be on 24th March.</p>
-                                                <div class="notification-note">
-                                                    <div class="p-1 pl-2"><span class="text-bold-500">Important</span></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-badge"><span class="bg-primary bg-lighten-4" data-toggle="tooltip" data-placement="right" title="Portfolio project work"><img class="avatar" src="template/Apex6/app-assets/img/portrait/small/avatar-s-23.png" alt="avatar" width="40"></span></div>
-                                            <div class="activity-list-text">
-                                                <h6 class="mb-1"><span>CNN</span><span class="float-right grey font-italic font-small-2">16 hours ago</span></h6>
-                                                <p class="mt-0 mb-2 font-small-3">U.S. investigating report says email account linked to CIA Director was hacked.</p>
-                                                <div class="notification-note">
-                                                    <div class="p-1 pl-2"><span class="text-bold-500">Read full article</span></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-badge"><span class="bg-primary bg-lighten-4" data-toggle="tooltip" data-placement="right" title="Portfolio project work"><i class="ft-map primary"></i></span></div>
-                                            <div class="activity-list-text">
-                                                <h6 class="mb-1"><span>Maps</span><span class="float-right grey font-italic font-small-2">Yesterday</span></h6>
-                                                <p class="mt-0 mb-2 font-small-3">You visited Walmart Supercenter in Chicago.</p>
-                                                <div class="notification-note">
-                                                    <div class="p-1 pl-2"><span class="text-bold-500">Write a Review!</span></div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="timeline-item">
-                                            <div class="timeline-badge"><span class="bg-primary bg-lighten-4" data-toggle="tooltip" data-placement="right" title="Portfolio project work"><i class="ft-package primary"></i></span></div>
-                                            <div class="activity-list-text">
-                                                <h6 class="mb-1"><span>Updates Available</span><span class="float-right grey font-italic font-small-2">2 days ago</span></h6>
-                                                <p class="mt-0 mb-2 font-small-3">19 app updates found.</p>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row tab-pane" id="settings-tab" aria-labelledby="base-tab2">
-                            <div class="col-12" id="settings">
-                                <h5 class="mt-2 mb-3">General Settings</h5>
-                                <ul class="list-unstyled mb-0 mx-2">
-                                    <li class="mb-3">
-                                        <div class="mb-1"><span class="text-bold-500">Notifications</span>
-                                            <div class="float-right">
-                                                <div class="custom-switch">
-                                                    <input class="custom-control-input" id="noti-s-switch-1" type="checkbox">
-                                                    <label class="custom-control-label" for="noti-s-switch-1"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p class="font-small-3 m-0">Use switches when looking for yes or no answers.</p>
-                                    </li>
-                                    <li class="mb-3">
-                                        <div class="mb-1"><span class="text-bold-500">Show recent activity</span>
-                                            <div class="float-right">
-                                                <div class="checkbox">
-                                                    <input id="noti-s-checkbox-1" type="checkbox" checked>
-                                                    <label for="noti-s-checkbox-1"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p class="font-small-3 m-0">The "for" attribute is necessary to bind checkbox with the input.</p>
-                                    </li>
-                                    <li class="mb-3">
-                                        <div class="mb-1"><span class="text-bold-500">Product Update</span>
-                                            <div class="float-right">
-                                                <div class="custom-switch">
-                                                    <input class="custom-control-input" id="noti-s-switch-4" type="checkbox" checked>
-                                                    <label class="custom-control-label" for="noti-s-switch-4"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p class="font-small-3 m-0">Message and mail me on weekly product updates.</p>
-                                    </li>
-                                    <li class="mb-3">
-                                        <div class="mb-1"><span class="text-bold-500">Email on Follow</span>
-                                            <div class="float-right">
-                                                <div class="custom-switch">
-                                                    <input class="custom-control-input" id="noti-s-switch-3" type="checkbox">
-                                                    <label class="custom-control-label" for="noti-s-switch-3"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p class="font-small-3 m-0">Mail me when someone follows me.</p>
-                                    </li>
-                                    <li class="mb-3">
-                                        <div class="mb-1"><span class="text-bold-500">Announcements</span>
-                                            <div class="float-right">
-                                                <div class="checkbox">
-                                                    <input id="noti-s-checkbox-2" type="checkbox" checked>
-                                                    <label for="noti-s-checkbox-2"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p class="font-small-3 m-0">Receive all the news and announcements from my clients.</p>
-                                    </li>
-                                    <li class="mb-3">
-                                        <div class="mb-1"><span class="text-bold-500">Date and Time</span>
-                                            <div class="float-right">
-                                                <div class="checkbox">
-                                                    <input id="noti-s-checkbox-3" type="checkbox">
-                                                    <label for="noti-s-checkbox-3"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p class="font-small-3 m-0">Show date and time on top of every page.</p>
-                                    </li>
-                                    <li>
-                                        <div class="mb-1"><span class="text-bold-500">Email on Comments</span>
-                                            <div class="float-right">
-                                                <div class="custom-switch">
-                                                    <input class="custom-control-input" id="noti-s-switch-2" type="checkbox" checked>
-                                                    <label class="custom-control-label" for="noti-s-switch-2"></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <p class="font-small-3 m-0">Mail me when someone comments on my article.</p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </aside>
 
     <!-- Theme customizer Starts-->
     <div class="customizer d-none d-lg-none d-xl-block">
@@ -518,6 +325,27 @@
     </div>
     <!-- Theme customizer Ends-->
 
+    <!-- Modal -->
+    <div class="modal fade text-left" id="modal-notifikasi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel2"><i class="ft-alert-triangle mr-2"></i>Perhatian</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"><i class="ft-x font-medium-2 text-bold-700"></i></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5><i class="ft-arrow-right mr-1"></i>Notifikasi Batas Akhir SPJ</h5>
+                    <p>Terdapat transaksi UMK yang sudah mendekati batas akhir jatuh tempo pengajuan SPJ. Silahkan cek di tombol kanan atas untuk melihat detilnya.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-light-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- END Notification Sidebar-->
     <div class="sidenav-overlay"></div>
     <div class="drag-target"></div>
@@ -576,6 +404,35 @@
             401: function() {
               window.location.href='auth/logout'
             }
+          }
+        });
+
+        $.getJSON('notifikasi', function(result){
+          if(result.success){
+            var jml = result.data.length;
+            $('#dropdownBasic1').html('<i class="ft-bell font-medium-3"></i><span class="notification badge badge-pill badge-danger">'+jml+'</span>');
+            $('#judul-notifikasi').html(jml+' notifikasi');
+
+            var html = ``;
+            $.each(result.data, function(i, data){
+
+              html += `<a class="d-flex justify-content-between" href="javascript:void(0)">
+                        <div class="media d-flex align-items-center">
+                            <div class="media-body">
+                                <h6 class="m-0"><span>`+data.jenis+`. `+data.nourut+`</span><small class="grey lighten-1 font-italic float-right">`+data.jml_hari+` hari lagi</small></h6>
+                                <small class="noti-text">Nilai Rp. `+data.nilai+`,-</small>
+                                <small class="noti-text">/ Jatuh Tempo `+data.tgl_jatuh_tempo+`</small>
+                                <h6 class="noti-text font-small-3 m-0">`+data.uraian+`</h6>
+                            </div>
+                        </div>
+                      </a>`;
+
+            });
+            
+            $('#isi-notifikasi').html(html);
+
+            $('#modal-notifikasi').modal('show');
+            
           }
         });
 

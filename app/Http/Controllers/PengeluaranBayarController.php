@@ -4,150 +4,64 @@ use DB;
 use Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use DataTables;
+use App\Libraries\PublicFunction;
+use Storage;
 
 class PengeluaranBayarController extends Controller {
 
 	public function index(Request $request)
 	{
-		$aColumns = array('id','nourut','nmunit','nama','nmtrans','total','bayar','nocek');
-		/* Indexed column (used for fast and accurate table cardinality) */
-		$sIndexColumn = "id";
-		/* DB table to use */
-		$sTable = "select  a.id,
-							lpad(a.nourut,5,'0') as nourut,
-							d.nmunit,
-							e.nama,
-							h.nmtrans,
-							a.nodok as pks,
-							to_char(a.tgdok1,'dd-mm-yyyy') as tgjtempo,
-							a.uraian,
-							nvl(a.nilai,0) as nilai,
-							b.nmalur||'<br>'||g.nmlevel||'<br>'||c.nmstatus as status,
-							nvl(a.ppn,0)+nvl(a.pph21,0)+nvl(a.pph22,0)+nvl(a.pph23,0)+nvl(a.pph25,0) as pajak,
-							nvl(a.nilai,0)-nvl(a.ppn,0)-nvl(a.pph21,0)-nvl(a.pph22,0)-nvl(a.pph23,0)-nvl(a.pph25,0) as total,
-							nvl(a.nocek,'') as nocek,
-							decode(a.nocek,null,'Belum','Sudah') as bayar
-					from d_trans a
-					left outer join t_alur b on(a.id_alur=b.id)
-					left outer join t_alur_status c on(a.id_alur=c.id_alur and a.status=c.status)
-					left outer join t_unit d on(a.kdunit=d.kdunit)
-					left outer join t_penerima e on(a.id_penerima=e.id)
-					left outer join t_level g on(c.kdlevel=g.kdlevel)
-					left outer join t_trans h on(a.kdtran=h.id)
-					where b.menu=4 and a.thang='".session('tahun')."' and c.is_final=1
-					order by a.id desc
-					";
-		
-		/*
-		 * Paging
-		 */ 
-		$sLimit = " ";
-		if((isset($_GET['iDisplayStart']))&&(isset($_GET['iDisplayLength']))){
-			$iDisplayStart=$_GET['iDisplayStart']+1;
-			$iDisplayLength=$_GET['iDisplayLength'];
-			$sSearch=$_GET['sSearch'];
-			if ((isset( $iDisplayStart )) &&  ($iDisplayLength != '-1' )) 
-			{
-				$iDisplayEnd=$iDisplayStart+$iDisplayLength-1;
-				$sLimit = " WHERE NO BETWEEN '$iDisplayStart' AND '$iDisplayEnd'";
-			}
-		}
-		
-		/*
-		 * Ordering
-		 */
-		$sOrder = " ";
-		if((isset($_GET['iSortCol_0']))&&(isset($_GET['sSortDir_0']))){
-			$iSortCol_0=$_GET['iSortCol_0'];
-			$iSortDir_0=$_GET['sSortDir_0'];
-			if ( isset($iSortCol_0  ) )
-			{		
-				//modified ordering
-				for($i=0;$i<count($aColumns);$i++){
-					if($iSortCol_0==$i){
-						if($iSortDir_0=='asc'){
-							$sOrder = " ORDER BY ".$aColumns[$i]." DESC ";
-						}
-						else{
-							$sOrder = " ORDER BY ".$aColumns[$i]." ASC ";
-						}
-					}
-				}
-			}
-		}
-		
-		//modified filtering
-		$sWhere="";
-		if(isset($_GET['sSearch'])){
-			$sSearch=$_GET['sSearch'];
-			if((isset($sSearch))&&($sSearch!='')){
-				$sWhere=" where lower(pks) like lower('".$sSearch."%') or lower(pks) like lower('%".$sSearch."%') or
-								lower(nourut) like lower('".$sSearch."%') or lower(nourut) like lower('%".$sSearch."%') or nilai=".$sSearch." ";
-			}
-		}
-		
-		/* Data set length after filtering */
-		$iFilteredTotal = 0;
-		$rows = DB::select("
-			SELECT COUNT(*) as JUMLAH FROM (".$sTable.") qry
-		");
-		$result = (array)$rows[0];
-		if($result){
-			$iFilteredTotal = $result['jumlah'];
-		}
-		
-		/* Total data set length */
-		$iTotal = 0;
-		$rows = DB::select("
-			SELECT COUNT(".$sIndexColumn.") as JUMLAH FROM (".$sTable.") qry
-		");
-		$result = (array)$rows[0];
-		if($result){
-			$iTotal = $result['jumlah'];
-		}
+		$sql = "
+			select  a.id,
+					lpad(a.nourut,5,'0') as nourut,
+					d.nmunit,
+					e.nama,
+					h.nmtrans,
+					a.nodok as pks,
+					to_char(a.tgdok1,'dd-mm-yyyy') as tgjtempo,
+					a.uraian,
+					nvl(a.nilai,0) as nilai,
+					b.nmalur||'<br>'||g.nmlevel||'<br>'||c.nmstatus as status,
+					nvl(a.ppn,0)+nvl(a.pph21,0)+nvl(a.pph22,0)+nvl(a.pph23,0)+nvl(a.pph25,0) as pajak,
+					nvl(a.nilai,0)-nvl(a.ppn,0)-nvl(a.pph21,0)-nvl(a.pph22,0)-nvl(a.pph23,0)-nvl(a.pph25,0) as total,
+					nvl(a.nocek,'') as nocek,
+					decode(a.nocek,null,'Belum','Sudah') as bayar
+			from d_trans a
+			left outer join t_alur b on(a.id_alur=b.id)
+			left outer join t_alur_status c on(a.id_alur=c.id_alur and a.status=c.status)
+			left outer join t_unit d on(a.kdunit=d.kdunit)
+			left outer join t_penerima e on(a.id_penerima=e.id)
+			left outer join t_level g on(c.kdlevel=g.kdlevel)
+			left outer join t_trans h on(a.kdtran=h.id)
+			where b.menu=4 and a.thang='".session('tahun')."' and c.is_final=1
+			order by a.id desc
+		";
 
-		/*
-		 * Format Output
-		 */
-		$sEcho="";
-		if(isset($_GET['sEcho'])){
-			$sEcho=$_GET['sEcho'];
-		}
-		$output = array(
-			"sEcho" => intval($sEcho),
-			"iTotalRecords" => $iTotal,
-			"iTotalDisplayRecords" => $iFilteredTotal,
-			"aaData" => array()
-		);
-		
-		$str=str_replace(" , ", " ", implode(", ", $aColumns));
-		
-		$sQuery = "SELECT * FROM ( SELECT ROWNUM AS NO,".$str." FROM ( SELECT * FROM (".$sTable.") ".$sOrder.") ".$sWhere." ) a ".$sLimit." ";
-		
-		$rows = DB::select($sQuery);
-		
-		foreach( $rows as $row )
-		{
-			$aksi='<center>
-						<button type="button" class="btn btn-raised btn-sm btn-icon btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-check"></i></button>
-						<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-							<a id="'.$row->id.'" class="dropdown-item proses" href="javascript:;">Bayar</a>
-						</div>
-					</center>';
-			
-			$output['aaData'][] = array(
-				$row->no,
-				$row->nourut,
-				$row->nmunit,
-				$row->nama,
-				$row->nmtrans,
-				'<div style="text-align:right;">'.number_format($row->total).'</div>',
-				$row->bayar,
-				$aksi
-			);
-		}
-		
-		return response()->json($output);
+		$query = DB::table(DB::raw("($sql) a"))
+				->selectRaw('a.*');
+
+		$datatables = DataTables::of($query)
+					->addIndexColumn()
+					->editColumn('total', function($row){
+						return number_format($row->total, 0, ',', '.');
+					})
+					->addColumn('aksi', function($row){
+
+						$aksi='<center>
+									<button type="button" class="btn btn-raised btn-sm btn-icon btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-check"></i></button>
+									<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+										<a id="'.$row->id.'" class="dropdown-item proses" href="javascript:;">Bayar</a>
+									</div>
+								</center>';
+
+						return $aksi;
+
+					})
+					->rawColumns(['aksi'])
+					->make(true);
+
+		return $datatables;
 	}
 	
 	public function pilih(Request $request, $id)
@@ -176,7 +90,8 @@ class PengeluaranBayarController extends Controller {
 					a.nobuku,
 					a.nocek,
 					to_char(a.tgcek,'yyyy-mm-dd') as tgcek,
-					m.kdakun as bayar
+					m.kdakun as bayar,
+					m.nmfile
 			from d_trans a
 			left outer join t_alur b on(a.id_alur=b.id)
 			left outer join t_unit c on(a.kdunit=c.kdunit)
@@ -209,6 +124,11 @@ class PengeluaranBayarController extends Controller {
 				left join t_akun b on(a.kdakun=b.kdakun)
 				where a.grup=1 and a.kddk='K'
 			) m on(a.id=m.id_trans)
+			left outer join(
+				select	*
+				from d_trans_dok
+				where id_dok_dtl=53
+			) m on(a.id=m.id_trans)
 			where a.id=?
 		",[
 			$id
@@ -218,6 +138,7 @@ class PengeluaranBayarController extends Controller {
 			
 			$id_alur = $rows[0]->id_alur;
 			$detil = $rows[0];
+			$detil->token = csrf_token();
 			$data['error'] = false;
 			$data['message'] = $detil;
 			
@@ -234,7 +155,7 @@ class PengeluaranBayarController extends Controller {
 			
 			$lampiran = '<ul>';
 			foreach($rows as $row){
-				$lampiran .= '<li><a href="penerimaan/rekam/download/'.$row->id.'" target="_blank" title="Download Lampiran">'.$row->uraian.'</li>';
+				$lampiran .= '<li><a href="pengeluaran-lampiran/download?nmfile='.$row->nmfile.'" target="_blank" title="Download Lampiran">'.$row->uraian.'</li>';
 			}
 			$lampiran .= '</ul>';
 			
@@ -269,83 +190,247 @@ class PengeluaranBayarController extends Controller {
 	
 	public function simpan(Request $request)
 	{
-		DB::beginTransaction();
+		DB::connection()->getPdo()->beginTransaction();
+		try{
+			$lanjut = false;
+			$error = '';
+			$id_trans = $request->input('inp-id');
+			$nmfile = $request->input('nmfile_baru');
 		
-		$update = DB::update("
-			update d_trans
-			set nobuku=?,
-				nocek=?,
-				tgcek=to_date(?,'yyyy-mm-dd'),
-				updated_at=sysdate
-			where id=?
-		",[
-			$request->input('nobuku'),
-			$request->input('nocek'),
-			$request->input('tgcek'),
-			$request->input('inp-id'),
-		]);
-		
-		$delete = DB::delete("
-			delete from d_trans_akun
-			where id_trans=? and grup='3'
-		",[
-			$request->input('inp-id')
-		]);
-		
-		$insert = DB::insert("
-			insert into d_trans_akun(id_trans,kdakun,nilai,kddk,grup)
-			select  id_trans,
-					kdakun,
-					nilai,
-					'D' as kddk,
-					'3' as grup
-			from d_trans_akun
-			where id_trans=? and kddk='K' and grup='1'
+			$update = DB::update("
+				update d_trans
+				set nobuku=?,
+					nocek=?,
+					tgcek=to_date(?,'yyyy-mm-dd'),
+					updated_at=sysdate
+				where id=?
+			",[
+				$request->input('nobuku'),
+				$request->input('nocek'),
+				$request->input('tgcek'),
+				$id_trans,
+			]);
+			
+			$delete = DB::delete("
+				delete from d_trans_akun
+				where id_trans=? and grup='3'
+			",[
+				$id_trans
+			]);
+			
+			$insert = DB::insert("
+				insert into d_trans_akun(id_trans,kdakun,nilai,kddk,grup)
+				select  id_trans,
+						kdakun,
+						nilai,
+						'D' as kddk,
+						'3' as grup
+				from d_trans_akun
+				where id_trans=? and kddk='K' and grup='1'
 
-			union all
+				union all
 
-			select  id_trans,
-					? as kdakun,
-					nilai,
-					'K' as kddk,
-					'3' as grup
-			from d_trans_akun
-			where id_trans=? and kddk='K' and grup='1'
-		",[
-			$request->input('inp-id'),
-			$request->input('bayar'),
-			$request->input('inp-id')
-		]);
-		
-		if($insert){
-			DB::commit();
-			return 'success';
+				select  id_trans,
+						? as kdakun,
+						nilai,
+						'K' as kddk,
+						'3' as grup
+				from d_trans_akun
+				where id_trans=? and kddk='K' and grup='1'
+			",[
+				$id_trans,
+				$request->input('bayar'),
+				$id_trans
+			]);
+
+			if($insert){
+
+				if($nmfile!==null && $nmfile!==''){
+
+					$delete = DB::table('d_trans_dok')
+					->where('id_trans', $id_trans)
+					->where('id_dok_dtl', 53)
+					->delete();
+
+					$insert = DB::table('d_trans_dok')->insert([
+						'id_trans' => $id_trans,
+						'id_dok_dtl' => 53,
+						'nmfile' => $nmfile,
+						'ket' => 'Dokumen bukti transfer'
+					]);
+
+					if($insert){
+						$lanjut = true;
+					}
+					else{
+						$error = 'Upload file gagal disimpan.';
+					}
+
+				}
+				else{
+					$error = 'File bukti transfer belum diupload.';
+				}
+
+			}
+			else{
+				$error = 'Data gagal disimpan.';
+			}
+			
+			if($lanjut){
+				DB::connection()->getPdo()->commit();
+				return 'success';
+			}
+			else{
+				DB::connection()->getPdo()->rollBack();
+				return $error;
+			}
+			
 		}
-		else{
-			return 'Proses gagal disimpan!';
-		}		
+		catch(\Exception $e){
+			DB::connection()->getPdo()->rollBack();
+
+			if(PublicFunction::errorLog($request, substr($e->getMessage(),0,255))){
+				return 'Kesalahan lainnya, hubungi Administrator.';
+			}
+			else{
+				return 'Kesalahan lainnya, hubungi Administrator. Log error gagal disimpan.';
+			}
+		}
 	}
 	
 	public function hapus(Request $request)
 	{
-		DB::beginTransaction();
+		DB::connection()->getPdo()->beginTransaction();
+		try{
+			$lanjut = false;
+			$error = '';
 		
-		$arr_id = explode("-", $request->input('id'));
-		
-		$delete = DB::delete("
-			delete from d_trans_akun
-			where id_trans=? and grup=?
-		",[
-			$arr_id[0],
-			$arr_id[1]
-		]);
-		
-		if($delete==true) {
-			DB::commit();
-			return 'success';
+			$arr_id = explode("-", $request->input('id'));
+			
+			$delete = DB::delete("
+				delete from d_trans_akun
+				where id_trans=? and grup=?
+			",[
+				$arr_id[0],
+				$arr_id[1]
+			]);
+			
+			if($delete==true) {
+				$lanjut = true;
+			}
+			else {
+				$error = 'Proses hapus gagal. Hubungi Administrator.';
+			}
+
+			if($lanjut){
+				DB::connection()->getPdo()->commit();
+				return 'success';
+			}
+			else{
+				DB::connection()->getPdo()->rollBack();
+				return $error;
+			}
+
 		}
-		else {
-			return 'Proses hapus gagal. Hubungi Administrator.';
+		catch(\Exception $e){
+			DB::connection()->getPdo()->rollBack();
+
+			if(PublicFunction::errorLog($request, substr($e->getMessage(),0,255))){
+				return 'Kesalahan lainnya, hubungi Administrator.';
+			}
+			else{
+				return 'Kesalahan lainnya, hubungi Administrator. Log error gagal disimpan.';
+			}
+		}
+	}
+
+	public function upload(Request $request)
+	{
+		try {
+
+			if (!empty($_FILES)) {
+				
+				$file = $request->file('file');
+				$fileName = $_FILES['file']['name'];
+				$tempFile = $_FILES['file']['tmp_name'];
+				$fileTypes = ['pdf','PDF']; //File extensions
+				$fileParts = pathinfo($_FILES['file']['name']);
+				$fileExt = $fileParts['extension'];
+				$fileSize = $_FILES['file']['size'];				
+				$error = $_FILES['file']['error'];
+				
+				if($error === UPLOAD_ERR_OK){
+
+					//cek tipe file
+					if (in_array($fileExt, $fileTypes)) {
+						
+						//cek ukuran file
+						if($fileSize>0){
+
+							$timestamp = time();
+
+							$file_name_baru = session('id_user').'_'.$timestamp.'.'.$fileExt;
+
+							//cek folder lokasi upload file satker di ftp
+							$pathFTP = 'buk/';
+							$kirimftp = Storage::disk('public')->put($pathFTP.$file_name_baru, fopen($file, 'r+'));
+							
+							if($kirimftp){
+								
+								$data['success'] = true;
+								$data['message'] = 'File berhasil diupload.';
+								$data['nmfile'] = $file_name_baru;
+								return response()->json($data, 200);
+
+							}
+							else{
+								$data['success'] = false;
+								$data['message'] = 'File gagal diupload ke server FTP.';
+								return response()->json($data, 500);
+							}
+							
+						}
+						else{
+							$data['success'] = false;
+							$data['message'] = 'Ukuran file tidak valid.';
+							return response()->json($data, 500);
+						}
+
+					}
+					else{
+						$data['success'] = false;
+						$data['message'] = 'Tipe file tidak valid.';
+						return response()->json($data, 500);
+					}
+
+				}
+				else{
+					$data['success'] = false;
+					$data['message'] = 'Error file upload: ' . $error;
+					return response()->json($data, 500);
+				}
+
+			}
+			else{
+				$data['success'] = false;
+				$data['message'] = 'Tidak ada file yang diupload.';
+				return response()->json($data, 500);
+			}
+
+        }
+		catch(\Exception $e) {
+
+			if(PublicFunction::errorLog($request, substr($e->getMessage(),0,255))){
+				$data['message'] = 'Kesalahan lainnya, hubungi Administrator.';
+			}
+			else{
+				$data['message'] = 'Kesalahan lainnya, hubungi Administrator. Log error gagal disimpan.';
+			}
+
+			$data['success'] = false;
+
+			return response()->json($data, 500);
+
 		}
 	}
 }

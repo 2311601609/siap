@@ -125,6 +125,23 @@
                 <div class="card-header">
 					<div class="clearfix">
 						<h4 class="card-title float-left">Data</h4>
+						<div class="actions float-right">
+							<button type="button" class="btn btn-primary mr-1" id="exportPrint">
+								<span class="d-flex align-items-center">
+									<span>Cetak</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPdf">
+								<span class="d-flex align-items-center">
+									<span>PDF</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportExcel">
+								<span class="d-flex align-items-center">
+									<span>XLS</span>
+								</span>
+							</button>
+						</div>
 					</div>
                 </div>
                 <div class="card-body collapse show">
@@ -175,6 +192,8 @@
 
 <script>
 	jQuery(document).ready(function(){
+
+		var route = 'kas-kecil/monitoring';
 	
 		jQuery.fn.dataTable.ext.errMode = 'none';
 			
@@ -212,9 +231,55 @@
 			table.ajax.url( 'kas-kecil/monitoring?status='+status ).load();
 		});
 		
+		// datatable init
+        $("#exportPrint").on("click", function () {
+            table.button('.buttons-print').trigger();
+        });
+
+		$("#exportPdf").on("click", function () {
+            table.button('.buttons-pdf').trigger();
+        });
+
+		$("#exportExcel").on("click", function () {
+            table.button('.buttons-excel').trigger();
+        });
+
 		//data tabel
-		var table=jQuery('#tabel-ruh').DataTable({
-			bProcessing:true,
+		var table = $('#tabel-ruh').DataTable({
+			buttons: [
+                {
+                    extend: 'print',
+                    title: 'Monitoring Kas Kecil',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Monitoring Kas Kecil',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+				{
+                    extend: 'excel',
+					title: 'Monitoring Kas Kecil',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+            ],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Semua"],
+            ],
+			processing: true,
 			language:{
 			    "decimal":        "",
 			    "emptyTable":     "Tidak ada data tersedia",
@@ -239,9 +304,19 @@
 			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
 			    }
 			},
-			aaSorting: [],
-			bServerSide: true,
-			sAjaxSource: "kas-kecil/monitoring"
+			serverSide: true,
+			ajax: {
+				url: route,
+			},
+			columns: [
+				{ data: "DT_RowIndex", name: "DT_RowIndex", className: "t-center", orderable: false, searchable: false },
+				{ data: "nourut", name: "nourut", className: "t-left" },
+				{ data: "nmtrans", name: "nmtrans", className: "t-left" },
+				{ data: "pks", name: "pks", className: "t-left" },
+				{ data: "nilai", name: "nilai", className: "t-right" },
+				{ data: "status", name: "status", className: "t-left" },
+				{ data: "aksi", name: "aksi", className: "t-center", orderable: false, searchable: false },
+			],
 		});
 		
 		//validasi isian form

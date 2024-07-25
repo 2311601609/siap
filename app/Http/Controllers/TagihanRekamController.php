@@ -110,7 +110,7 @@ class TagihanRekamController extends Controller {
 											<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
 											'.$ubah.'	
 											'.$hapus.'	
-											<a id="'.$row->id.'" class="dropdown-item" target="_blank" href="cetak/tagihan/1">Cetak Tagihan</a>
+											<a class="dropdown-item" target="_blank" href="tagihan/rekam/cetak?id='.$row->id.'">Cetak Tagihan</a>
 											</div>
 										</center>';
 
@@ -372,7 +372,26 @@ class TagihanRekamController extends Controller {
 							");
 							
 							if($insert){
-								$lanjut = true;
+								
+								$rows_balance = DB::select("
+									select	count(*) as jml
+									from(
+										select	sum(decode(a.kddk,'D',a.nilai,0)) as debet,
+												sum(decode(a.kddk,'K',a.nilai,0)) as kredit
+										from(
+											".implode(" union all ", $arr_insert)."
+										) a
+									) a
+									where a.debet=a.kredit
+								");
+
+								if($rows_balance[0]->jml==1){
+									$lanjut = true;
+								}
+								else{
+									$error = 'Jurnal tidak balance, silahkan cek perhitungan total.';
+								}
+
 							}
 							else{
 								$error = 'Simpan detil gagal!';
@@ -473,7 +492,26 @@ class TagihanRekamController extends Controller {
 						");
 						
 						if($insert){
-							$lanjut = true;
+							
+							$rows_balance = DB::select("
+								select	count(*) as jml
+								from(
+									select	sum(decode(a.kddk,'D',a.nilai,0)) as debet,
+											sum(decode(a.kddk,'K',a.nilai,0)) as kredit
+									from(
+										".implode(" union all ", $arr_insert)."
+									) a
+								) a
+								where a.debet=a.kredit
+							");
+
+							if($rows_balance[0]->jml==1){
+								$lanjut = true;
+							}
+							else{
+								$error = 'Jurnal tidak balance, silahkan cek perhitungan total.';
+							}
+
 						}
 						else{
 							$error = 'Simpan pajak gagal!';
@@ -620,6 +658,79 @@ class TagihanRekamController extends Controller {
 		}
 		
 		return number_format($nilai+$pajak,2);
+	}
+
+	public function cetak(Request $request)
+	{
+		if(isset($_GET['id'])){
+			
+			$id = $_GET['id'];
+
+			$rows = DB::select("
+				select  a.id,
+						a.id_kontrak_dtl,
+						b.id_kontrak,
+						e.nmproyek,
+						c.ket as ket_kontrak,
+						d.nama,
+						lpad(a.nourut,5,'0') as nourut,
+						a.thang,
+						a.nodok,
+						to_char(a.tgdok,'d FMMonth yyyy') as tgdok,
+						to_char(b.tgjtempo,'d FMMonth yyyy') as tgjtempo,
+						a.uraian,
+						b.tahun,
+						b.bulan,
+						nvl(f.nilai,0) as nilai,
+						nvl(g.nilai,0) as pajak,
+						nvl(f.nilai,0)+nvl(g.nilai,0) as total
+				from d_trans a
+				left join d_kontrak_dtl b on(a.id_kontrak_dtl=b.id)
+				left join d_kontrak c on(b.id_kontrak=c.id)
+				left join t_penerima d on(c.id_penerima=d.id)
+				left join t_proyek e on(a.id_proyek=e.id)
+				left join(
+					
+					select  id_trans,
+							sum(nilai) as nilai
+					from d_trans_akun
+					where id_trans=? and grup='1' and kddk='K'
+					group by id_trans
+
+				) f on(a.id=f.id_trans)
+				left join(
+					
+					select  id_trans,
+							sum(nilai) as nilai
+					from d_trans_akun
+					where id_trans=? and grup='0'
+					group by id_trans
+
+				) g on(a.id=g.id_trans)
+				where a.id=?
+			",[
+				$id,
+				$id,
+				$id
+			]);
+
+			if(count($rows)>0){
+
+				$tagihan = $rows[0];
+
+				return view('tagihan.index', [
+					'tagihan' => $tagihan
+				]);
+
+			}
+			else{
+				return 'Data tidak ditemukan.';
+			}
+
+		}
+		else{
+			return 'Parameter tidak valid.';
+		}
 	}
 	
 }

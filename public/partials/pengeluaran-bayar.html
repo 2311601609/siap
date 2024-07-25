@@ -28,6 +28,7 @@
 							<input type="hidden" id="id_alur" name="id_alur">
 							<input type="hidden" id="status" name="status">
 							<input type="hidden" id="grup" name="grup">
+							<input type="hidden" id="nmfile_baru" name="nmfile_baru">
 
 							<div class="row">
 								<div class="col-md-6">
@@ -102,6 +103,24 @@
 							</div>
 							<div class="row">
 								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="fileupload">Upload Lampiran</label>
+										<div>
+											<span class="btn btn-primary fileinput-button">
+												<i class="fa fa-upload"></i>
+												<span>Browse File</span>
+												<input id="fileupload" type="file" name="file">
+											</span>
+										</div>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="ket">Status Upload</label>
+										<input type="text" id="status-upload" name="status-upload" class="form-control" disabled>
+									</fieldset>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
 
 									<fieldset class="form-group">
 										<label for="bayar">Kas Bank/ Bendahara</label>
@@ -150,6 +169,23 @@
                 <div class="card-header">
 					<div class="clearfix">
 						<h4 class="card-title float-left">Data</h4>
+						<div class="actions float-right">
+							<button type="button" class="btn btn-primary mr-1" id="exportPrint">
+								<span class="d-flex align-items-center">
+									<span>Cetak</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPdf">
+								<span class="d-flex align-items-center">
+									<span>PDF</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportExcel">
+								<span class="d-flex align-items-center">
+									<span>XLS</span>
+								</span>
+							</button>
+						</div>
 					</div>
                 </div>
                 <div class="card-body collapse show">
@@ -182,6 +218,8 @@
 
 <script>
 	jQuery(document).ready(function(){
+
+		var route = 'pengeluaran/bayar';
 	
 		jQuery.fn.dataTable.ext.errMode = 'none';
 			
@@ -201,10 +239,48 @@
 			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		}
 		
-		jQuery('.val_num').mask('000,000,000,000,000', {reverse: true});
+		$('.uang').inputmask('numeric', {
+			radixPoint: '.',
+			groupSeparator: ',',
+			autoGroup: true,
+			prefix: '',
+			rightAlign: false,
+			digits: 2,
+			oncleared: function () {
+				// Fungsi ini akan dipanggil saat input dihapus
+				$(this).val('');
+			}
+		});
 		
 		//aktivasi chosen
 		jQuery('.chosen').select2();
+
+		$('#fileupload').click(function(){
+			$('#status-upload').html('File belum diupload...');
+		});
+
+		function upload(token){
+
+			$('#fileupload').fileupload({
+				url: route+'/upload',
+				dataType: 'json',
+				formData:{
+					_token: token
+				},
+				done: function (e, data) {
+					$('#nmfile').html(data.files[0].name);
+					$('#nmfile_baru').val(data.result.nmfile);
+					$('#status-upload').val('File berhasil diupload, silahkan klik tombol simpan.');
+				},
+				error: function(error) {
+					$('#status-upload').val(error.responseJSON.message);
+				},
+				progressall: function (e, data) {
+					$('#status-upload').html('Sedang proses upload..');
+				}
+			}).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
+				
+		}
 		
 		//tampilan default
 		function form_default() {
@@ -218,10 +294,55 @@
 		//aktivasi tampilan default
 		form_default();
 		
+		// datatable init
+        $("#exportPrint").on("click", function () {
+            table.button('.buttons-print').trigger();
+        });
+
+		$("#exportPdf").on("click", function () {
+            table.button('.buttons-pdf').trigger();
+        });
+
+		$("#exportExcel").on("click", function () {
+            table.button('.buttons-excel').trigger();
+        });
+
 		//data tabel
-		//data tabel
-		var table=jQuery('#tabel-ruh').DataTable({
-			bProcessing:true,
+		var table = $('#tabel-ruh').DataTable({
+			buttons: [
+                {
+                    extend: 'print',
+                    title: 'Pembayaran BUK',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Pembayaran BUK',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+				{
+                    extend: 'excel',
+					title: 'Pembayaran BUK',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+            ],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Semua"],
+            ],
+			processing: true,
 			language:{
 			    "decimal":        "",
 			    "emptyTable":     "Tidak ada data tersedia",
@@ -246,9 +367,20 @@
 			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
 			    }
 			},
-			aaSorting: [],
-			bServerSide: true,
-			sAjaxSource: "pengeluaran/bayar"
+			serverSide: true,
+			ajax: {
+				url: route,
+			},
+			columns: [
+				{ data: "DT_RowIndex", name: "DT_RowIndex", className: "t-center", orderable: false, searchable: false },
+				{ data: "nourut", name: "nourut", className: "t-left" },
+				{ data: "nmunit", name: "nmunit", className: "t-left" },
+				{ data: "nama", name: "nama", className: "t-left" },
+				{ data: "nmtrans", name: "nmtrans", className: "t-left" },
+				{ data: "total", name: "total", className: "t-right" },
+				{ data: "bayar", name: "bayar", className: "t-left" },
+				{ data: "aksi", name: "aksi", className: "t-center", orderable: false, searchable: false },
+			],
 		});
 		
 		//validasi isian form
@@ -269,6 +401,7 @@
 			jQuery('.chosen').val('').trigger('change');
 			jQuery.getJSON('pengeluaran/bayar/pilih/'+id, function(result){
 				if(result.error==false) {
+					upload(result.message.token);
 					jQuery('#inp-id').val(id);
 					jQuery('#inp-rekambaru').val('0');
 					jQuery('#nourut').val(result.message.nourut);

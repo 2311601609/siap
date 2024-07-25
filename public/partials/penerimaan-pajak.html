@@ -104,10 +104,7 @@
 									<fieldset class="form-group">
 										<label for="nilai">Nilai</label>
 										<div class="input-group">
-											<input type="text" id="nilai" name="nilai" class="form-control val_num" style="text-align:right;" maxlength="19" readonly>
-											<div class="input-group-append">
-												<input type="text" id="nilai_des" name="nilai_des" class="form-control val_num" maxlength="2" readonly>
-											</div>
+											<input type="text" id="nilai" name="nilai" class="form-control uang" style="text-align:right;" maxlength="19" readonly>
 										</div>
 									</fieldset>
 								</div>
@@ -115,7 +112,7 @@
 									<fieldset class="form-group">
 										<label for="total">Total</label>
 										<div class="input-group">
-											<input type="text" id="total" name="total" class="form-control val_num" style="text-align:right;" maxlength="19" readonly>
+											<input type="text" id="total" name="total" class="form-control uang" style="text-align:right;" maxlength="19" readonly>
 											<div class="input-group-append">
 												<button type="button" class="btn btn-danger" id="hitung-total">Hitung Total</button>
 											</div>
@@ -132,8 +129,7 @@
 												<thead>
 													<tr>
 														<th style="width:60%;">Jenis</th>
-														<th style="width:30%;">Nilai</th>
-														<th style="width:5%;">Des</th>
+														<th style="width:35%;">Nilai</th>
 														<th style="width:5%;">Hapus</th>
 													</tr>
 												</thead>
@@ -181,6 +177,23 @@
                 <div class="card-header">
 					<div class="clearfix">
 						<h4 class="card-title float-left">Data</h4>
+						<div class="actions float-right">
+							<button type="button" class="btn btn-primary mr-1" id="exportPrint">
+								<span class="d-flex align-items-center">
+									<span>Cetak</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPdf">
+								<span class="d-flex align-items-center">
+									<span>PDF</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportExcel">
+								<span class="d-flex align-items-center">
+									<span>XLS</span>
+								</span>
+							</button>
+						</div>
 					</div>
                 </div>
                 <div class="card-body collapse show">
@@ -213,9 +226,11 @@
 </section>
 
 <script>
-	jQuery(document).ready(function(){
+	$(document).ready(function(){
+
+		var route = 'penerimaan/pajak';
 	
-		jQuery.fn.dataTable.ext.errMode = 'none';
+		$.fn.dataTable.ext.errMode = 'none';
 			
 		function digit_grouping(nStr){
 			nStr += '';
@@ -233,33 +248,83 @@
 			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 		}
 		
-		jQuery('.val_num').mask('000,000,000,000,000', {reverse: true});
+		$('.uang').inputmask('numeric', {
+			radixPoint: '.',
+			groupSeparator: ',',
+			autoGroup: true,
+			prefix: '',
+			rightAlign: false,
+			digits: 2,
+			oncleared: function () {
+				// Fungsi ini akan dipanggil saat input dihapus
+				$(this).val('');
+			}
+		});
 		
 		//aktivasi chosen
-		jQuery('.chosen').select2();
+		$('.chosen').select2();
 		
 		//tampilan default
 		function form_default() {
-			jQuery('input,textarea,select').val('');
-			jQuery('.warning, #div-form').hide();
-			jQuery('#div-tabel').show();
-			jQuery('.chosen').trigger('change');
-			jQuery('#simpan').prop('disabled', false);
-			jQuery.getJSON('dropdown/akun-pajak/json', function(result){
-				var akun='<option value="" style="display:none;">Pilih Akun</option>';
-				jQuery.each(result, function(i,field){
-					akun+='<option value="'+field.kdakun+'|'+field.kddk+'|'+field.nilai+'">'+field.kdakun+' - '+field.nmakun+'</option>';
-				});
-				jQuery('#inp-akun').val(akun);
-			});
+			$('input,textarea,select').val('');
+			$('.warning, #div-form').hide();
+			$('#div-tabel').show();
+			$('.chosen').trigger('change');
+			$('#simpan').prop('disabled', false);
 		}
 		
 		//aktivasi tampilan default
 		form_default();
-		
+
+		// datatable init
+        $("#exportPrint").on("click", function () {
+            table.button('.buttons-print').trigger();
+        });
+
+		$("#exportPdf").on("click", function () {
+            table.button('.buttons-pdf').trigger();
+        });
+
+		$("#exportExcel").on("click", function () {
+            table.button('.buttons-excel').trigger();
+        });
+
 		//data tabel
-		var table=jQuery('#tabel-ruh').DataTable({
-			bProcessing:true,
+		var table = $('#tabel-ruh').DataTable({
+			buttons: [
+                {
+                    extend: 'print',
+                    title: 'Pajak Penerimaan',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Pajak Penerimaan',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+				{
+                    extend: 'excel',
+					title: 'Pajak Penerimaan',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+            ],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Semua"],
+            ],
+			processing: true,
 			language:{
 			    "decimal":        "",
 			    "emptyTable":     "Tidak ada data tersedia",
@@ -284,25 +349,21 @@
 			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
 			    }
 			},
-			"columns": [
-				{},
-				{},
-				{},
-				{},
-				{},
-				{},
-				{},
-				{},
-				{}
-			],
-			bServerSide: true,
-			ajax:{
-				url: "penerimaan/pajak", // Change this URL to where your json data comes from
-				type: "GET"
+			serverSide: true,
+			ajax: {
+				url: route,
 			},
-			fnCreatedRow: function( nRow, aData, iDataIndex ) {
-				jQuery(nRow).attr('id', aData[0]);
-			}
+			columns: [
+				{ data: "DT_RowIndex", name: "DT_RowIndex", className: "t-center", orderable: false, searchable: false },
+				{ data: "nourut", name: "nourut", className: "t-left" },
+				{ data: "nmunit", name: "nmunit", className: "t-left" },
+				{ data: "nama", name: "nama", className: "t-left" },
+				{ data: "nmtrans", name: "nmtrans", className: "t-left" },
+				{ data: "nilai", name: "nilai", className: "t-right" },
+				{ data: "pajak", name: "pajak", className: "t-right" },
+				{ data: "total", name: "total", className: "t-right" },
+				{ data: "aksi", name: "aksi", className: "t-center", orderable: false, searchable: false },
+			],
 		});
 		
 		//validasi isian form
@@ -310,8 +371,8 @@
 			var arr_id = str_id.split(',');
 			var next = true;
 			for(x = 0; x < arr_id.length; x++){
-				if(jQuery('#'+arr_id[x]).val()==''){
-					jQuery('#'+arr_id[x]).addClass('is-invalid');
+				if($('#'+arr_id[x]).val()==''){
+					$('#'+arr_id[x]).addClass('is-invalid');
 					next = false;
 				}
 			}
@@ -320,60 +381,81 @@
 		
 		//cari data user yang akan di edit berdasarkan id user
 		function cari_data(id){
-			jQuery('.chosen').val('').trigger('change');
-			jQuery.getJSON('penerimaan/pajak/pilih/'+id, function(result){
+			$('.chosen').val('').trigger('change');
+			$.getJSON(route + '/pilih/' + id, function(result){
 				if(result.error==false) {
-					jQuery('#inp-id').val(id);
-					jQuery('#inp-rekambaru').val('0');
-					jQuery('#x').val(result.x);
+					$('#inp-id').val(id);
+					$('#inp-rekambaru').val('0');
+					$('#x').val(result.x);
 					
-					jQuery('#tabel-rincian').html('');
-					jQuery.each(result.akun, function(x,row){
-						jQuery('#tabel-rincian').append(
-							'<tr id="tr-'+x+'">'+
-								'<td>'+
-									'<select id="chosen-'+x+'" class="form-control akun" name="rincian['+x+'][\'kdakun\']" style="z-index:999999999 !important;">'+
-										jQuery('#inp-akun').val()+
-									'</select>'+
-								'</td>'+
-								'<td><input id="nilai-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai\']" class="val_num" value="'+digit_grouping(row.nilai)+'"></td>'+
-								'<td><input id="nilai_des-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai_des\']" class="val_num" maxlength="2" value="00"></td>'+
-								'<td>'+
-									'<center><a href="javascript:;" id="'+x+'" class="btn btn-sm btn-danger hapus-detil"><i class="fa fa-minus"></i></a></center>'+
-								'</td>'+
-							'</tr>'
-						);
-						jQuery('#chosen-'+x).val(row.kdakun+'|'+row.kddk+'|'+row.nilai1);
-						jQuery('#chosen-'+x).select2();
-						jQuery('.val_num').mask('000,000,000,000,000', {reverse: true});
+					$('#tabel-rincian').html('');
+
+					$.getJSON('dropdown/akun-pajak-baru/json?id_trans=' + result.message.kdtran, function(result1){
+					
+						var akun='<option value="" style="display:none;">Pilih Akun</option>';
+						$.each(result1, function(i,field){
+							akun+='<option value="'+field.kdakun+'|'+field.kddk+'|'+field.nilai+'">'+field.kdakun+' - '+field.nmakun+' ('+field.kddk+')</option>';
+						});
+
+						$('#inp-akun').val(akun);
+
+						$.each(result.akun, function(x,row){
+
+							$('#tabel-rincian').append(
+								'<tr id="tr-'+x+'">'+
+									'<td>'+
+										'<select id="chosen-'+x+'" class="form-control akun" name="rincian['+x+'][\'kdakun\']" style="z-index:999999999 !important;">'+
+											$('#inp-akun').val()+
+										'</select>'+
+									'</td>'+
+									'<td><input id="nilai-'+x+'" type="text" name="rincian['+x+'][\'nilai\']" class="uang" value="'+row.nilai+'"></td>'+
+									'<td>'+
+										'<center><a href="javascript:;" id="'+x+'" class="btn btn-sm btn-danger hapus-detil"><i class="fa fa-minus"></i></a></center>'+
+									'</td>'+
+								'</tr>'
+							);
+
+							$('#nilai-'+x).inputmask('numeric', {
+								radixPoint: '.',
+								groupSeparator: ',',
+								autoGroup: true,
+								prefix: '',
+								rightAlign: true,
+								digits: 2,
+								oncleared: function () {
+									// Fungsi ini akan dipanggil saat input dihapus
+									$(this).val('');
+								}
+							});
+
+							$('#chosen-'+x).select2({width:'100%', search_contains: true});
+							$('#chosen-'+x).val(row.kdakun+'|'+row.kddk+'|'+row.nilai1).trigger('change');
+							
+						});
+
 					});
 					
-					jQuery('#nmunit').val(result.message.nmunit);
-					jQuery('#id_alur').val(result.message.id_alur);
-					jQuery('#nourut').val(result.message.nourut);
-					jQuery('#status').val(result.message.status);
-					jQuery('#nmunit').val(result.message.nmunit);
-					jQuery('#nmalur').val(result.message.nmalur);
-					jQuery('#debet').val(result.message.debet);
-					jQuery('#kredit').val(result.message.kredit);
-					jQuery('#kdakun_d').val(result.message.kdakun_d);
-					jQuery('#kdakun_k').val(result.message.kdakun_k);
-					jQuery('#nmtrans').val(result.message.nmtrans);
-					jQuery('#nmpelanggan').val(result.message.nmpelanggan);
-					jQuery('#nopks').val(result.message.nopks);
-					jQuery('#tgpks').val(result.message.tgpks);
-					jQuery('#tgjtempo').val(result.message.tgjtempo);
-					jQuery('#uraian').val(result.message.uraian);
-					jQuery('#nilai').val(digit_grouping(result.message.nilai));
-					jQuery('#ppn').val(digit_grouping(result.message.ppn));
-					jQuery('#pph21').val(digit_grouping(result.message.pph21));
-					jQuery('#pph22').val(digit_grouping(result.message.pph22));
-					jQuery('#pph23').val(digit_grouping(result.message.pph23));
-					jQuery('#pph25').val(digit_grouping(result.message.pph25));
-					jQuery('#total').val(digit_grouping(result.message.total));
-					jQuery('#div-lampiran').html(result.lampiran);
-					jQuery('#pajak').html(result.pajak).trigger('change');
-					jQuery('.chosen').trigger('change');
+					$('#nmunit').val(result.message.nmunit);
+					$('#id_alur').val(result.message.id_alur);
+					$('#nourut').val(result.message.nourut);
+					$('#status').val(result.message.status);
+					$('#nmunit').val(result.message.nmunit);
+					$('#nmalur').val(result.message.nmalur);
+					$('#debet').val(result.message.debet);
+					$('#kredit').val(result.message.kredit);
+					$('#kdakun_d').val(result.message.kdakun_d);
+					$('#kdakun_k').val(result.message.kdakun_k);
+					$('#nmtrans').val(result.message.nmtrans);
+					$('#nmpelanggan').val(result.message.nmpelanggan);
+					$('#nopks').val(result.message.nopks);
+					$('#tgpks').val(result.message.tgpks);
+					$('#tgjtempo').val(result.message.tgjtempo);
+					$('#uraian').val(result.message.uraian);
+					$('#nilai').val(digit_grouping(result.message.nilai));
+					$('#total').val(digit_grouping(result.message.total));
+					$('#div-lampiran').html(result.lampiran);
+					$('#pajak').html(result.pajak).trigger('change');
+					$('.chosen').trigger('change');
 					
 				}
 				else{
@@ -382,138 +464,136 @@
 			});
 		}
 		
-		jQuery('#tambah-detil').click(function(){
-			var x=parseInt(jQuery('#x').val())+1;
-			jQuery('#tabel-rincian').append(
+		$('#tambah-detil').click(function(){
+			var x=parseInt($('#x').val())+1;
+			$('#tabel-rincian').append(
 				'<tr id="tr-'+x+'">'+
 					'<td>'+
 						'<select id="chosen-'+x+'" class="form-control akun" name="rincian['+x+'][\'kdakun\']" style="z-index:999999999 !important;">'+
-							jQuery('#inp-akun').val()+
+							$('#inp-akun').val()+
 						'</select>'+
 					'</td>'+
 					'<td><input id="nilai-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai\']" class="val_num"></td>'+
-					'<td><input id="nilai_des-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai_des\']" class="val_num" maxlength="2" value="00"></td>'+
 					'<td>'+
 						'<center><a href="javascript:;" id="'+x+'" class="btn btn-sm btn-danger hapus-detil"><i class="fa fa-minus"></i></a></center>'+
 					'</td>'+
 				'</tr>'
 			);
-			jQuery('#chosen-'+x).select2();
-			jQuery('.val_num').mask('000,000,000,000,000', {reverse: true});
-			jQuery('#x').val(x);
+			$('#chosen-'+x).select2();
+			$('#nilai-'+x).inputmask('numeric', {
+				radixPoint: '.',
+				groupSeparator: ',',
+				autoGroup: true,
+				prefix: '',
+				rightAlign: false,
+				digits: 2,
+				oncleared: function () {
+					// Fungsi ini akan dipanggil saat input dihapus
+					$(this).val('');
+				}
+			});
+			$('#x').val(x);
 		});
 		
-		jQuery('body').off('click', '.hapus-detil').on('click', '.hapus-detil', function(){
+		$('body').off('click', '.hapus-detil').on('click', '.hapus-detil', function(){
 			var id=this.id;
-			jQuery('#tr-'+id).remove();
+			$('#tr-'+id).remove();
 		});
 		
 		//klik ubah
-		jQuery('body').off('click', '.proses').on('click', '.proses', function(){
+		$('body').off('click', '.proses').on('click', '.proses', function(){
 			var id = this.id;
-			jQuery('#div-tabel').hide();
-			jQuery('#div-form').show();
+			$('#div-tabel').hide();
+			$('#div-form').show();
 			cari_data(id);
 		});
 		
 		//klik batal
-		jQuery('.batal').click(function(){
+		$('.batal').click(function(){
 			form_default();
 		});
 		
 		//klik simpan
-		jQuery('#simpan').click(function(){
-			jQuery(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
-			jQuery(this).prop('disabled',true);
+		$('#simpan').click(function(){
+			$(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
+			$(this).prop('disabled',true);
 			var next = form_valid('inp-id,pajak,nilai1');
 			if(next==true){
-				jQuery.get('token', function(token){
+				$.get('token', function(token){
 					if(token){
-						jQuery('#_token').val(token);
-						var data = jQuery('#form-ruh').serialize();
-						jQuery.ajax({
-							url: 'penerimaan/pajak',
+						$('#_token').val(token);
+						var data = $('#form-ruh').serialize();
+						$.ajax({
+							url: route,
 							method: 'POST',
 							data: data,
 							success: function(result){
 								if(result=='success') {
-									jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-									jQuery('#simpan').prop('disabled',false);
+									$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan').prop('disabled',false);
 									alertify.log('Proses simpan berhasil');
 									form_default();
 									table.ajax.reload();
 								} else {
-									jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-									jQuery('#simpan').prop('disabled',false);
+									$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan').prop('disabled',false);
 									alertify.log(result);
 								} 
 							},
 							error: function(result){
-								jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-								jQuery('#simpan').prop('disabled',false);
+								$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+								$('#simpan').prop('disabled',false);
 								alertify.log('Data tidak dapat disimpan. Koneksi pada aplikasi/database terputus atau data sudah pernah direkam atau format data salah. Hubungi Administrator.');
 							}
 						})
 					} 
 					else{
-						jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-						jQuery('#simpan').prop('disabled',false);
+						$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+						$('#simpan').prop('disabled',false);
 						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
 					}
 				});
 			}
 			else{
-				jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-				jQuery('#simpan').prop('disabled',false);
+				$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+				$('#simpan').prop('disabled',false);
 				alertify.log('Data tidak dapat dikosongkan!');
 			}
 		});
 		
-		jQuery('#hitung-total').click(function(){
+		$('#hitung-total').click(function(){
 			var next = form_valid('nilai');
 			if(next==true){
-				jQuery.get('token', function(token){
+				$.get('token', function(token){
 					if(token){
-						jQuery('#_token').val(token);
-						var data = jQuery('#form-ruh').serialize();
-						jQuery.ajax({
+						$('#_token').val(token);
+						var data = $('#form-ruh').serialize();
+						$.ajax({
 							url: 'penerimaan/rekam/hitung-total?param=2',
 							method: 'POST',
 							data: data,
 							success: function(result){
-								jQuery('#total').val(result);
+								$('#total').val(result);
 							},
 							error: function(result){
-								jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-								jQuery('#simpan').prop('disabled',false);
+								$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+								$('#simpan').prop('disabled',false);
 								alertify.log('Koneksi pada aplikasi/database terputus!');
 							}
 						})
 					}
 					else{
-						jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-						jQuery('#simpan').prop('disabled',false);
+						$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+						$('#simpan').prop('disabled',false);
 						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
 					}
 				});
 			}
 			else{
-				jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-				jQuery('#simpan').prop('disabled',false);
+				$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+				$('#simpan').prop('disabled',false);
 				alertify.log('Data tidak dapat dikosongkan!');
 			}
-		});
-		
-		jQuery('body').off('change', '.akun').on('change', '.akun', function(){
-			var arr_id = this.id.split('-');
-			var id = arr_id[1];
-			var arr_akun = jQuery(this).val().split('|');
-			var kdakun = arr_akun[0];
-			var kddk = arr_akun[1];
-			var persen = arr_akun[2];
-			var nilai = jQuery('#nilai').val().replace(/,/g, '');
-			var pajak = nilai*persen/100;
-			jQuery('#nilai-'+id).val(digit_grouping(pajak));
 		});
 		
 	});

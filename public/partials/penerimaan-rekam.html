@@ -28,6 +28,12 @@
 							<input type="hidden" id="x" name="x">
 							<input type="hidden" id="inp-akun">
 
+							<input type="hidden" id="param-kdsdana" name="param-kdsdana">
+							<input type="hidden" id="param-kdunit" name="param-kdunit">
+							<input type="hidden" id="param-id_proyek" name="param-id_proyek">
+							<input type="hidden" id="param-id_pelanggan" name="param-id_pelanggan">
+							<input type="hidden" id="param-kredit" name="param-kredit">
+
 							<legend>Data Transaksi</legend>
 							<div class="row">
 								<div class="col-md-6">
@@ -41,35 +47,9 @@
 										</div>
 									</fieldset>
 									<fieldset class="form-group">
-										<label for="kdsdana">Sumber Dana</label>
-										<select id="kdsdana" name="kdsdana" class="form-control chosen">
-										</select>
-									</fieldset>
-									<fieldset class="form-group">
-										<label for="kdunit">Divisi/ Unit</label>
-										<select id="kdunit" name="kdunit" class="form-control chosen">
-										</select>
-									</fieldset>
-									<fieldset class="form-group">
-										<label for="id_proyek">Proyek</label>
-										<select id="id_proyek" name="id_proyek" class="form-control chosen">
-										</select>
-									</fieldset>
-									<fieldset class="form-group">
-										<label for="id_pelanggan">Pelanggan</label>
-										<div class="input-group">
-											<select id="id_pelanggan" name="id_pelanggan" class="form-control chosen">
-											</select>
-										</div>
-									</fieldset>
-								</div>
-								<div class="col-md-6">
-									<fieldset class="form-group">
 										<label for="id_alur">Jenis Kegiatan</label>
-										<div class="input-group">
-											<select id="id_alur" name="id_alur" class="form-control chosen">
-											</select>
-										</div>
+										<select id="id_alur" name="id_alur" class="form-control chosen">
+										</select>
 									</fieldset>
 									<fieldset class="form-group">
 										<label for="kdtran">Jenis Transaksi</label>
@@ -80,6 +60,30 @@
 										<label for="parent_id">Tagihan</label>
 										<select id="parent_id" name="parent_id" class="form-control chosen">
 											<option value="" style="display:none;">Pilih Data</option>
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="kdsdana">Sumber Dana</label>
+										<select id="kdsdana" name="kdsdana" class="form-control chosen">
+										</select>
+									</fieldset>
+								</div>
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="kdunit">Divisi/ Unit</label>
+										<div class="input-group">
+											<select id="kdunit" name="kdunit" class="form-control chosen">
+											</select>
+										</div>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="id_proyek">Proyek</label>
+										<select id="id_proyek" name="id_proyek" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="id_pelanggan">Pelanggan</label>
+										<select id="id_pelanggan" name="id_pelanggan" class="form-control chosen">
 										</select>
 									</fieldset>
 									<fieldset class="form-group">
@@ -327,6 +331,7 @@
 	$(document).ready(function(){
 
 		var route = 'penerimaan/rekam';
+
 		
 		function numberWithCommas(x) {
 			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -371,9 +376,23 @@
 		$.get('dropdown/unit/4', function(result){
 			$('#kdunit').html(result).trigger('change');
 		});
+
+		$('#kdunit').on('select2:select', function(){
+			var kdunit = $(this).val();
+			if(kdunit){
+				$('#param-kdunit').val(kdunit);
+			}
+		});
 		
 		$.get('dropdown/sdana', function(result){
 			$('#kdsdana').html(result).trigger('change');
+		});
+
+		$('#kdsdana').on('select2:select', function(){
+			var kdsdana = $(this).val();
+			if(kdsdana){
+				$('#param-kdsdana').val(kdsdana);
+			}
 		});
 		
 		$.get('dropdown/alur-penerimaan', function(result){
@@ -383,17 +402,27 @@
 		$.get('dropdown/penerima', function(result){
 			$('#id_pelanggan').html(result).trigger('change');
 		});
-		
-		$.get('dropdown/transaksi', function(result){
-			$('#kdtran').html(result).trigger('change');
+
+		$('#id_pelanggan').on('select2:select', function(){
+			var id_pelanggan = $(this).val();
+			if(id_pelanggan){
+				$('#param-id_pelanggan').val(id_pelanggan);
+			}
 		});
 		
 		$.get('dropdown/proyek', function(result){
 			$('#id_proyek').html(result).trigger('change');
 		});
+
+		$('#id_proyek').on('select2:select', function(){
+			var id_proyek = $(this).val();
+			if(id_proyek){
+				$('#param-id_proyek').val(id_proyek);
+			}
+		});
 		
-		$.get('cek/level', function(result){
-			if(result=='10' || result=='12'){ //admin
+		$.get(route, function(result){
+			if(result=='1'){ //admin
 				$('#tambah').show();
 			}
 		});
@@ -406,11 +435,12 @@
 				});
 			}
 		});
-		
+
 		$('#kdtran').on('select2:select', function(){
 			var kdtran = $(this).val();
 			if(kdtran){
-				$.getJSON('penerimaan/rekam/tagihan/'+kdtran, function(result){
+				
+				$.getJSON(route + '/tagihan/' + kdtran, function(result){
 					if(result.error==false){
 						$('#parent_id').html(result.dropdown).trigger('change');
 						$('#div-tagihan').show();
@@ -419,7 +449,7 @@
 						$('#parent_id').html('').trigger('change');
 						$('#div-tagihan').hide();
 					}
-					$('#id_proyek,#id_pelanggan,#kredit').prop('disabled', false).trigger('change');
+					$('#id_proyek,#id_pelanggan,#kredit,#kdsdana,#kdunit').prop('disabled', false).trigger('change');
 					$.get('dropdown/akun/debet/'+kdtran, function(result){
 						$('#debet').html(result).trigger('change');
 					});
@@ -427,20 +457,75 @@
 						$('#kredit').html(result).trigger('change');
 					});
 				});
+
+				$.getJSON('dropdown/akun-pajak-baru/json?id_trans=' + kdtran, function(result){
+					
+					var akun='<option value="" style="display:none;">Pilih Akun</option>';
+					$.each(result, function(i,field){
+						akun+='<option value="'+field.kdakun+'|'+field.kddk+'|'+field.nilai+'">'+field.kdakun+' - '+field.nmakun+' ('+field.kddk+')</option>';
+					});
+					$('#inp-akun').val(akun);
+
+					$('#x').val(0);
+			
+					$('#tabel-rincian').html(
+						'<tr id="tr-0">'+
+							'<td>'+
+								'<select id="chosen-0" class="form-control akun" name="rincian[0][\'kdakun\']" style="z-index:999999999 !important;">'+
+									$('#inp-akun').val()+
+								'</select>'+
+							'</td>'+
+							'<td><input id="nilai-0" style="text-align:right;" type="text" name="rincian[0][\'nilai\']" class="val_num"></td>'+
+							'<td>'+
+								'<center><a href="javascript:;" id="0" class="btn btn-sm btn-danger hapus-detil"><i class="fa fa-minus"></i></a></center>'+
+							'</td>'+
+						'</tr>'
+					);
+
+					$('#nilai-0').inputmask('numeric', {
+						radixPoint: '.',
+						groupSeparator: ',',
+						autoGroup: true,
+						prefix: '',
+						rightAlign: false,
+						digits: 2,
+						oncleared: function () {
+							// Fungsi ini akan dipanggil saat input dihapus
+							$(this).val('');
+						}
+					});
+					
+					$('#chosen-0').select2();
+
+				});
+
 			}
 		});
 		
+		$('#kredit').on('select2:select', function(){
+			var kredit = $(this).val();
+			if(kredit){
+				$('#param-kredit').val(kredit);
+			}
+		});
+
 		$('#parent_id').on('select2:select', function(){
 			if($(this).val()){
 				var data = $(this).val().split('|');
 				var proyek = data[5].split('-');
 				$('#id_proyek').val(proyek[0]).trigger('change');
+				$('#param-id_proyek').val(proyek[0]);
 				$('#id_pelanggan').val(proyek[1]).trigger('change');
+				$('#param-id_pelanggan').val(proyek[1]);
+				$('#kdsdana').val(proyek[2]).trigger('change');
+				$('#param-kdsdana').val(proyek[2]);
+				$('#kdunit').val(proyek[3]).trigger('change');
+				$('#param-kdunit').val(proyek[3]);
 				$('#uraian').val(data[2]);
 				$('#nilai').val(digit_grouping(data[3]));
 				$('#kredit').val(data[4]).trigger('change');
-				console.log(data);
-				$('#id_proyek,#id_pelanggan,#kredit').prop('disabled', true).trigger('change');
+				$('#param-kredit').val(data[4]);
+				$('#id_proyek,#id_pelanggan,#kredit,#kdsdana,#kdunit').prop('disabled', true).trigger('change');
 			}
 		});
 		
@@ -470,13 +555,7 @@
 			$('.chosen').prop('disabled', false).trigger('change');
 			$('#simpan').prop('disabled', false);
 			$('#tabel-rincian').html('');
-			$.getJSON('dropdown/akun-pajak/json', function(result){
-				var akun='<option value="" style="display:none;">Pilih Akun</option>';
-				$.each(result, function(i,field){
-					akun+='<option value="'+field.kdakun+'|'+field.kddk+'|'+field.nilai+'">'+field.kdakun+' - '+field.nmakun+' ('+field.kddk+')</option>';
-				});
-				$('#inp-akun').val(akun);
-			});
+			
 			$.get('dropdown/ttd/06', function(result){
 				$('#ttd1').html(result).trigger('change');
 			});
@@ -504,34 +583,7 @@
 			$('#nilai,#ppn,#pph21,#pph22,#pph23,#pph25,#total').val(0);
 			$('#div-form,#cari-nourut').show();
 			cariNourut();
-			$('#x').val(0);
 			
-			$('#tabel-rincian').html(
-				'<tr id="tr-0">'+
-					'<td>'+
-						'<select id="chosen-0" class="form-control akun" name="rincian[0][\'kdakun\']" style="z-index:999999999 !important;">'+
-							$('#inp-akun').val()+
-						'</select>'+
-					'</td>'+
-					'<td><input id="nilai-0" style="text-align:right;" type="text" name="rincian[0][\'nilai\']" class="val_num"></td>'+
-					'<td>'+
-						'<center><a href="javascript:;" id="0" class="btn btn-sm btn-danger hapus-detil"><i class="fa fa-minus"></i></a></center>'+
-					'</td>'+
-				'</tr>'
-			);
-			$('#nilai-0').inputmask('numeric', {
-				radixPoint: '.',
-				groupSeparator: ',',
-				autoGroup: true,
-				prefix: '',
-				rightAlign: false,
-				digits: 2,
-				oncleared: function () {
-					// Fungsi ini akan dipanggil saat input dihapus
-					$(this).val('');
-				}
-			});
-			$('#chosen-0').select2();
 		});
 		
 		$('#tambah-detil').click(function(){
@@ -674,7 +726,7 @@
 		//cari data user yang akan di edit berdasarkan id user
 		function cari_data(id){
 			$('.chosen').val('').trigger('change');
-			$.getJSON('penerimaan/rekam/pilih/'+id, function(result){
+			$.getJSON(route + '/pilih/' + id, function(result){
 				if(result.error==false) {
 				
 					$.get('dropdown/transaksi/'+result.message.id_alur, function(result1){
@@ -693,34 +745,46 @@
 					}
 					
 					$('#tabel-rincian').html('');
-					$.each(result.akun, function(x,row){
-						$('#tabel-rincian').append(
-							'<tr id="tr-'+x+'">'+
-								'<td>'+
-									'<select id="chosen-'+x+'" class="form-control akun" name="rincian['+x+'][\'kdakun\']" style="z-index:999999999 !important;">'+
-										$('#inp-akun').val()+
-									'</select>'+
-								'</td>'+
-								'<td><input id="nilai-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai\']" class="val_num" value="'+digit_grouping(row.nilai)+'"></td>'+
-								'<td>'+
-									'<center><a href="javascript:;" id="'+x+'" class="btn btn-sm btn-danger hapus-detil"><i class="fa fa-minus"></i></a></center>'+
-								'</td>'+
-							'</tr>'
-						);
-						$('#chosen-'+x).val(row.kdakun+'|'+row.kddk+'|'+row.nilai1);
-						$('#chosen-'+x).select2();
-						$('#nilai-'+x).inputmask('numeric', {
-							radixPoint: '.',
-							groupSeparator: ',',
-							autoGroup: true,
-							prefix: '',
-							rightAlign: false,
-							digits: 2,
-							oncleared: function () {
-								// Fungsi ini akan dipanggil saat input dihapus
-								$(this).val('');
-							}
+
+					$.getJSON('dropdown/akun-pajak-baru/json?id_trans=' + result.message.kdtran, function(result1){
+					
+						var akun='<option value="" style="display:none;">Pilih Akun</option>';
+						$.each(result1, function(i,field){
+							akun+='<option value="'+field.kdakun+'|'+field.kddk+'|'+field.nilai+'">'+field.kdakun+' - '+field.nmakun+' ('+field.kddk+')</option>';
 						});
+
+						$('#inp-akun').val(akun);
+
+						$.each(result.akun, function(x,row){
+							$('#tabel-rincian').append(
+								'<tr id="tr-'+x+'">'+
+									'<td>'+
+										'<select id="chosen-'+x+'" class="form-control akun" name="rincian['+x+'][\'kdakun\']" style="z-index:999999999 !important;">'+
+											$('#inp-akun').val()+
+										'</select>'+
+									'</td>'+
+									'<td><input id="nilai-'+x+'" style="text-align:right;" type="text" name="rincian['+x+'][\'nilai\']" class="val_num" value="'+digit_grouping(row.nilai)+'"></td>'+
+									'<td>'+
+										'<center><a href="javascript:;" id="'+x+'" class="btn btn-sm btn-danger hapus-detil"><i class="fa fa-minus"></i></a></center>'+
+									'</td>'+
+								'</tr>'
+							);
+							$('#chosen-'+x).select2({width:'100%', search_contains: true});
+							$('#chosen-'+x).val(row.kdakun+'|'+row.kddk+'|'+row.nilai1).trigger('change');
+							$('#nilai-'+x).inputmask('numeric', {
+								radixPoint: '.',
+								groupSeparator: ',',
+								autoGroup: true,
+								prefix: '',
+								rightAlign: false,
+								digits: 2,
+								oncleared: function () {
+									// Fungsi ini akan dipanggil saat input dihapus
+									$(this).val('');
+								}
+							});
+						});
+
 					});
 					
 					$('#debet').html(result.dropdown_d).trigger('change');
@@ -729,11 +793,12 @@
 					$('#inp-id').val(id);
 					$('#inp-rekambaru').val('0');
 					$('#x').val(result.x);
-					$('#kdunit').val(result.message.kdunit);
-					$('#kdsdana').val(result.message.kdsdana);
+					$('#param-kredit').val(result.message.kredit);
+					$('#kdunit,#param-kdunit').val(result.message.kdunit);
+					$('#kdsdana,#param-kdsdana').val(result.message.kdsdana);
 					$('#id_alur').val(result.message.id_alur);
-					$('#id_proyek').val(result.message.id_proyek);
-					$('#id_pelanggan').val(result.message.id_pelanggan);
+					$('#id_proyek,#param-id_proyek').val(result.message.id_proyek);
+					$('#id_pelanggan,#param-id_pelanggan').val(result.message.id_pelanggan);
 					$('#nopks').val(result.message.nopks);
 					$('#tgpks').val(result.message.tgpks);
 					$('#tgjtempo').val(result.message.tgjtempo);
@@ -755,6 +820,7 @@
 					$('#pph25').val(digit_grouping(result.message.pph25));
 					$('#total').val(digit_grouping(result.message.total));
 					$('.chosen').trigger('change');
+					$('#id_proyek,#id_pelanggan,#kredit,#kdsdana,#kdunit').prop('disabled', true).trigger('change');
 				}
 				else{
 					alertify.log(result.message);
@@ -792,7 +858,7 @@
 						$('#_token').val(token);
 						var data = $('#form-ruh').serialize();
 						$.ajax({
-							url: 'penerimaan/rekam',
+							url: route,
 							method: 'POST',
 							data: data,
 							success: function(result){
@@ -837,7 +903,7 @@
 					$.get('token', function(token){
 						if(token) {
 							$.ajax({
-								url:'penerimaan/rekam/hapus',
+								url:route + '/hapus',
 								method:'POST',
 								data:{
 									_token:token, 
@@ -885,7 +951,7 @@
 						$('#_token_detil').val(token);
 						var data = $('#form-ruh-detil').serialize();
 						$.ajax({
-							url: 'penerimaan/rekam/upload-simpan',
+							url: route + '/upload-simpan',
 							method: 'POST',
 							data: data,
 							success: function(result){
@@ -929,7 +995,7 @@
 					$.get('token', function(token){
 						if(token) {
 							$.ajax({
-								url:'penerimaan/rekam/hapus-dok',
+								url:route+'/hapus-dok',
 								method:'POST',
 								data:{
 									_token:token, 
@@ -963,7 +1029,7 @@
 						$('#_token').val(token);
 						var data = $('#form-ruh').serialize();
 						$.ajax({
-							url: 'penerimaan/rekam/hitung-total?param=2',
+							url: route + '/hitung-total?param=2',
 							method: 'POST',
 							data: data,
 							success: function(result){
@@ -990,16 +1056,19 @@
 			}
 		});
 		
-		$('body').off('change', '.akun').on('change', '.akun', function(){
+		$('body').off('select2:select', '.akun').on('select2:select', '.akun', function(){
+			
 			var arr_id = this.id.split('-');
 			var id = arr_id[1];
 			var arr_akun = $(this).val().split('|');
 			var kdakun = arr_akun[0];
 			var kddk = arr_akun[1];
 			var persen = arr_akun[2];
-			var nilai = $('#nilai').val().replace(/,/g, '');
+			var nilai = $('#nilai').val();
+			nilai = nilai.split(',').join('');
 			var pajak = nilai*persen/100;
-			$('#nilai-'+id).val(digit_grouping(pajak));
+			pajak = parseFloat(pajak.toFixed(2));
+			$('#nilai-'+id).val(pajak);
 			
 		});
 		
