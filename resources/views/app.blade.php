@@ -336,8 +336,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <h5><i class="ft-arrow-right mr-1"></i>Notifikasi Batas Akhir SPJ</h5>
-                    <p>Terdapat transaksi UMK yang sudah mendekati batas akhir jatuh tempo pengajuan SPJ. Silahkan cek di tombol kanan atas untuk melihat detilnya.</p>
+                    <h5><i class="ft-arrow-right mr-1"></i>Notifikasi Proses Dokumen</h5>
+                    <p>Terdapat transaksi UMK/ BUK yang sudah mendekati batas akhir jatuh tempo pengajuan. Silahkan cek di tombol kanan atas untuk melihat detilnya.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn bg-light-secondary" data-dismiss="modal">Tutup</button>

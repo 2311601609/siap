@@ -1053,9 +1053,9 @@ class DropdownController extends Controller {
 	public function kontrakDtlInfo()
 	{
 		$arr_where = array();
-		if(isset($_GET['id_kontrak_dtl'])){
-			if($_GET['id_kontrak_dtl']!==null && $_GET['id_kontrak_dtl']!==''){
-				$arr_where[] = " a.id_kontrak_dtl=".$_GET['id_kontrak_dtl'];
+		if(isset($_GET['id'])){
+			if($_GET['id']!==null && $_GET['id']!==''){
+				$arr_where[] = " a.id=".$_GET['id'];
 			}
 		}
 
