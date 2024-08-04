@@ -13,6 +13,8 @@ use App\Http\Controllers\AnggaranTargetController;
 use App\Http\Controllers\TagihanRekamController;
 use App\Http\Controllers\TagihanProsesController;
 use App\Http\Controllers\TagihanPajakController;
+use App\Http\Controllers\TagihanUploadController;
+use App\Http\Controllers\TagihanUploadDetilController;
 use App\Http\Controllers\PenerimaanRekamController;
 use App\Http\Controllers\PenerimaanProsesController;
 use App\Http\Controllers\PenerimaanPajakController;
@@ -275,6 +277,23 @@ Route::middleware(['auth'])->group(function () {
 			
 		});
 		
+	});
+
+	//tagihan upload
+	Route::group(['prefix' => 'tagihan-upload'], function () {
+			
+		Route::get('', [TagihanUploadController::class, 'index']);
+		Route::get('data', [TagihanUploadController::class, 'data']);
+		Route::post('', [TagihanUploadController::class, 'simpan'])->middleware('role:12');
+		Route::post('upload', [TagihanUploadController::class, 'upload'])->middleware('role:12');
+		Route::post('hapus', [TagihanUploadController::class, 'hapus'])->middleware('role:12');
+	});
+
+	//tagihan upload detil
+	Route::group(['prefix' => 'tagihan-upload-detil'], function () {
+			
+		Route::get('', [TagihanUploadDetilController::class, 'index']);
+		Route::get('data', [TagihanUploadDetilController::class, 'data']);
 	});
 
 	//penerimaan
