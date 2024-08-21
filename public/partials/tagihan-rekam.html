@@ -345,7 +345,7 @@
 			if($(this).val()){
 				var kdunit = $(this).val();
 				$('#id_kontrak').html('<option value="">Sedang proses...</option>').trigger('change');
-				$.get('dropdown/kontrak?kdunit='+kdunit, function(result){
+				$.get('dropdown/kontrak?tipe=1&kdunit='+kdunit, function(result){
 					$('#id_kontrak').html(result).trigger('change');
 					$('#id_kontrak_dtl').html('').trigger('change');
 				});

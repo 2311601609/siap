@@ -757,6 +757,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('/akun/html/all1', [DropdownController::class, 'akun_html_all_lvl']);
 		Route::get('/akun/debet/{param}', [DropdownController::class, 'akun_debet']);
 		Route::get('/akun/debet/{param}/json', [DropdownController::class, 'akun_debet_json']);
+		Route::get('/akun/debet/{param}/json-unit', [DropdownController::class, 'akun_debet_json_unit']);
 		Route::get('/akun/kredit/{param}', [DropdownController::class, 'akun_kredit']);
 		Route::get('/akun/belanja', [DropdownController::class, 'akun_belanja']);
 		Route::get('/periode', [DropdownController::class, 'periode']);

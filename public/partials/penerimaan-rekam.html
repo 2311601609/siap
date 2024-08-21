@@ -67,14 +67,24 @@
 										<select id="kdsdana" name="kdsdana" class="form-control chosen">
 										</select>
 									</fieldset>
+									<fieldset class="form-group">
+										<label for="kdunit">Divisi/ Unit</label>
+										<select id="kdunit" name="kdunit" class="form-control chosen">
+										</select>
+									</fieldset>
 								</div>
 								<div class="col-md-6">
 									<fieldset class="form-group">
-										<label for="kdunit">Divisi/ Unit</label>
+										<label for="id_program">Kode Program</label>
 										<div class="input-group">
-											<select id="kdunit" name="kdunit" class="form-control chosen">
+											<select id="id_program" name="id_program" class="form-control chosen">
 											</select>
 										</div>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="id_giat">Kode Kegiatan</label>
+										<select id="id_giat" name="id_giat" class="form-control chosen">
+										</select>
 									</fieldset>
 									<fieldset class="form-group">
 										<label for="id_proyek">Proyek</label>
@@ -380,8 +390,25 @@
 		$('#kdunit').on('select2:select', function(){
 			var kdunit = $(this).val();
 			if(kdunit){
+				
 				$('#param-kdunit').val(kdunit);
+
+				$.get('dropdown/program?kdunit='+kdunit, function(result){
+					$('#id_program').html(result).trigger('change');
+				});
+
 			}
+		});
+
+		$('#id_program').on('select2:select', function(){
+			var arr_program = $(this).val().split('|');
+			var id_program = 0;
+			if(arr_program.length>1){
+				id_program = arr_program[0];
+			}
+			$.get('dropdown/kegiatan?id_program=' + id_program, function(result){
+				$('#id_giat').html(result).trigger('change');
+			});
 		});
 		
 		$.get('dropdown/sdana', function(result){
@@ -789,6 +816,19 @@
 					
 					$('#debet').html(result.dropdown_d).trigger('change');
 					$('#kredit').html(result.dropdown_k).trigger('change');
+
+					$.get('dropdown/program?kdunit='+result.message.kdunit, function(result1){
+						$('#id_program').html(result1).trigger('change');
+						$('#id_program').val(result.message.id_program);
+					});
+
+					var arr_program = result.message.id_program.split('|');
+					var id_program = arr_program[0];
+
+					$.get('dropdown/kegiatan?id_program=' + id_program, function(result1){
+						$('#id_giat').html(result1);
+						$('#id_giat').val(result.message.id_giat).trigger('change');
+					});
 					
 					$('#inp-id').val(id);
 					$('#inp-rekambaru').val('0');
