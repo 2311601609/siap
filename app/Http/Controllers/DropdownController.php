@@ -698,6 +698,41 @@ class DropdownController extends Controller {
 		return response()->json($rows);
 		
 	}
+
+	public function akun_debet_json_unit($id_trans)
+	{
+		$rows = DB::select("
+			select  a.*
+			from(
+				
+				select  a.*
+				from t_akun a,
+				(
+					select  kdakun,
+							panjang
+					from t_trans_akun
+					where id_trans=? and kddk='D'
+				) b
+				where a.lvl=6 and substr(a.kdakun,1,b.panjang)=substr(b.kdakun,1,b.panjang)
+				
+			) a
+			left join(
+				
+				select  distinct kdakun
+				from t_akun_unit
+				where kdunit=?
+
+			) b on(a.kdakun=b.kdakun)
+			where b.kdakun is not null
+			order by a.kdakun asc
+		",[
+			$id_trans,
+			session('kdunit')
+		]);
+		
+		return response()->json($rows);
+		
+	}
 	
 	public function akun_kredit($id_trans)
 	{
@@ -922,9 +957,26 @@ class DropdownController extends Controller {
 
 	public function program()
 	{
+		$arr_where = [];
+		if(session('kdlevel')=='11'){
+			$arr_where[] = " kdunit='".session('kdunit')."' ";
+		}
+
+		if(isset($_GET['kdunit'])){
+			if($_GET['kdunit']!==null && $_GET['kdunit']!==''){
+				$arr_where[] = " kdunit='".$_GET['kdunit']."' ";
+			}
+		}
+
+		$where = "";
+		if(count($arr_where)>0){
+			$where = "where ".implode(" and ", $arr_where);
+		}
+
 		$rows = DB::select("
 			select	*
 			from t_program
+			".$where."
 		");
 		
 		$data = '<option value="" style="display:none;">Pilih Data</option>';
@@ -965,9 +1017,20 @@ class DropdownController extends Controller {
 	public function kontrak()
 	{
 		$arr_where = array();
+
+		if(session('kdlevel')=='11'){
+			$arr_where[] = " a.kdunit='".session('kdunit')."' ";
+		}
+
 		if(isset($_GET['kdunit'])){
 			if($_GET['kdunit']!==null && $_GET['kdunit']!==''){
 				$arr_where[] = " a.kdunit='".$_GET['kdunit']."' ";
+			}
+		}
+
+		if(isset($_GET['tipe'])){
+			if($_GET['tipe']!==null && $_GET['tipe']!==''){
+				$arr_where[] = " a.tipe='".$_GET['tipe']."' ";
 			}
 		}
 

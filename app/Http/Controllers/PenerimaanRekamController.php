@@ -131,7 +131,9 @@ class PenerimaanRekamController extends Controller {
 					a.ttd1,
 					a.ttd2,
 					a.ttd3,
-					a.ttd4
+					a.ttd4,
+					a.id_program||'|'||d.uraian as id_program,
+					a.id_giat||'|'||e.uraian as id_giat
 			from d_trans a
 			left outer join(
 				select	id_trans,
@@ -147,6 +149,8 @@ class PenerimaanRekamController extends Controller {
 				from d_trans_akun
 				where kddk='K' and grup=1
 			) c on(a.id=c.id_trans)
+			left join t_program d on(a.id_program=d.id)
+			left join t_kegiatan e on(a.id_giat=e.id)
 			where a.id=?
 		",[
 			$id
@@ -347,6 +351,15 @@ class PenerimaanRekamController extends Controller {
 			$total = (float)str_replace(',', '', $request->input('total'));
 			$nilai = (float)str_replace(',', '', $request->input('nilai'));
 			$nourut = (int)$request->input('nourut');
+
+			$program = htmlspecialchars($request->input('id_program'));
+			$kegiatan = htmlspecialchars($request->input('id_giat'));
+
+			$arr_program = explode("|", $program);
+			$arr_kegiatan = explode("|", $kegiatan);
+
+			$id_program = $arr_program[0];
+			$id_giat = $arr_kegiatan[0];
 			
 			if($total>0){
 			
@@ -394,6 +407,8 @@ class PenerimaanRekamController extends Controller {
 								'ttd2' => $request->input('ttd2'),
 								'ttd3' => $request->input('ttd3'),
 								'ttd4' => $request->input('ttd4'),
+								'id_program' => $id_program,
+								'id_giat' => $id_giat,
 								'nilai' => $total,
 								'nilai_bersih' => $nilai,
 								'parent_id' => $parent_id,
@@ -509,6 +524,8 @@ class PenerimaanRekamController extends Controller {
 								ttd2=?,
 								ttd3=?,
 								ttd4=?,
+								id_program=?,
+								id_giat=?,
 								id_user=?,
 								updated_at=sysdate
 							where id=?
@@ -529,6 +546,8 @@ class PenerimaanRekamController extends Controller {
 							$request->input('ttd2'),
 							$request->input('ttd3'),
 							$request->input('ttd4'),
+							$id_program,
+							$id_giat,
 							session('id_user'),
 							$request->input('inp-id')
 						]);

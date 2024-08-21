@@ -226,7 +226,7 @@ class KontrakController extends Controller
 								a.tahun,
 								a.bulan,
 								round(".$nilai."/".$jmlbayar.",2) as nilai,
-								to_date(a.tahun||'-'||a.bulan||'-'||TO_CHAR(TO_DATE('".$tgmulai."','yyyy-mm-dd'),'dd'),'yyyy-mm-dd') as tgjtempo,
+								last_day(to_date(a.tahun||'-'||a.bulan,'yyyy-mm')) as tgjtempo,
 								round(100/".$jmlbayar.",2) as fisik,
 								row_number() over(order by a.tahun,a.bulan) as nourut,
 								".session('id_user')." as id_user

@@ -61,6 +61,16 @@
 										<select id="kdtran" name="kdtran" class="form-control chosen">
 										</select>
 									</fieldset>
+									<fieldset class="form-group">
+										<label for="id_program">Kode Program</label>
+										<select id="id_program" name="id_program" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="id_giat">Kode Kegiatan</label>
+										<select id="id_giat" name="id_giat" class="form-control chosen">
+										</select>
+									</fieldset>
 								</div>
 								<div class="col-md-6">
 									<fieldset class="form-group">
@@ -73,6 +83,16 @@
 									<fieldset class="form-group">
 										<label for="id_proyek">Proyek</label>
 										<select id="id_proyek" name="id_proyek" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="id_kontrak">Kontrak/ PKS</label>
+										<select id="id_kontrak" name="id_kontrak" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="id_kontrak_dtl">Termin/ Periode</label>
+										<select id="id_kontrak_dtl" name="id_kontrak_dtl" class="form-control chosen">
 										</select>
 									</fieldset>
 									<fieldset class="form-group">
@@ -384,6 +404,36 @@
 		$.get('dropdown/output', function(result){
 			$('#id_output').html(result).trigger('change');
 		});
+
+		$.get('dropdown/program', function(result){
+			$('#id_program').html(result).trigger('change');
+		});
+
+		$('#id_program').on('select2:select', function(){
+			var arr_program = $(this).val().split('|');
+			var id_program = 0;
+			if(arr_program.length>1){
+				id_program = arr_program[0];
+			}
+			$.get('dropdown/kegiatan?id_program=' + id_program, function(result){
+				$('#id_giat').html(result).trigger('change');
+			});
+		});
+
+		$.get('dropdown/kontrak?tipe=2', function(result){
+			$('#id_kontrak').html(result).trigger('change');
+			$('#id_kontrak_dtl').html('').trigger('change');
+		});
+
+		$('body').off('select2:select', '#id_kontrak').on('select2:select', '#id_kontrak', function(){
+			if($(this).val()){
+				var id_kontrak = $(this).val();
+				$('#id_kontrak_dtl').html('<option value="">Sedang proses...</option>').trigger('change');
+				$.get('dropdown/kontrak-dtl?id_kontrak='+id_kontrak+'&update=0', function(result){
+					$('#id_kontrak_dtl').html(result).trigger('change');
+				});
+			}
+		});
 		
 		$.get(route, function(result){
 			if(result=='1'){ //admin
@@ -410,7 +460,7 @@
 				$('#kredit').html(result).trigger('change');
 				$('#kredit').val('211100').trigger('change');
 			});
-			$.getJSON('dropdown/akun/debet/'+kdtran+'/json', function(result){
+			$.getJSON('dropdown/akun/debet/'+kdtran+'/json-unit', function(result){
 				
 				var akun='<option value="" style="display:none;">Pilih Akun</option>';
 				$.each(result, function(i,field){
@@ -796,6 +846,31 @@
 							});
 						});
 
+					});
+
+					$.get('dropdown/program', function(result1){
+						$('#id_program').html(result1).trigger('change');
+						$('#id_program').val(result.message.id_program);
+					});
+
+					var arr_program = result.message.id_program.split('|');
+					var id_program = arr_program[0];
+
+					$.get('dropdown/kegiatan?id_program=' + id_program, function(result1){
+						$('#id_giat').html(result1);
+						$('#id_giat').val(result.message.id_giat).trigger('change');
+					});
+
+					$('#id_kontrak').html('<option value="">Sedang proses...</option>').trigger('change');
+					$.get('dropdown/kontrak', function(result1){
+						$('#id_kontrak').html(result1).trigger('change');
+						$('#id_kontrak').val(result.message.id_kontrak).trigger('change');
+					});
+
+					$('#id_kontrak_dtl').html('<option value="">Sedang proses...</option>').trigger('change');
+					$.get('dropdown/kontrak-dtl?id_kontrak='+result.message.id_kontrak+'&update=1', function(result1){
+						$('#id_kontrak_dtl').html(result1).trigger('change');
+						$('#id_kontrak_dtl').val(result.message.id_kontrak_dtl).trigger('change');
 					});
 					
 					$('#debet').html(result.dropdown_d).trigger('change');

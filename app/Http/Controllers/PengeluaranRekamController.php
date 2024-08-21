@@ -145,7 +145,11 @@ class PengeluaranRekamController extends Controller {
 					a.ttd3,
 					a.ttd4,
 					a.nilai-a.nilai_bersih as pajak,
-					to_char(a.tgrekam,'yyyy-mm-dd') as tgrekam
+					to_char(a.tgrekam,'yyyy-mm-dd') as tgrekam,
+					a.id_program||'|'||d.uraian as id_program,
+					a.id_giat||'|'||e.uraian as id_giat,
+					a.id_kontrak_dtl,
+					f.id_kontrak
 			from d_trans a
 			left join(
 				select	*
@@ -157,6 +161,9 @@ class PengeluaranRekamController extends Controller {
 				from d_trans_akun
 				where kddk='K' and grup=1
 			) c on(a.id=c.id_trans)
+			left join t_program d on(a.id_program=d.id)
+			left join t_kegiatan e on(a.id_giat=e.id)
+			left join d_kontrak_dtl f on(a.id_kontrak_dtl=f.id)
 			where a.id=?
 		",[
 			$id
@@ -355,6 +362,15 @@ class PengeluaranRekamController extends Controller {
 			$lanjut = false;
 			$error = '';
 
+			$program = htmlspecialchars($request->input('id_program'));
+			$kegiatan = htmlspecialchars($request->input('id_giat'));
+
+			$arr_program = explode("|", $program);
+			$arr_kegiatan = explode("|", $kegiatan);
+
+			$id_program = $arr_program[0];
+			$id_giat = $arr_kegiatan[0];
+
 			$total = str_replace(',', '', $request->input('total'));
 			
 			$nourut = (int)$request->input('nourut');
@@ -440,11 +456,14 @@ class PengeluaranRekamController extends Controller {
 												'ttd2' => $request->input('ttd2'),
 												'ttd3' => $request->input('ttd3'),
 												'ttd4' => $request->input('ttd4'),
+												'id_program' => $id_program,
+												'id_giat' => $id_giat,
 												'nilai' => str_replace(',', '', $request->input('total')),
 												'nilai_bersih' => str_replace(',', '', $request->input('nilai')),
 												'parent_id' => $parent_id,
 												'status' => 1,
-												'id_user' => session('id_user')
+												'id_user' => session('id_user'),
+												'id_kontrak_dtl' => $request->input('id_kontrak_dtl')
 											]);
 											
 											if($id_trans){
@@ -704,9 +723,12 @@ class PengeluaranRekamController extends Controller {
 												ttd2=?,
 												ttd3=?,
 												ttd4=?,
+												id_program=?,
+												id_giat=?,
 												id_user=?,
 												updated_at=sysdate,
-												tgrekam=to_date(?,'yyyy-mm-dd')
+												tgrekam=to_date(?,'yyyy-mm-dd'),
+												id_kontrak_dtl=?
 											where id=?
 										",[
 											$id_proyek,
@@ -724,8 +746,11 @@ class PengeluaranRekamController extends Controller {
 											$request->input('ttd2'),
 											$request->input('ttd3'),
 											$request->input('ttd4'),
+											$id_program,
+											$id_giat,
 											session('id_user'),
 											$request->input('tgrekam'),
+											$request->input('id_kontrak_dtl'),
 											$request->input('inp-id')
 										]);
 										
