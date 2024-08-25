@@ -618,4 +618,44 @@ class RKAPController extends Controller
 
 		}
 	}
+
+	public function log()
+	{
+		$id = 0;
+		if(isset($_GET['id_rkap'])){
+			if($_GET['id_rkap']!==null && $_GET['id_rkap']!==''){
+				$id = $_GET['id_rkap'];
+			}
+		}
+
+		$rows = DB::select("
+			select  to_char(a.updated_at,'dd/mm/yyyy hh24:mi:ss') as created_at,
+					b.nama,
+					a.status_ket,
+					c.uraian as nmstatus
+			from h_rkap a
+			left join t_user b on(a.id_user=b.id)
+			left join t_status_rkap c on(a.status=c.status)
+			where a.id=?
+			order by a.updated_at desc
+		",[
+			$id
+		]);
+
+		$html = '';
+
+		foreach($rows as $row){
+
+			$html .= '<tr>
+						<td>'.$row->created_at.'</td>
+						<td>'.$row->nama.'</td>
+						<td>'.$row->nmstatus.'</td>
+						<td>'.$row->status_ket.'</td>
+					</tr>';
+
+		}
+
+		return $html;
+
+	}
 }

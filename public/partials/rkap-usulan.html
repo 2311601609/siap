@@ -103,6 +103,24 @@
 									</fieldset>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<fieldset class="form-group">
+										<table class="table table-striped table-bordered">
+											<thead>
+												<tr>
+													<th>Tgl. Proses</th>
+													<th>Pengguna</th>
+													<th>Status</th>
+													<th>Keterangan</th>
+												</tr>
+											</thead>
+											<tbody id="tabel-ruh-log">
+											</tbody>
+										</table>
+									</fieldset>
+								</div>
+							</div>
 							
 	                    </form>
 	                </div>
@@ -339,6 +357,7 @@
 		}
 
 		function cari_data_detil(id){
+			
 			$.getJSON(route + '/detil?id=' + id, function(result){
 				if(result) {
 					$('#inp-id-detil').val(id);
@@ -349,6 +368,14 @@
 					$('#status').html(result.dropdown_status).trigger('change');
 				}
 			});
+
+			$('#tabel-ruh-log').html('<tr><td colspan="4">Sedang proses...</td></tr>');
+			$.get(route + '/log?id_rkap=' + id, function(result){
+				if(result) {
+					$('#tabel-ruh-log').html(result);
+				}
+			});
+
 		}
 		
 		//klik ubah
