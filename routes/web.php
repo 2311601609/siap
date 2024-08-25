@@ -125,6 +125,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::post('', [RKAPController::class, 'simpan'])->middleware('role:11');
 		Route::post('hapus', [RKAPController::class, 'hapus'])->middleware('role:11');
 		Route::post('detil', [RKAPController::class, 'detilSimpan']);
+		Route::get('log', [RKAPController::class, 'log']);
 	});
 
 	//RKAP - Akun
