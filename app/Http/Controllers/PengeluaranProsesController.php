@@ -469,7 +469,7 @@ class PengeluaranProsesController extends Controller {
 							if($rows[0]->is_bayar=='1'){
 								
 								$rows_bayar = DB::select("
-									select nvl(nocek,'') as nocek
+									select 	nvl(nocek,'') as nocek
 									from d_trans
 									where id=?
 								",[
@@ -478,6 +478,23 @@ class PengeluaranProsesController extends Controller {
 								
 								if($rows_bayar[0]->nocek==''){
 									$next = false;
+									$error = 'Nomor cek/ bukti bayar belum direkam.';
+								}
+								else{
+
+									$rows_lampiran = DB::select("
+										select	count(*) as jml
+										from d_trans_dok
+										where id_trans=? and id_dok_dtl=53
+									",[
+										$request->input('inp-id')
+									]);
+
+									if($rows_lampiran[0]->jml==0){
+										$next = false;
+										$error = 'File atau lampiran cek/ bukti bayar belum diupload.';
+									}
+
 								}
 								
 							}
