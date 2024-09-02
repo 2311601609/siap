@@ -84,7 +84,7 @@
                                                             <a href="auth-forgot-password.html">Forgot Password?</a>
                                                         </div>-->
                                                         <div class="d-flex justify-content-between flex-sm-row flex-column">
-                                                            <button type="submit" id="submit" class="btn btn-primary">Login</button>
+                                                            <button type="submit" id="submit" class="btn btn-primary">Submit</button>
                                                         </div>
                                                     </form>
                                                     <hr>
