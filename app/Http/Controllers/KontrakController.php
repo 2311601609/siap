@@ -38,7 +38,8 @@ class KontrakController extends Controller
 					a.ket,
 					a.jmlbayar,
 					a.nilai,
-					a.status
+					a.status,
+					a.addendum
 			FROM ".$this->table." a
 			LEFT JOIN t_unit b on(a.kdunit=b.kdunit)
 			WHERE a.id = ?
@@ -108,11 +109,17 @@ class KontrakController extends Controller
 
 						$crud = false;
 						$proses = false;
+						$addendum = false;
 						if(session('kdlevel')=='11'){ // staf teknis divisi
+							
 							if($row->status==0){ //rekam
 								$crud = true;
 								$proses = true;
 							}
+							elseif($row->status==3){ //disetujui
+								$addendum = true;
+							}
+
 						}
 						elseif(session('kdlevel')=='08'){ // manager (JM)
 							if($row->status==1){
@@ -136,12 +143,18 @@ class KontrakController extends Controller
 							$proses_output = '<a id="'.$row->id.'" class="dropdown-item proses" href="javascript:;">Proses Data</a>';
 						}
 
+						$addendum_output = '';
+						if($addendum){
+							$addendum_output = '<a id="'.$row->id.'" class="dropdown-item addendum" href="javascript:;">Addendum</a>';
+						}
+
 						$aksi = '
 							<center>
 								<button type="button" class="btn btn-raised btn-sm btn-icon btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="ft-edit"></i></button>
 								<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
 									'.$crud_output.'
 									'.$proses_output.'
+									'.$addendum_output.'
 									<a id="'.$row->id.'" class="dropdown-item"
 										href="#/kontrak/rekam/detil?
 										id_kontrak='.$row->id.'&
@@ -343,7 +356,8 @@ class KontrakController extends Controller
 					to_char(tgmulai,'yyyy-mm-dd') as tgmulai,
 					ket,
 					jmlbayar,
-					nilai
+					nilai,
+					addendum
 			FROM ".$this->table."
 			WHERE id = ?
 		", [$id]);
@@ -364,19 +378,27 @@ class KontrakController extends Controller
 			$error = '';
 
 			$status = $this->getDetail($id)->status;
+			$addendum = $this->getDetail($id)->addendum;
 
 			if($status==0){
 
-				$delete = DB::table($this->table.'_dtl')->where('id_kontrak','=',$id)->delete();
+				if($addendum==''){
 
-				$delete = DB::table($this->table.'_dok')->where('id_kontrak','=',$id)->delete();
+					$delete = DB::table($this->table.'_dtl')->where('id_kontrak','=',$id)->delete();
+
+					$delete = DB::table($this->table.'_dok')->where('id_kontrak','=',$id)->delete();
+					
+					$delete = DB::table($this->table)->where('id','=',$id)->delete();
+					
+					if($delete) {
+						$lanjut = true;
+					} else {
+						$error = "Gagal menghapus data";		
+					}
 				
-				$delete = DB::table($this->table)->where('id','=',$id)->delete();
-				
-				if($delete) {
-					$lanjut = true;
-				} else {
-					$error = "Gagal menghapus data";		
+				}
+				else{
+					$error = 'Data addendum tidak dapat dihapus lagi.';
 				}
 			
 			}
@@ -531,6 +553,86 @@ class KontrakController extends Controller
 
 		}
 		
+	}
+
+	/**
+	 * description 
+	 */
+	public function addendum(Request $request)
+	{
+		DB::connection()->getPdo()->beginTransaction();
+
+		try{
+			$id = $request->id;
+			$lanjut = false;
+			$error = '';
+
+			$status = $this->getDetail($id)->status;
+
+			if($status==3){
+
+				$insert = DB::insert("
+					insert into d_kontrak_h
+					select	*
+					from d_kontrak
+					where id=?
+				",[
+					$id
+				]);
+
+				if($insert){
+
+					$update = DB::update("
+						update d_kontrak
+						set addendum=nvl(addendum,0)+1,
+							status=0,
+							id_user=?,
+							updated_at=sysdate
+						where id=?
+					",[
+						session('id_user'),
+						$id
+					]);
+			
+					if($update) {
+						$lanjut = true;
+					}
+					else{
+						$error = "Proses addendum gagal.";
+					}
+
+				}
+				else{
+					$error = 'Proses simpan data histori kontrak gagal.';
+				}
+			
+			}
+			else{
+				$error = 'Data sudah diproses, tidak dapat diaddendum lagi.';
+			}
+
+			if($lanjut){
+				DB::connection()->getPdo()->commit();
+				return 'success';
+			}
+			else{
+				DB::connection()->getPdo()->rollBack();
+				return $error;
+			}
+
+		}
+		catch(\Exception $e){
+
+			DB::connection()->getPdo()->rollBack();
+
+			if(PublicFunction::errorLog($request, substr($e->getMessage(),0,255))){
+				return 'Kesalahan lainnya, hubungi Administrator.';
+			}
+			else{
+				return 'Kesalahan lainnya, hubungi Administrator. Log error gagal disimpan.';
+			}
+
+		}
 	}
 
 }
