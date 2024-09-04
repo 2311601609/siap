@@ -163,6 +163,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('detil', [KontrakController::class, 'detil']);
 		Route::post('', [KontrakController::class, 'simpan'])->middleware('role:11');
 		Route::post('hapus', [KontrakController::class, 'hapus'])->middleware('role:11');
+		Route::post('addendum', [KontrakController::class, 'addendum'])->middleware('role:11');
 		Route::post('detil', [KontrakController::class, 'detilSimpan']);
 	});
 
