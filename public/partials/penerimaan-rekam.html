@@ -553,6 +553,11 @@
 				$('#kredit').val(data[4]).trigger('change');
 				$('#param-kredit').val(data[4]);
 				$('#id_proyek,#id_pelanggan,#kredit,#kdsdana,#kdunit').prop('disabled', true).trigger('change');
+
+				$.get('dropdown/program?kdunit='+proyek[3], function(result1){
+					$('#id_program').html(result1).trigger('change');
+				});
+
 			}
 		});
 		

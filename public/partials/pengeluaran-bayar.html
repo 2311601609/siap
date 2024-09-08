@@ -428,6 +428,7 @@
 					jQuery('#total').val(digit_grouping(result.message.total));
 					jQuery('#div-lampiran').html(result.lampiran);
 					jQuery('#bayar').html(result.pajak).trigger('change');
+					$('#nmfile_baru').val(result.message.nmfile);
 				}
 				else{
 					alertify.log(result.message);
