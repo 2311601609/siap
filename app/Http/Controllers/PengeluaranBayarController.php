@@ -91,7 +91,8 @@ class PengeluaranBayarController extends Controller {
 					a.nocek,
 					to_char(a.tgcek,'yyyy-mm-dd') as tgcek,
 					m.kdakun as bayar,
-					m.nmfile
+					n.nmfile,
+					decode(o.id_trans,null,0,1) as utang_bayar
 			from d_trans a
 			left outer join t_alur b on(a.id_alur=b.id)
 			left outer join t_unit c on(a.kdunit=c.kdunit)
@@ -122,13 +123,19 @@ class PengeluaranBayarController extends Controller {
 						b.nmakun
 				from d_trans_akun a
 				left join t_akun b on(a.kdakun=b.kdakun)
-				where a.grup=1 and a.kddk='K'
+				where a.grup=3 and a.kddk='K'
 			) m on(a.id=m.id_trans)
 			left outer join(
 				select	*
 				from d_trans_dok
 				where id_dok_dtl=53
-			) m on(a.id=m.id_trans)
+			) n on(a.id=n.id_trans)
+			left outer join(
+				select  a.id_trans
+				from d_trans_akun a
+				left join t_akun b on(a.kdakun=b.kdakun)
+				where a.grup=1 and a.kddk='K' and a.kdakun='210301'
+			) o on(a.id=o.id_trans)
 			where a.id=?
 		",[
 			$id
@@ -154,27 +161,38 @@ class PengeluaranBayarController extends Controller {
 			]);
 			
 			$lampiran = '<ul>';
+			$nmfile = '';
 			foreach($rows as $row){
 				$lampiran .= '<li><a href="pengeluaran-lampiran/download?nmfile='.$row->nmfile.'" target="_blank" title="Download Lampiran">'.$row->uraian.'</li>';
+				$nmfile = $row->nmfile;
 			}
 			$lampiran .= '</ul>';
 			
 			$data['lampiran'] = $lampiran;
+			$data['nmfile'] = $nmfile;
 			
 			$rows = DB::select("
 				select  *
 				from t_akun
-				where lvl=6 and substr(kdakun,1,3)='111' and substr(kdakun,1,4)<>'1112'
+				where substr(kdakun,1,4)='1101' and lvl=6
 				order by kdakun
 			");
-			
-			$pajak = '<option value="">Pilih Data</option>';
-			foreach($rows as $row){
-				$selected = '';
-				if($row->kdakun==$detil->bayar){
-					$selected = 'selected';
+
+			if($detil->utang_bayar==1){
+
+				$pajak = '';
+
+				foreach($rows as $row){
+					$selected = '';
+					if($row->kdakun==$detil->bayar){
+						$selected = 'selected';
+					}
+					$pajak .= '<option value="'.$row->kdakun.'" '.$selected.'>'.$row->nmakun.'</option>';
 				}
-				$pajak .= '<option value="'.$row->kdakun.'" '.$selected.'>'.$row->nmakun.'</option>';
+
+			}
+			else{
+				$pajak = '<option value="000000">NIHIL</option>';
 			}
 			
 			$data['pajak'] = $pajak;
@@ -210,41 +228,52 @@ class PengeluaranBayarController extends Controller {
 				$request->input('tgcek'),
 				$id_trans,
 			]);
-			
-			$delete = DB::delete("
-				delete from d_trans_akun
-				where id_trans=? and grup='3'
-			",[
-				$id_trans
-			]);
-			
-			$insert = DB::insert("
-				insert into d_trans_akun(id_trans,kdakun,nilai,kddk,grup)
-				select  id_trans,
-						kdakun,
-						nilai,
-						'D' as kddk,
-						'3' as grup
-				from d_trans_akun
-				where id_trans=? and kddk='K' and grup='1'
 
-				union all
+			$next = true;
 
-				select  id_trans,
-						? as kdakun,
-						nilai,
-						'K' as kddk,
-						'3' as grup
-				from d_trans_akun
-				where id_trans=? and kddk='K' and grup='1'
-			",[
-				$id_trans,
-				$request->input('bayar'),
-				$id_trans
-			]);
+			if($request->input('bayar')!=='000000'){
 
-			if($insert){
+				$delete = DB::delete("
+					delete from d_trans_akun
+					where id_trans=? and grup='3'
+				",[
+					$id_trans
+				]);
+				
+				$insert = DB::insert("
+					insert into d_trans_akun(id_trans,kdakun,nilai,kddk,grup)
+					select  id_trans,
+							kdakun,
+							nilai,
+							'D' as kddk,
+							'3' as grup
+					from d_trans_akun
+					where id_trans=? and kddk='K' and grup='1'
 
+					union all
+
+					select  id_trans,
+							? as kdakun,
+							nilai,
+							'K' as kddk,
+							'3' as grup
+					from d_trans_akun
+					where id_trans=? and kddk='K' and grup='1'
+				",[
+					$id_trans,
+					$request->input('bayar'),
+					$id_trans
+				]);
+
+				if(!$insert){
+					$next = false;
+					$error = 'Proses simpan data pembayaran gagal.';
+				}
+
+			}
+
+			if($next){
+				
 				if($nmfile!==null && $nmfile!==''){
 
 					$delete = DB::table('d_trans_dok')
@@ -268,12 +297,9 @@ class PengeluaranBayarController extends Controller {
 
 				}
 				else{
-					$error = 'File bukti transfer belum diupload.';
+					$error = 'File bukti pembayaran belum diupload.';
 				}
 
-			}
-			else{
-				$error = 'Data gagal disimpan.';
 			}
 			
 			if($lanjut){

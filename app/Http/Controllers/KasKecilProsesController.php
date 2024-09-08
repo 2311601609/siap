@@ -318,6 +318,7 @@ class KasKecilProsesController extends Controller {
 			
 			if(count($rows)>0){
 				
+				$kdtran = $rows[0]->kdtran;
 				$kdakun = $rows[0]->kdakun;
 				$nilai = $rows[0]->nilai;
 				
@@ -341,12 +342,14 @@ class KasKecilProsesController extends Controller {
 						",[
 							$request->input('inp-id')
 						]);
+
+						$query_insert = '';
 						
-						if($kdakun=='920000'){ //jika tarik uang ke kas bp
+						if($kdtran==61){ //pengisian kas kecil dari bank
 							
 							$query_insert = "
 								select	".$request->input('inp-id')." as id_trans,
-										'111300' as kdakun,
+										'110101' as kdakun,
 										'D' as kddk,
 										".$nilai." as nilai,
 										0 as grup
@@ -355,44 +358,52 @@ class KasKecilProsesController extends Controller {
 								union all
 								
 								select	".$request->input('inp-id')." as id_trans,
-										'920000' as kdakun,
+										'810001' as kdakun,
 										'K' as kddk,
 										".$nilai." as nilai,
 										0 as grup
 								from dual
 							";
 							
+						}
+						elseif($kdtran==62){ //penyetoran bank dari kas kecil
+							
+							$query_insert = "
+								select	".$request->input('inp-id')." as id_trans,
+										'820001' as kdakun,
+										'D' as kddk,
+										".$nilai." as nilai,
+										0 as grup
+								from dual
+								
+								union all
+								
+								select	".$request->input('inp-id')." as id_trans,
+										'110101' as kdakun,
+										'K' as kddk,
+										".$nilai." as nilai,
+										0 as grup
+								from dual
+							";
+						
+						}
+
+						if($query_insert!==''){
+
+							$insert = DB::insert("
+								insert into d_trans_akun(id_trans,kdakun,kddk,nilai,grup)
+								".$query_insert."
+							");
+							
+							if(!$insert){
+								$next = false;
+								$error = 'Akun kontra pos gagal disimpan!';
+							}
+
 						}
 						else{
-							
-							$query_insert = "
-								select	".$request->input('inp-id')." as id_trans,
-										'910000' as kdakun,
-										'D' as kddk,
-										".$nilai." as nilai,
-										0 as grup
-								from dual
-								
-								union all
-								
-								select	".$request->input('inp-id')." as id_trans,
-										'111300' as kdakun,
-										'K' as kddk,
-										".$nilai." as nilai,
-										0 as grup
-								from dual
-							";
-						
-						}
-						
-						$insert = DB::insert("
-							insert into d_trans_akun(id_trans,kdakun,kddk,nilai,grup)
-							".$query_insert."
-						");
-						
-						if(!$insert){
 							$next = false;
-							$error = 'Akun kontra pos gagal disimpan!';
+							$error = 'Akun tidak dikenali.';
 						}
 						
 					}

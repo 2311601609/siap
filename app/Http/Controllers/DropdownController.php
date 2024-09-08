@@ -855,6 +855,7 @@ class DropdownController extends Controller {
 		$rows = DB::select("
 			select	*
 			from t_sdana
+			order by kdsdana desc
 		");
 		
 		$data = '<option value="" style="display:none;">Pilih Data</option>';

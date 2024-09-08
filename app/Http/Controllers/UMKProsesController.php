@@ -350,7 +350,7 @@ class UMKProsesController extends Controller {
 						
 						$query_insert = "
 							select	".$request->input('inp-id')." as id_trans,
-									'114120' as kdakun,
+									'110303' as kdakun,
 									'D' as kddk,
 									".$nilai." as nilai,
 									0 as grup
@@ -359,7 +359,7 @@ class UMKProsesController extends Controller {
 							union all
 							
 							select	".$request->input('inp-id')." as id_trans,
-									'111300' as kdakun,
+									'110101' as kdakun,
 									'K' as kddk,
 									".$nilai." as nilai,
 									0 as grup
