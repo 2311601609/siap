@@ -36,12 +36,17 @@
 										<label for="nmakun">Nama Akun</label>
 										<input type="text" id="nmakun" name="nmakun" class="form-control" maxlength="255">
 									</fieldset>
-									<fieldset class="form-group">
-										<label for="lvl">Level Akun</label>
-										<input type="text" id="lvl" name="lvl" class="form-control" maxlength="1">
-									</fieldset>
 								</div>
 								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="lvl">Level Akun</label>
+										<select id="lvl" name="lvl" class="form-control chosen">
+											<option value="" style="display:none;">Pilih data</option>
+											<option value="2">Level 2 (coa 2 digit)</option>
+											<option value="4">Level 3 (coa 4 digit)</option>
+											<option value="6">Level 4 (coa 6 digit | transaksi)</option>
+										</select>
+									</fieldset>
 									<fieldset class="form-group">
 										<label for="kddk">Debet/ Kredit</label>
 										<select id="kddk" name="kddk" class="form-control chosen">

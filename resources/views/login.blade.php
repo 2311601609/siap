@@ -66,35 +66,18 @@
                                                     <img src="template/Apex6/app-assets/img/gallery/login.png" alt="" class="img-fluid" width="300" height="230">
                                                 </div>
                                                 <div class="col-lg-6 col-12 px-4 py-3">
-                                                    <h4 class="mb-2 card-title">Login</h4>
-                                                    <p>Welcome back, please login to your account.</p>
+                                                    <h4 class="mb-2 card-title">SIAP V2</h4>
+                                                    <p>Selamat datang,<br>masukan akun pengguna Anda.</p>
                                                     <form id="form-ruh" name="form-ruh" onsubmit="return false">
                                                         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                                                         <input type="text" class="form-control mb-3" placeholder="Username" id="username" name="username">
                                                         <input type="password" class="form-control mb-3" placeholder="Password" id="password" name="password">
                                                         <select class="form-control mb-3" id="tahun" name="tahun">
                                                         </select>
-                                                        <!--<div class="d-sm-flex justify-content-between mb-3 font-small-2">
-                                                            <div class="remember-me mb-2 mb-sm-0">
-                                                                <div class="checkbox auth-checkbox">
-                                                                    <input type="checkbox" id="auth-ligin">
-                                                                    <label for="auth-ligin"><span>Remember Me</span></label>
-                                                                </div>
-                                                            </div>
-                                                            <a href="auth-forgot-password.html">Forgot Password?</a>
-                                                        </div>-->
                                                         <div class="d-flex justify-content-between flex-sm-row flex-column">
-                                                            <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+                                                            <button type="submit" id="submit" class="btn btn-primary">Masuk</button>
                                                         </div>
                                                     </form>
-                                                    <hr>
-                                                    <div class="d-flex justify-content-between align-items-center">
-                                                        <h6 class="text-primary m-0">Or Login With</h6>
-                                                        <div class="login-options">
-                                                            <a class="btn btn-sm btn-social-icon btn-facebook mr-1"><span class="fa fa-facebook"></span></a>
-                                                            <a class="btn btn-sm btn-social-icon btn-twitter mr-1"><span class="fa fa-twitter"></span></a>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -158,7 +141,7 @@
                 doBounce($('#login'), 3, '10px', 100);
             
                 $(this).prop('disabled',true);
-                $(this).html('<span class="loading">Loading.....</span>');
+                $(this).html('<span class="loading">Sedang proses.....</span>');
                 var lanjut=true;
                 if($('#username').val()==''){
                     lanjut=false;
@@ -178,7 +161,7 @@
                         method:'POST',
                         success:function(result){
                             alertify.log(result.message);
-                            $('#submit').html('Submit');
+                            $('#submit').html('Masuk');
                             $('#submit').prop('disabled', false);
                             if(result.success){    
                                 window.location.href='./';
@@ -186,14 +169,14 @@
                         },
                         error:function(result){
                             alertify.log(result.message);
-                            $('#submit').html('Submit');
+                            $('#submit').html('Masuk');
                             $('#submit').prop('disabled', false);
                         }
                     });
                 }
                 else{
                     alertify.log('Kolom username/password tidak dapat dikosongkan!');
-                    $('#submit').html('Submit');
+                    $('#submit').html('Masuk');
                     $('#submit').prop('disabled', false);
                 }
                 
