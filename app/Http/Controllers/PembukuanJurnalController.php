@@ -5,6 +5,10 @@ use Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use clsTinyButStrong;
+use DataTables;
+use App\Libraries\PublicFunction;
+use App\Exports\NeracaLajurExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PembukuanJurnalController extends Controller {
 	
@@ -115,6 +119,138 @@ class PembukuanJurnalController extends Controller {
 			'total_debet' => number_format($total_debet,0),
 			'total_kredit' => number_format($total_kredit,0)
 		));
+	}
+
+	public function neracaPercobaan()
+	{
+		if (request()->has('tgawal') && request()->has('tgakhir')) {
+
+			$tgawal = $_GET['tgawal'];
+			$tgakhir = $_GET['tgakhir'];
+
+			if($tgawal!=='' && $tgakhir!==''){
+
+				$where = " and a.tgsawal between to_date('".$tgawal." 00:00:00','yyyy-mm-dd hh24:mi:ss') and to_date('".$tgakhir." 23:59:59','yyyy-mm-dd hh24:mi:ss') ";
+				$where1 = " and a.tgdok between to_date('".$tgawal." 00:00:00','yyyy-mm-dd hh24:mi:ss') and to_date('".$tgakhir." 23:59:59','yyyy-mm-dd hh24:mi:ss') ";
+				
+				$sql = "
+					select  a.kdakun,
+							b.nmakun,
+							sum(decode(a.kddk,'D',a.nilai,0)) as debet,
+							sum(decode(a.kddk,'K',a.nilai,0)) as kredit
+					from(
+						/* saldo awal */
+						select  to_char(a.tgsawal,'YYYY') as thang,
+								to_char(a.tgsawal,'MM') as periode,
+								a.kddk,
+								a.kdakun,
+								sum(a.nilai) as nilai
+						from d_sawal a
+						where a.thang='".session('tahun')."' ".$where."
+						group by to_char(a.tgsawal,'YYYY'),
+								to_char(a.tgsawal,'MM'),
+								a.kdakun,
+								a.kddk
+						
+						union all
+						
+						/* transaksi berjalan termasuk pajak */
+						select  to_char(a.tgdok,'yyyy') as thang,
+								to_char(a.tgdok,'mm') as periode,
+								a.kddk,
+								a.kdakun,
+								sum(a.nilai) as nilai
+						from(
+							".$this->query()."
+						) a
+						where a.neraca1=1 ".$where1."
+						group by to_char(a.tgdok,'yyyy'),
+								to_char(a.tgdok,'mm'),
+								a.kddk,
+								a.kdakun
+						
+					) a
+					left join t_akun b on(a.kdakun=b.kdakun)
+					group by a.kdakun,b.nmakun
+					order by a.kdakun,b.nmakun
+				";
+
+				$query = DB::table(DB::raw("($sql) a"))
+						->selectRaw('a.*');
+
+				$datatables = DataTables::of($query)
+							->editColumn('debet', function($row){
+								return number_format($row->debet, 0, ',', '.');
+							})
+							->editColumn('kredit', function($row){
+								return number_format($row->kredit, 0, ',', '.');
+							})
+							->make(true);
+
+				return $datatables;
+
+			}
+
+		}
+	}
+
+	public function neracaPercobaanTotal()
+	{
+		if (request()->has('tgawal') && request()->has('tgakhir')) {
+
+			$tgawal = $_GET['tgawal'];
+			$tgakhir = $_GET['tgakhir'];
+
+			if($tgawal!=='' && $tgakhir!==''){
+
+				$where = " and a.tgsawal between to_date('".$tgawal." 00:00:00','yyyy-mm-dd hh24:mi:ss') and to_date('".$tgakhir." 23:59:59','yyyy-mm-dd hh24:mi:ss') ";
+				$where1 = " and a.tgdok between to_date('".$tgawal." 00:00:00','yyyy-mm-dd hh24:mi:ss') and to_date('".$tgakhir." 23:59:59','yyyy-mm-dd hh24:mi:ss') ";
+				
+				$sql = "
+					select  sum(decode(a.kddk,'D',a.nilai,0)) as debet,
+							sum(decode(a.kddk,'K',a.nilai,0)) as kredit
+					from(
+						/* saldo awal */
+						select  to_char(a.tgsawal,'YYYY') as thang,
+								to_char(a.tgsawal,'MM') as periode,
+								a.kddk,
+								a.kdakun,
+								sum(a.nilai) as nilai
+						from d_sawal a
+						where a.thang='".session('tahun')."' ".$where."
+						group by to_char(a.tgsawal,'YYYY'),
+								to_char(a.tgsawal,'MM'),
+								a.kdakun,
+								a.kddk
+						
+						union all
+						
+						/* transaksi berjalan termasuk pajak */
+						select  to_char(a.tgdok,'yyyy') as thang,
+								to_char(a.tgdok,'mm') as periode,
+								a.kddk,
+								a.kdakun,
+								sum(a.nilai) as nilai
+						from(
+							".$this->query()."
+						) a
+						where a.neraca1=1 ".$where1."
+						group by to_char(a.tgdok,'yyyy'),
+								to_char(a.tgdok,'mm'),
+								a.kddk,
+								a.kdakun
+						
+					) a
+					left join t_akun b on(a.kdakun=b.kdakun)
+				";
+
+				$rows = DB::select($sql);
+
+				return response()->json($rows[0]);
+
+			}
+
+		}
 	}
 	
 	public function neracaExcel(Request $request, $tgawal, $tgakhir)
@@ -464,7 +600,7 @@ class PembukuanJurnalController extends Controller {
 			'total_saldo' => number_format($total_saldo,0),
 		));
 	}
-	
+
 	public function neracaLajurExcel(Request $request, $periode)
 	{
 		$rows = DB::select("
@@ -605,6 +741,306 @@ class PembukuanJurnalController extends Controller {
 		header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 		$TBS->Show(OPENTBS_DOWNLOAD,'Neraca_Lajur.xlsx');
 		
+	}
+
+	public function neracaLajurBaru()
+	{
+		if (request()->has('lvl') && request()->has('periode')) {
+
+			$lvl = explode(",", $_GET['lvl']);
+			$periode = $_GET['periode'];
+
+			if($lvl!=='' && $periode!==''){
+
+				$arr_query = [];
+				for($i=0;$i<count($lvl);$i++){
+
+					$substr = $lvl[$i];
+					$zero = 6 - $substr;
+					$nol = str_repeat('0', $zero);
+
+					$arr_query[] = "
+						select  SUBSTR(a.kdakun,1,".$substr.")||'".$nol."' as kdakun,
+								SUM(a.sawal_debet) AS sawal_debet,
+								SUM(a.sawal_kredit) AS sawal_kredit,
+								SUM(a.mutasi_debet) AS mutasi_debet,
+								SUM(a.mutasi_kredit) AS mutasi_kredit,
+								SUM(a.lr_debet) AS lr_debet,
+								SUM(a.lr_kredit) AS lr_kredit,
+								SUM(a.nr_debet) AS nr_debet,
+								SUM(a.nr_kredit) AS nr_kredit
+						from d_buku_besar_dtl a
+						where a.thang='".session('tahun')."' and a.periode<='".$periode."'
+						group by substr(a.kdakun,1,".$substr.")
+					";
+
+				}
+
+				$sql = "
+					select  a.*,
+							b.nmakun
+					from(
+						".implode(" union all ", $arr_query)."
+					) a
+					left join t_akun b on(a.kdakun=b.kdakun)
+					order by a.kdakun
+				";
+
+				$query = DB::table(DB::raw("($sql) a"))
+						->selectRaw('a.*');
+
+				$datatables = DataTables::of($query)
+							->editColumn('sawal_debet', function($row){
+								return number_format($row->sawal_debet, 0, ',', '.');
+							})
+							->editColumn('sawal_kredit', function($row){
+								return number_format($row->sawal_kredit, 0, ',', '.');
+							})
+							->editColumn('mutasi_debet', function($row){
+								return number_format($row->mutasi_debet, 0, ',', '.');
+							})
+							->editColumn('mutasi_kredit', function($row){
+								return number_format($row->mutasi_kredit, 0, ',', '.');
+							})
+							->editColumn('lr_debet', function($row){
+								return number_format($row->lr_debet, 0, ',', '.');
+							})
+							->editColumn('lr_kredit', function($row){
+								return number_format($row->lr_kredit, 0, ',', '.');
+							})
+							->editColumn('nr_debet', function($row){
+								return number_format($row->nr_debet, 0, ',', '.');
+							})
+							->editColumn('nr_kredit', function($row){
+								return number_format($row->nr_kredit, 0, ',', '.');
+							})
+							->make(true);
+
+				return $datatables;
+
+			}
+
+		}
+	}
+
+	public function neracaLajurTotalBaru()
+	{
+		if (request()->has('periode')) {
+
+			$periode = $_GET['periode'];
+
+			if($periode!==''){
+
+				$sql = "
+					select	a.*,
+							a.lr_debet + a.lr_sisa_debet as lr_sisa1_debet,
+							a.lr_kredit + a.lr_sisa_kredit as lr_sisa1_kredit,
+							a.nr_debet + a.nr_sisa_debet as nr_sisa1_debet,
+							a.nr_kredit + a.nr_sisa_kredit as nr_sisa1_kredit
+					from(
+
+						select	a.*,
+								case
+									when a.lr_debet > a.lr_kredit
+										then 0
+									else
+										a.lr_kredit - a.lr_debet
+								end as lr_sisa_debet,
+								case
+									when a.lr_debet > a.lr_kredit
+										then a.lr_debet - a.lr_kredit
+									else
+										0
+								end as lr_sisa_kredit,
+								case
+									when a.nr_debet > a.nr_kredit
+										then 0
+									else
+										a.nr_kredit - a.nr_debet
+								end as nr_sisa_debet,
+								case
+									when a.nr_debet > a.nr_kredit
+										then a.nr_debet - a.nr_kredit
+									else
+										0
+								end as nr_sisa_kredit
+						from(
+
+							select  SUM(a.sawal_debet) AS sawal_debet,
+									SUM(a.sawal_kredit) AS sawal_kredit,
+									SUM(a.mutasi_debet) AS mutasi_debet,
+									SUM(a.mutasi_kredit) AS mutasi_kredit,
+									SUM(a.lr_debet) AS lr_debet,
+									SUM(a.lr_kredit) AS lr_kredit,
+									SUM(a.nr_debet) AS nr_debet,
+									SUM(a.nr_kredit) AS nr_kredit
+							from d_buku_besar_dtl a
+							where a.thang='".session('tahun')."' and a.periode='".$periode."'
+
+						) a
+
+					) a
+				";
+
+				$rows = DB::select($sql);
+
+				return response()->json($rows[0]);
+
+			}
+
+		}
+	}
+
+	public function neracaLajurExcelBaru()
+	{
+		if (request()->has('lvl') && request()->has('periode')) {
+
+			$lvl = explode(",", $_GET['lvl']);
+			$periode = $_GET['periode'];
+
+			if($lvl!=='' && $periode!==''){
+
+				$arr_query = [];
+				for($i=0;$i<count($lvl);$i++){
+
+					$substr = $lvl[$i];
+					$zero = 6 - $substr;
+					$nol = str_repeat('0', $zero);
+
+					$arr_query[] = "
+						select  SUBSTR(a.kdakun,1,".$substr.")||'".$nol."' as kdakun,
+								SUM(a.sawal_debet) AS sawal_debet,
+								SUM(a.sawal_kredit) AS sawal_kredit,
+								SUM(a.mutasi_debet) AS mutasi_debet,
+								SUM(a.mutasi_kredit) AS mutasi_kredit,
+								SUM(a.lr_debet) AS lr_debet,
+								SUM(a.lr_kredit) AS lr_kredit,
+								SUM(a.nr_debet) AS nr_debet,
+								SUM(a.nr_kredit) AS nr_kredit
+						from d_buku_besar_dtl a
+						where a.thang='".session('tahun')."' and a.periode<='".$periode."'
+						group by substr(a.kdakun,1,".$substr.")
+					";
+
+				}
+
+				$sql = "
+					select  a.*,
+							b.nmakun
+					from(
+						".implode(" union all ", $arr_query)."
+					) a
+					left join t_akun b on(a.kdakun=b.kdakun)
+					order by a.kdakun
+				";
+
+				$rows = DB::select($sql);
+
+				if(count($rows)>0){
+
+					$data = $rows;
+
+					$sql = "
+						select	a.*,
+								a.lr_debet + a.lr_sisa_debet as lr_sisa1_debet,
+								a.lr_kredit + a.lr_sisa_kredit as lr_sisa1_kredit,
+								a.nr_debet + a.nr_sisa_debet as nr_sisa1_debet,
+								a.nr_kredit + a.nr_sisa_kredit as nr_sisa1_kredit
+						from(
+
+							select	a.*,
+									case
+										when a.lr_debet > a.lr_kredit
+											then 0
+										else
+											a.lr_kredit - a.lr_debet
+									end as lr_sisa_debet,
+									case
+										when a.lr_debet > a.lr_kredit
+											then a.lr_debet - a.lr_kredit
+										else
+											0
+									end as lr_sisa_kredit,
+									case
+										when a.nr_debet > a.nr_kredit
+											then 0
+										else
+											a.nr_kredit - a.nr_debet
+									end as nr_sisa_debet,
+									case
+										when a.nr_debet > a.nr_kredit
+											then a.nr_debet - a.nr_kredit
+										else
+											0
+									end as nr_sisa_kredit
+							from(
+
+								select  SUM(a.sawal_debet) AS sawal_debet,
+										SUM(a.sawal_kredit) AS sawal_kredit,
+										SUM(a.mutasi_debet) AS mutasi_debet,
+										SUM(a.mutasi_kredit) AS mutasi_kredit,
+										SUM(a.lr_debet) AS lr_debet,
+										SUM(a.lr_kredit) AS lr_kredit,
+										SUM(a.nr_debet) AS nr_debet,
+										SUM(a.nr_kredit) AS nr_kredit
+								from d_buku_besar_dtl a
+								where a.thang='".session('tahun')."' and a.periode='".$periode."'
+
+							) a
+
+						) a
+					";
+
+					$rows = DB::select($sql);
+
+					if(count($rows)>0){
+
+						$total = $rows[0];
+
+						$rows = DB::select("
+							select	to_char(last_day(to_date('".session('tahun')."-".$periode."-01','yyyy-mm-dd')),'dd') as tgl_pelaporan,
+									upper(nmbulan) as nmbulan
+							from t_bulan
+							where bulan='".$periode."'
+						");
+
+						$bulan = "N/A";
+						$tgl_pelaporan = "N/A";
+						if(count($rows)>0){
+							$bulan = $rows[0]->nmbulan;
+							$tgl_pelaporan = $rows[0]->tgl_pelaporan.' '.$bulan.' '.session('tahun');
+						}
+
+						$param = array(
+							'thang' => session('tahun'),
+							'periode' => $periode,
+							'bulan' => $bulan,
+							'tgl_pelaporan' => $tgl_pelaporan,
+						);
+
+						$output = [
+							'params' => $param,
+							'rows' => $data,
+							'totals' => $total
+						];
+
+						//return view('excel.neraca-lajur', $output);
+
+						return Excel::download(new NeracaLajurExport($output), 'neraca-lajur-'.session('tahun').'-'.$periode.'.xlsx');
+
+					}
+					else{
+						return 'Total data tidak ditemukan.';
+					}
+
+				}
+				else{
+					return 'Baris data tidak ditemukan.';
+				}
+
+			}
+
+		}
 	}
 	
 }

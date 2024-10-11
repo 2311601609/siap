@@ -35,6 +35,7 @@ use App\Http\Controllers\BukuBesarController;
 use App\Http\Controllers\BuktiTransaksiController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LaporanKeuanganController;
+use App\Http\Controllers\LaporanKeuanganBaruController;
 use App\Http\Controllers\LaporanRealisasiController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\MonitoringController;
@@ -498,6 +499,7 @@ Route::middleware(['auth'])->group(function () {
 	Route::group(['prefix' => 'koreksi-transaksi'], function () {
 		
 		Route::get('', [KoreksiTransaksiController::class, 'index']);
+		Route::get('/data', [KoreksiTransaksiController::class, 'data']);
 		Route::get('/pilih/{param}', [KoreksiTransaksiController::class, 'pilih']);
 		Route::post('', [KoreksiTransaksiController::class, 'simpan']);
 		Route::post('/hapus', [KoreksiTransaksiController::class, 'hapus']);
@@ -510,6 +512,7 @@ Route::middleware(['auth'])->group(function () {
 		Route::group(['prefix' => 'saldo-awal'], function () {
 		
 			Route::get('', [PembukuanSaldoAwalController::class, 'index']);
+			Route::get('/data', [PembukuanSaldoAwalController::class, 'data']);
 			Route::get('/total', [PembukuanSaldoAwalController::class, 'total']);
 			Route::get('/pilih/{param}', [PembukuanSaldoAwalController::class, 'pilih'])->middleware('role:00.04');
 			Route::post('', [PembukuanSaldoAwalController::class, 'simpan'])->middleware('role:00.04');
@@ -534,6 +537,13 @@ Route::middleware(['auth'])->group(function () {
 			
 		});
 		
+		Route::group(['prefix' => 'neraca-percobaan'], function () {
+		
+			Route::get('', [PembukuanJurnalController::class, 'neracaPercobaan']);
+			Route::get('/total', [PembukuanJurnalController::class, 'neracaPercobaanTotal']);
+			
+		});
+		
 		Route::group(['prefix' => 'neraca-penyesuaian'], function () {
 		
 			Route::get('', [PembukuanJurnalController::class, 'neracaPenyesuaian']);
@@ -544,6 +554,14 @@ Route::middleware(['auth'])->group(function () {
 		
 			Route::get('/{param}', [PembukuanJurnalController::class, 'neracaLajur']);
 			Route::get('/{param}/excel', [PembukuanJurnalController::class, 'neracaLajurExcel']);
+			
+		});
+
+		Route::group(['prefix' => 'neraca-lajur-baru'], function () {
+		
+			Route::get('', [PembukuanJurnalController::class, 'neracaLajurBaru']);
+			Route::get('/total', [PembukuanJurnalController::class, 'neracaLajurTotalBaru']);
+			Route::get('/excel', [PembukuanJurnalController::class, 'neracaLajurExcelBaru']);
 			
 		});
 		
@@ -589,6 +607,14 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('/arus-kas', [LaporanKeuanganController::class, 'cashFlow']);
 		Route::get('/rkey', [LaporanKeuanganController::class, 'rKey']);
 		
+	});
+
+	Route::group(['prefix' => 'laporan-keuangan'], function() {
+
+		Route::get('laba-rugi', [LaporanKeuanganBaruController::class, 'labaRugi']);
+		Route::get('laba-rugi/excel', [LaporanKeuanganBaruController::class, 'labaRugiExcel']);
+		Route::get('posisi-keuangan', [LaporanKeuanganBaruController::class, 'posisiKeuangan']);
+		Route::get('posisi-keuangan/excel', [LaporanKeuanganBaruController::class, 'posisiKeuanganExcel']);
 	});
 
 	//route for realisasi

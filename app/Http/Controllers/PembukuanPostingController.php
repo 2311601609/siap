@@ -4,6 +4,7 @@ use DB;
 use Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Libraries\PublicFunction;
 
 class PembukuanPostingController extends Controller {
 
@@ -140,132 +141,250 @@ class PembukuanPostingController extends Controller {
 	
 	public function simpan(Request $request)
 	{
-		$periode = $request->input('periode');
-		
-		if($periode!==''){
+		DB::connection()->getPdo()->beginTransaction();
+		try{
+			$lanjut = false;
+			$error = '';
+			$periode = htmlspecialchars($request->input('periode'));
+
+			if($periode!==''){
 			
-			$where = '';
-			
-			$query = "
-				select  a.thang,
-						a.periode,
-						a.kdakun,
-						sum(decode(a.kddk,'D',a.nilai,0)) as debet,
-						sum(decode(a.kddk,'K',a.nilai,0)) as kredit,
-						".session('id_user')." as id_user
-				from(
-					/* saldo awal */
-					select  to_char(a.tgsawal,'YYYY') as thang,
-							to_char(a.tgsawal,'MM') as periode,
-							a.kddk,
-							a.kdakun,
-							sum(a.nilai) as nilai
-					from d_sawal a
-					where a.thang=?
-					group by to_char(a.tgsawal,'YYYY'),
-							to_char(a.tgsawal,'MM'),
-							a.kdakun,
-							a.kddk
-					
-					union all
-					
-					/* transaksi berjalan termasuk pajak dan penyesuaian */
-					select  to_char(a.tgdok,'yyyy') as thang,
-							to_char(a.tgdok,'mm') as periode,
-							a.kddk,
-							a.kdakun,
-							sum(a.nilai) as nilai
-					from(
-						select  a.kdakun,
-								a.kddk,
-								a.nilai,
-								case
-									when c.menu=1 /* tagihan */
-										then b.tgrekam
-									when c.menu in(2,3) /* penerimaan dan umk */
-										then b.tgcek
-									when c.menu=4 and a.grup in('0','1','2') /* buk rekam */
-										then b.tgrekam
-									when c.menu=4 and a.grup='3' /* buk bayar */
-										then b.tgcek
-									else /* kas kecil dan penyesuaian */
-										nvl(b.tgdok,b.tgrekam)
-								end as tgdok
-						from d_trans_akun a
-						left join d_trans b on(a.id_trans=b.id)
-						left join t_alur c on(b.id_alur=c.id)
-						where b.thang=?
-					) a
-					group by to_char(a.tgdok,'yyyy'),
-							 to_char(a.tgdok,'mm'),
-							 a.kddk,
-							 a.kdakun
-					
-				) a
-				where a.periode<=?
-				group by a.thang,a.periode,a.kdakun
-			";
-			
-			DB::beginTransaction();
-			
-			$rows = DB::select("
-				select	count(*) as jml
-				from(".$query.") a
-			",[
-				session('tahun'),
-				session('tahun'),
-				$periode
-			]);
-			
-			if($rows[0]->jml>0){
+				$where = '';
 				
-				$insert = DB::insert("
-					insert into d_posting(thang,periode,jumlah,id_user)
-					values(?,?,?,?)
+				$query = "
+					select  a.thang,
+							a.periode,
+							a.kdakun,
+							sum(decode(a.kddk,'D',a.nilai,0)) as debet,
+							sum(decode(a.kddk,'K',a.nilai,0)) as kredit,
+							".session('id_user')." as id_user
+					from(
+						
+						/* transaksi berjalan termasuk pajak dan penyesuaian */
+						select  to_char(a.tgdok,'yyyy') as thang,
+								to_char(a.tgdok,'mm') as periode,
+								a.kddk,
+								a.kdakun,
+								sum(a.nilai) as nilai
+						from(
+							select  a.kdakun,
+									a.kddk,
+									a.nilai,
+									case
+										when c.menu=1 /* tagihan */
+											then b.tgrekam
+										when c.menu in(2,3) /* penerimaan dan umk */
+											then b.tgcek
+										when c.menu=4 and a.grup in('0','1','2') /* buk rekam */
+											then b.tgrekam
+										when c.menu=4 and a.grup='3' /* buk bayar */
+											then b.tgcek
+										else /* kas kecil dan penyesuaian */
+											nvl(b.tgdok,b.tgrekam)
+									end as tgdok
+							from d_trans_akun a
+							left join d_trans b on(a.id_trans=b.id)
+							left join t_alur c on(b.id_alur=c.id)
+							where b.thang=?
+						) a
+						group by to_char(a.tgdok,'yyyy'),
+								 to_char(a.tgdok,'mm'),
+								 a.kddk,
+								 a.kdakun
+						
+					) a
+					where a.periode<=?
+					group by a.thang,a.periode,a.kdakun
+				";
+				
+				$rows = DB::select("
+					select	count(*) as jml
+					from(".$query.") a
 				",[
 					session('tahun'),
-					$periode,
-					$rows[0]->jml,
-					session('id_user')
+					$periode
 				]);
 				
-				if($insert){
-					
-					$delete = DB::delete("
-						delete from d_buku_besar
-						where thang='".session('tahun')."' and periode<='".$periode."'
-					");
+				if($rows[0]->jml>0){
 					
 					$insert = DB::insert("
-						insert into d_buku_besar(thang,periode,kdakun,debet,kredit,id_user)
-						".$query."
+						insert into d_posting(thang,periode,jumlah,id_user)
+						values(?,?,?,?)
 					",[
 						session('tahun'),
-						session('tahun'),
-						$periode
+						$periode,
+						$rows[0]->jml,
+						session('id_user')
 					]);
 					
 					if($insert){
-						DB::commit();
-						return 'success';
+						
+						$delete = DB::delete("
+							delete from d_buku_besar
+							where thang='".session('tahun')."' and periode<='".$periode."'
+						");
+						
+						$insert = DB::insert("
+							insert into d_buku_besar(thang,periode,kdakun,debet,kredit,id_user)
+							".$query."
+						",[
+							session('tahun'),
+							$periode
+						]);
+						
+						if($insert){
+
+							$delete = DB::delete("
+								delete from d_buku_besar_dtl
+								where thang='".session('tahun')."' and periode='".$periode."'
+							");
+							
+							$insert = DB::insert("
+								insert into d_buku_besar_dtl(
+										thang,
+										periode,
+										kdakun,
+										nmakun,
+										kdlap,
+										sawal_debet,
+										sawal_kredit,
+										sawal_saldo,
+										mutasi_debet,
+										mutasi_kredit,
+										mutasi_saldo,
+										lr_debet,
+										lr_kredit,
+										nr_debet,
+										nr_kredit,
+										id_user
+								)
+								select  ? as thang,
+										? as periode,
+										a.kdakun,
+										a.nmakun,
+										a.kdlap,
+										a.sawal_debet,
+										a.sawal_kredit,
+										a.sawal_saldo,
+										a.mutasi_debet,
+										a.mutasi_kredit,
+										a.mutasi_saldo,
+										case
+											when a.kdlap='LR' and ((a.sawal_saldo + a.mutasi_saldo) >= 0)
+												then a.sawal_saldo + a.mutasi_saldo
+											else
+												0
+										end lr_debet,
+										case
+											when a.kdlap='LR' and ((a.sawal_saldo + a.mutasi_saldo) < 0)
+												then abs(a.sawal_saldo + a.mutasi_saldo)
+											else
+												0
+										end lr_kredit,
+										case
+											when a.kdlap='NR' and ((a.sawal_saldo + a.mutasi_saldo) >= 0)
+												then a.sawal_saldo + a.mutasi_saldo
+											else
+												0
+										end nr_debet,
+										case
+											when a.kdlap='NR' and ((a.sawal_saldo + a.mutasi_saldo) < 0)
+												then abs(a.sawal_saldo + a.mutasi_saldo)
+											else
+												0
+										end nr_kredit,
+										0 as id_user
+								from(
+
+									select  a.kdakun,
+											a.nmakun,
+											a.kdlap,
+											nvl(b.debet,0) as sawal_debet,
+											nvl(b.kredit,0) as sawal_kredit,
+											nvl(b.debet,0)-nvl(b.kredit,0) as sawal_saldo,
+											nvl(c.debet,0) as mutasi_debet,
+											nvl(c.kredit,0) as mutasi_kredit,
+											nvl(c.debet,0)-nvl(c.kredit,0) as mutasi_saldo
+									from t_akun a
+									left join(
+										
+										-- cari data saldo awal
+										select  a.kdakun,
+												sum(decode(a.kddk,'D',a.nilai,0)) as debet,
+												sum(decode(a.kddk,'K',a.nilai,0)) as kredit
+										from d_sawal a
+										where a.thang=?
+										group by a.kdakun
+
+									) b on(a.kdakun=b.kdakun)
+									left join(
+										
+										-- cari data mutasi akun
+										select  a.kdakun,
+												sum(a.debet) as debet,
+												sum(a.kredit) as kredit
+										from d_buku_besar a
+										where a.thang=? and a.periode<=?
+										group by a.kdakun
+
+									) c on(a.kdakun=c.kdakun)
+									where b.kdakun is not null or c.kdakun is not null
+									
+								) a
+							",[
+								session('tahun'),
+								$periode,
+								session('tahun'),
+								session('tahun'),
+								$periode
+							]);
+
+							if($insert){
+								$lanjut = true;
+							}
+							else{
+								$error = 'Insert buku besar detil gagal disimpan!';	
+							}
+
+						}
+						else{
+							$error = 'Insert buku besar gagal disimpan!';
+						}
+						
 					}
 					else{
-						return 'Insert buku besar gagal disimpan!';
+						$error = 'Data log posting gagal disimpan!';
 					}
 					
 				}
 				else{
-					return 'Data log posting gagal disimpan!';
-				}
+					$error = 'Data transaksi tidak ditemukan!';
+				}			
 				
 			}
 			else{
-				return 'Data transaksi tidak ditemukan!';
-			}			
-			
+				$error = 'Periode tidak dapat dikosongkan!';
+			}
+
+			if($lanjut){
+				DB::connection()->getPdo()->commit();
+				return 'success';
+			}
+			else{
+				DB::connection()->getPdo()->rollBack();
+				return $error;
+			}
+
 		}
-		else{
-			return 'Periode tidak dapat dikosongkan!';
+		catch(\Exception $e){
+			DB::connection()->getPdo()->rollBack();
+
+			if(PublicFunction::errorLog($request, substr($e->getMessage(),0,255))){
+				return 'Kesalahan lainnya, hubungi Administrator.';
+			}
+			else{
+				return 'Kesalahan lainnya, hubungi Administrator. Log error gagal disimpan.';
+			}
 		}
 	}
 	

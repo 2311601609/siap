@@ -847,23 +847,7 @@ class BukuBesarController extends Controller
 			'values' => $values
 		];
 
-		//return view('excel.buku-besar', $data);
-
 		return Excel::download(new BukuBesarExport($data), 'buku-besar-'.session('tahun').'.xlsx');
-
-		/*$TBS = new clsTinyButStrong();
-		$TBS->Plugin(TBS_INSTALL, OPENTBS_PLUGIN);	
-		
-		//load template in folder /doc
-		$TBS->LoadTemplate('tbs_template/'.'template_buku_besar_semua.xlsx');
-		
-		$TBS->Plugin(OPENTBS_SELECT_SHEET,'Sheet1');
-		$TBS->MergeBlock('p', $param);
-		$TBS->MergeBlock('v', $values);
-		
-		//download file
-		header('Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		$TBS->Show(OPENTBS_DOWNLOAD,'Buku_besar_all.xlsx');*/
 		
 	}
 	

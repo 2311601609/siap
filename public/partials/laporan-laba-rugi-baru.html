@@ -1,0 +1,120 @@
+<!-- Prevent direct access to .html file -->
+<script>
+	if(typeof app === 'undefined'){
+		document.location.href='index.php';
+	}
+</script>
+
+<section>
+	
+	<div class="row">
+        <div class="col-sm-12">
+            <div class="content-header">Laporan/ Laba (Rugi)</div>
+        </div>
+    </div>
+	
+	<div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Form</h4>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard">
+                        
+						<form id="form-ruh" class="form form-horizontal">
+							<input type="hidden" id="_token" name="_token">
+
+							<div class="row">
+								<div class="col-md-12">
+									<fieldset class="form-group">
+										<label for="periode">Periode</label>
+										<select id="periode" name="periode" class="form-control chosen">
+										</select>
+									</fieldset>
+								</div>
+							</div>
+
+						</form>
+
+                    </div>
+                </div>
+				<div class="card-footer d-flex justify-content-end pt-0">
+					<button id="cari" type="button" class="btn bg-light-secondary compose-cancel-btn mr-2">
+						<i class="ft-eye m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Tampilkan</span>
+					</button>
+					<button type="button" class="btn-send btn btn-primary" id="download">
+						<i class="ft-download m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Excel</span>
+					</button>
+				</div>
+            </div>
+        </div>
+    </div>
+
+	<div class="row" id="div-tabel" style="display:none;">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+					<div class="clearfix">
+						<h4 class="card-title float-left">Data</h4>
+					</div>
+                </div>
+                <div class="card-body collapse show">
+                    <div class="card-block card-dashboard table-responsive" id="tabel-ruh">
+						
+					</div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+</section>
+
+<script>
+	$(document).ready(function(){
+
+		var route = 'laporan-keuangan/laba-rugi'
+
+		$('.chosen').select2();
+		
+		$.get('dropdown/periode', function(result){
+			$('#periode').html(result).trigger('change');
+		});
+
+		$('#cari').click(function(){
+
+			var periode = $('#periode').val();
+
+			if(periode!==''){
+
+				$('#div-tabel').show();
+
+				$.get(route+'?periode='+periode, function(result){
+					$('#tabel-ruh').html(result);
+				});
+
+			}
+			else{
+				alertify.error('Parameter tidak valid.');
+			}
+
+		});
+		
+		$('#download').click(function(){
+			
+			if($('#periode').val()!==''){
+				var periode = $('#periode').val();
+				window.open(route+'/excel?periode='+periode, '_blank');
+			}
+			else{
+				alertify.error('Parameter tidak valid.');
+			}
+		
+		});
+		
+	});
+</script>
