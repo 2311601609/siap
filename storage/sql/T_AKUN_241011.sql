@@ -6,7 +6,7 @@ Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL, 
     KDLAPDTL)
  Values
-   ('110100', 'KAS & BANK', 'D', 'NR', 4, 
+   ('110100', 'KAS DAN BANK', 'D', 'NR', 4, 
     '01');
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
@@ -743,7 +743,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('210417', 'Utang PPh 4 (2) - Pengalihan Hak Tanah & Bangunan', 'K', 'NR', 6);
+   ('210417', 'Utang PPh 4 (2) - Pengalihan Hak Tanah DAN Bangunan', 'K', 'NR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL, 
     KDLAPDTL)
@@ -911,7 +911,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('320103', 'Dana Sosial & Dana Pensiun', 'K', 'NR', 6);
+   ('320103', 'Dana Sosial DAN Dana Pensiun', 'K', 'NR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1313,7 +1313,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620000', 'BEBAN ADMINISTRASI & UMUM', 'D', 'LR', 2);
+   ('620000', 'BEBAN ADMINISTRASI DAN UMUM', 'D', 'LR', 2);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL, 
     KDLAPDTL)
@@ -1323,7 +1323,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620101', 'Beban Pegawai - Gaji & Tunjangan', 'D', 'LR', 6);
+   ('620101', 'Beban Pegawai - Gaji DAN Tunjangan', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1347,7 +1347,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620107', 'Beban Pegawai - Honorarium Badan Pengawas & Sekretariat', 'D', 'LR', 6);
+   ('620107', 'Beban Pegawai - Honorarium Badan Pengawas DAN Sekretariat', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1453,7 +1453,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620201', 'Beban Kantor - Alat Tulis & Perlengkapan', 'D', 'LR', 6);
+   ('620201', 'Beban Kantor - Alat Tulis DAN Perlengkapan', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1461,7 +1461,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620203', 'Beban Kantor - Utilitas - Listrik & Air', 'D', 'LR', 6);
+   ('620203', 'Beban Kantor - Utilitas - Listrik DAN Air', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1477,7 +1477,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620207', 'Beban Kantor - Beban Makan & Minum Rapat', 'D', 'LR', 6);
+   ('620207', 'Beban Kantor - Beban Makan DAN Minum Rapat', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1485,7 +1485,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620209', 'Beban Kantor - Cetak & Penggandaan', 'D', 'LR', 6);
+   ('620209', 'Beban Kantor - Cetak DAN Penggandaan', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1497,7 +1497,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620212', 'Beban Kantor - Makan & Minum', 'D', 'LR', 6);
+   ('620212', 'Beban Kantor - Makan DAN Minum', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1506,25 +1506,25 @@ Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL, 
     KDLAPDTL)
  Values
-   ('620300', 'BEBAN PEMELIHARAAN & PERBAIKAN', 'D', 'LR', 4, 
+   ('620300', 'BEBAN PEMELIHARAAN DAN PERBAIKAN', 'D', 'LR', 4, 
     '02');
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620301', 'Beban Pemeliharaan & Perbaikan - Bangunan', 'D', 'LR', 6);
+   ('620301', 'Beban Pemeliharaan DAN Perbaikan - Bangunan', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620302', 'Beban Pemeliharaan & Perbaikan - Inventaris', 'D', 'LR', 6);
+   ('620302', 'Beban Pemeliharaan DAN Perbaikan - Inventaris', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620303', 'Beban Pemeliharaan & Perbaikan - Kendaraan', 'D', 'LR', 6);
+   ('620303', 'Beban Pemeliharaan DAN Perbaikan - Kendaraan', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL, 
     KDLAPDTL)
  Values
-   ('620400', 'BEBAN PENYUSUTAN & AMORTISASI', 'D', 'LR', 4, 
+   ('620400', 'BEBAN PENYUSUTAN DAN AMORTISASI', 'D', 'LR', 4, 
     '02');
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
@@ -1579,15 +1579,15 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620507', 'Beban Umum - Pengawasan & Pembinaan', 'D', 'LR', 6);
+   ('620507', 'Beban Umum - Pengawasan DAN Pembinaan', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620508', 'Beban Umum - Pengawasan & Pembinaan - GCG', 'D', 'LR', 6);
+   ('620508', 'Beban Umum - Pengawasan DAN Pembinaan - GCG', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620509', 'Beban Umum - Pengawasan & Pembinaan - SMM', 'D', 'LR', 6);
+   ('620509', 'Beban Umum - Pengawasan DAN Pembinaan - SMM', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1603,7 +1603,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620513', 'Beban Umum - Pajak Bumi & Bangunan', 'D', 'LR', 6);
+   ('620513', 'Beban Umum - Pajak Bumi DAN Bangunan', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1655,7 +1655,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620526', 'Beban Umum - Biaya Penelitian & Pengembangan', 'D', 'LR', 6);
+   ('620526', 'Beban Umum - Biaya Penelitian DAN Pengembangan', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1663,7 +1663,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('620528', 'Biaya Umum - Dewan Pengawas & Komite', 'D', 'LR', 6);
+   ('620528', 'Biaya Umum - Dewan Pengawas DAN Komite', 'D', 'LR', 6);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1679,7 +1679,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('710100', 'Pendapatan Jasa Giro & Deposito', 'K', 'LR', 4);
+   ('710100', 'Pendapatan Jasa Giro DAN Deposito', 'K', 'LR', 4);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
@@ -1773,7 +1773,7 @@ Insert into T_AKUN
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL)
  Values
-   ('730000', 'PENDAPATAN (BEBAN) PAJAK PENGHASILAN & LABA ANAK PERUSAHAAN', 'D', 'LR', 2);
+   ('730000', 'PENDAPATAN (BEBAN) PAJAK PENGHASILAN DAN LABA ANAK PERUSAHAAN', 'D', 'LR', 2);
 Insert into T_AKUN
    (KDAKUN, NMAKUN, KDDK, KDLAP, LVL, 
     KDLAPDTL)
