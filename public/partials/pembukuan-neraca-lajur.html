@@ -9,7 +9,7 @@
 	
 	<div class="row">
         <div class="col-sm-12">
-            <div class="content-header">Pembukuan/ Neraca Lajur</div>
+            <div class="content-header">Laporan/ Trial Balance (Neraca Lajur)</div>
         </div>
     </div>
 	
@@ -28,7 +28,18 @@
 							<input type="hidden" id="_token" name="_token">
 
 							<div class="row">
-								<div class="col-md-12">
+								<div class="col-md-6">
+									<fieldset class="form-group">
+										<label for="lvl">Level</label>
+										<select id="lvl" name="lvl" class="form-control chosen" multiple>
+											<option value="6">Level 4 (coa 6 digit | transaksi)</option>
+											<option value="4">Level 3 (coa 4 digit)</option>
+											<option value="2">Level 2 (coa 2 digit)</option>
+											<option value="1">Level 1 (coa 1 digit)</option>
+										</select>
+									</fieldset>
+								</div>
+								<div class="col-md-6">
 									<fieldset class="form-group">
 										<label for="periode">Periode</label>
 										<select id="periode" name="periode" class="form-control chosen">
@@ -42,6 +53,10 @@
                     </div>
                 </div>
 				<div class="card-footer d-flex justify-content-end pt-0">
+					<button id="cari" type="button" class="btn bg-light-secondary compose-cancel-btn mr-2">
+						<i class="ft-eye m-0 mr-sm-1"></i>
+						<span class="d-sm-inline-block d-none">Tampilkan</span>
+					</button>
 					<button type="button" class="btn-send btn btn-primary" id="download">
 						<i class="ft-download m-0 mr-sm-1"></i>
 						<span class="d-sm-inline-block d-none">Excel</span>
@@ -57,70 +72,79 @@
                 <div class="card-header">
 					<div class="clearfix">
 						<h4 class="card-title float-left">Data</h4>
+						<div class="actions float-right">
+							<button type="button" class="btn btn-primary mr-1" id="exportPrint">
+								<span class="d-flex align-items-center">
+									<span>Cetak</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportPdf">
+								<span class="d-flex align-items-center">
+									<span>PDF</span>
+								</span>
+							</button>
+							<button type="button" class="btn btn-primary mr-1" id="exportExcel">
+								<span class="d-flex align-items-center">
+									<span>XLS</span>
+								</span>
+							</button>
+						</div>
 					</div>
                 </div>
                 <div class="card-body collapse show">
-                    <div class="card-block card-dashboard">
-                        <div class="table-responsive">
-							<table class="table table-striped table-bordered">
-								<thead>
-									<tr>
-										<th rowspan="2">Akun</th>
-										<th rowspan="2">Uraian</th>
-										<th colspan="2">Neraca Disesuaikan</th>
-										<th colspan="3">Neraca Lajur</th>
-										<th colspan="2">Laporan Rugi Laba</th>
-									</tr>
-									<tr>
-										<th>Debet</th>
-										<th>Kredit</th>
-										<th>Debet</th>
-										<th>Kredit</th>
-										<th>Saldo</th>
-										<th>Debet</th>
-										<th>Kredit</th>
-									</tr>
-								</thead>
-								<tbody id="tabel-ruh">
-									<tr>
-										<td colspan="9">Sedang proses......</td>
-									</tr>
-								</tbody>
-								<tfoot>
-									<tr>
-										<td colspan="2" style="text-align:center;">Total</td>
-										<td id="total-debet" style="text-align:right;">0</td>
-										<td id="total-kredit" style="text-align:right;">0</td>
-										<td id="total-debet1" style="text-align:right;">0</td>
-										<td id="total-kredit1" style="text-align:right;">0</td>
-										<td id="total-saldo" style="text-align:right;">0</td>
-										<td id="total-debet2" style="text-align:right;">0</td>
-										<td id="total-kredit2" style="text-align:right;">0</td>
-									</tr>
-									<tr>
-										<td colspan="2" style="text-align:center;">Laba/Rugi</td>
-										<td></td>
-										<td></td>
-										<td id="total-debet3" style="text-align:right;">0</td>
-										<td id="total-kredit3" style="text-align:right;">0</td>
-										<td></td>
-										<td id="total-debet4" style="text-align:right;">0</td>
-										<td id="total-kredit4" style="text-align:right;">0</td>
-									</tr>
-									<tr>
-										<td colspan="2" style="text-align:center;">Total Neraca dan Laba/Rugi</td>
-										<td></td>
-										<td></td>
-										<td id="total-debet5" style="text-align:right;">0</td>
-										<td id="total-kredit5" style="text-align:right;">0</td>
-										<td></td>
-										<td id="total-debet6" style="text-align:right;">0</td>
-										<td id="total-kredit6" style="text-align:right;">0</td>
-									</tr>
-								</tfoot>
-							</table>
-						</div>
-                    </div>
+                    <div class="card-block card-dashboard table-responsive">
+						<table id="tabel-ruh" class="table table-sm table-striped table-bordered small" style="width:100%;">
+							<thead>
+								<tr>
+									<th rowspan="2">No. COA</th>
+									<th rowspan="2">Uraian</th>
+									<th colspan="2">Saldo Awal</th>
+									<th colspan="2">Adjusment</th>
+									<th colspan="2">Laba (Rugi)</th>
+									<th colspan="2">Neraca</th>
+								</tr>
+								<tr>
+									<th>Debet</th>
+									<th>Kredit</th>
+									<th>Debet</th>
+									<th>Kredit</th>
+									<th>Debet</th>
+									<th>Kredit</th>
+									<th>Debet</th>
+									<th>Kredit</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="2" style="text-align:center;">Total</td>
+									<td id="sawal-debet" style="text-align:right;">0</td>
+									<td id="sawal-kredit" style="text-align:right;">0</td>
+									<td id="mutasi-debet" style="text-align:right;">0</td>
+									<td id="mutasi-kredit" style="text-align:right;">0</td>
+									<td id="lr-debet" style="text-align:right;">0</td>
+									<td id="lr-kredit" style="text-align:right;">0</td>
+									<td id="nr-debet" style="text-align:right;">0</td>
+									<td id="nr-kredit" style="text-align:right;">0</td>
+								</tr>
+								<tr>
+									<td colspan="6" style="text-align:center;">Ikhtisar Laba (Rugi)</td>
+									<td id="lr-sisa-debet" style="text-align:right;">0</td>
+									<td id="lr-sisa-kredit" style="text-align:right;">0</td>
+									<td id="nr-sisa-debet" style="text-align:right;">0</td>
+									<td id="nr-sisa-kredit" style="text-align:right;">0</td>
+								</tr>
+								<tr>
+									<td colspan="6" style="text-align:center;">Total Ikhtisar Laba (Rugi)</td>
+									<td id="lr-sisa1-debet" style="text-align:right;">0</td>
+									<td id="lr-sisa1-kredit" style="text-align:right;">0</td>
+									<td id="nr-sisa1-debet" style="text-align:right;">0</td>
+									<td id="nr-sisa1-kredit" style="text-align:right;">0</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
                 </div>
             </div>
         </div>
@@ -129,48 +153,172 @@
 </section>
 
 <script>
-	jQuery(document).ready(function(){
-		
-		jQuery('.chosen').select2();
-		
-		jQuery.get('dropdown/periode', function(result){
-			jQuery('#periode').html(result).trigger('change');
+	$(document).ready(function(){
+
+		var route = 'pembukuan/neraca-lajur-baru'
+
+		$.fn.dataTable.ext.errMode = 'none';
+
+		function digit_grouping(nStr){
+			nStr += '';
+			x = nStr.split('.');
+			x1 = x[0];
+			x2 = x.length > 1 ? '.' + x[1] : '';
+			var rgx = /(\d+)(\d{3})/;
+			while (rgx.test(x1)) {
+				x1 = x1.replace(rgx, '$1' + ',' + '$2');
+			}
+			return x1 + x2;
+		}
+
+		// datatable init
+        $("#exportPrint").on("click", function () {
+            table.button('.buttons-print').trigger();
+        });
+
+		$("#exportPdf").on("click", function () {
+            table.button('.buttons-pdf').trigger();
+        });
+
+		$("#exportExcel").on("click", function () {
+            table.button('.buttons-excel').trigger();
+        });
+
+		//data tabel
+		var table = $('#tabel-ruh').DataTable({
+			buttons: [
+				{
+                    extend: 'print',
+                    title: 'Neraca Lajur',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Neraca Lajur',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+				{
+                    extend: 'excel',
+					title: 'Neraca Lajur',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
+                    },
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+			],
+			processing: true,
+			lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Semua"],
+            ],
+			language:{
+			    "decimal":        "",
+			    "emptyTable":     "Tidak ada data tersedia",
+			    "info":           "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+			    "infoEmpty":      "Menampilkan 0 sampai 0 dari 0 entri",
+			    "infoFiltered":   "(disaring dari _MAX_ total entri)",
+			    "infoPostFix":    "",
+			    "thousands":      ",",
+			    "lengthMenu":     "Tampilkan _MENU_ entri",
+			    "loadingRecords": "Proses Loading...",
+			    "processing":     "Sedang Proses...",
+			    "search":         "Cari:",
+			    "zeroRecords":    "Tidak ditemukan data yang sesuai",
+			    "paginate": {
+			        "first":      "Awal",
+			        "last":       "Akhir",
+			        "next":       "Sesudah",
+			        "previous":   "Sebelum"
+			    },
+			    "aria": {
+			        "sortAscending":  ": aktifkan untuk mengurutkan kolom (asc)",
+			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
+			    }
+			},
+			ajax: {
+				url: route,
+			},
+			serverSide: true,
+			columns: [
+				{ data: "kdakun", name: "kdakun", className: "t-left" },
+				{ data: "nmakun", name: "nmakun", className: "t-left" },
+				{ data: "sawal_debet", name: "sawal_debet", className: "t-right" },
+				{ data: "sawal_kredit", name: "sawal_kredit", className: "t-right" },
+				{ data: "mutasi_debet", name: "mutasi_debet", className: "t-right" },
+				{ data: "mutasi_kredit", name: "mutasi_kredit", className: "t-right" },
+				{ data: "lr_debet", name: "lr_debet", className: "t-right" },
+				{ data: "lr_kredit", name: "lr_kredit", className: "t-right" },
+				{ data: "nr_debet", name: "nr_debet", className: "t-right" },
+				{ data: "nr_kredit", name: "nr_kredit", className: "t-right" },
+			],
 		});
 		
-		jQuery('#periode').on('select2:select', function(){
+		$('.chosen').select2();
+		
+		$.get('dropdown/periode', function(result){
+			$('#periode').html(result).trigger('change');
+		});
+
+		$('#cari').click(function(){
+
+			var lvl = $('#lvl').val();
+			var periode = $('#periode').val();
+
+			if(periode!=='' && lvl!==''){
+
+				$('#div-tabel').show();
+
+				table.ajax.url(route+'?lvl='+lvl+'&periode='+periode).load();
 			
-			var periode = jQuery(this).val();
-			
-			jQuery('#div-tabel').show();
-			jQuery('#tabel-ruh').html('<td colspan="8">Sedang proses......</td>');
-			
-			jQuery.getJSON('pembukuan/neraca-lajur/'+periode, function(result){
-				jQuery('#tabel-ruh').html(result.data);
-				jQuery('#total-debet').html(result.total_debet);
-				jQuery('#total-kredit').html(result.total_kredit);
-				jQuery('#total-debet1').html(result.total_debet1);
-				jQuery('#total-kredit1').html(result.total_kredit1);
-				jQuery('#total-debet2').html(result.total_debet2);
-				jQuery('#total-kredit2').html(result.total_kredit2);
-				jQuery('#total-debet3').html(result.total_debet3);
-				jQuery('#total-kredit3').html(result.total_kredit3);
-				jQuery('#total-debet4').html(result.total_debet4);
-				jQuery('#total-kredit4').html(result.total_kredit4);
-				jQuery('#total-debet5').html(result.total_debet5);
-				jQuery('#total-kredit5').html(result.total_kredit5);
-				jQuery('#total-debet6').html(result.total_debet6);
-				jQuery('#total-kredit6').html(result.total_kredit6);
-				jQuery('#total-saldo').html(result.total_saldo);
-			});
-			
+				$.getJSON(route+'/total?periode='+periode, function(result){
+
+					$('#sawal-debet').html(digit_grouping(result.sawal_debet));
+					$('#sawal-kredit').html(digit_grouping(result.sawal_kredit));
+					$('#mutasi-debet').html(digit_grouping(result.mutasi_debet));
+					$('#mutasi-kredit').html(digit_grouping(result.mutasi_kredit));
+					$('#lr-debet').html(digit_grouping(result.lr_debet));
+					$('#lr-kredit').html(digit_grouping(result.lr_kredit));
+					$('#nr-debet').html(digit_grouping(result.nr_debet));
+					$('#nr-kredit').html(digit_grouping(result.nr_kredit));
+
+					$('#lr-sisa-debet').html(digit_grouping(result.lr_sisa_debet));
+					$('#lr-sisa-kredit').html(digit_grouping(result.lr_sisa_kredit));
+					$('#nr-sisa-debet').html(digit_grouping(result.nr_sisa_debet));
+					$('#nr-sisa-kredit').html(digit_grouping(result.nr_sisa_kredit));
+
+					$('#lr-sisa1-debet').html(digit_grouping(result.lr_sisa1_debet));
+					$('#lr-sisa1-kredit').html(digit_grouping(result.lr_sisa1_kredit));
+					$('#nr-sisa1-debet').html(digit_grouping(result.nr_sisa1_debet));
+					$('#nr-sisa1-kredit').html(digit_grouping(result.nr_sisa1_kredit));
+
+				});
+
+			}
+			else{
+				alertify.error('Parameter tidak valid.');
+			}
+
 		});
 		
-		jQuery('#download').click(function(){
+		$('#download').click(function(){
 			
-			if($('#periode').val()!==''){
+			if($('#lvl').val()!=='' && $('#periode').val()!==''){
+				var lvl = $('#lvl').val();
 				var periode = $('#periode').val();
-				window.open('pembukuan/neraca-lajur/'+periode+'/excel', '_blank');
-			}			
+				window.open(route+'/excel?lvl='+lvl+'&periode='+periode, '_blank');
+			}
+			else{
+				alertify.error('Parameter tidak valid.');
+			}
 		
 		});
 		

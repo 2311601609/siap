@@ -293,125 +293,149 @@ class PembukuanJurnalPController extends Controller {
 	
 	public function simpan(Request $request)
 	{
-		if(count($request->input('rincian'))>0){
-			
-			$arr_rincian = $request->input('rincian');
-			
-			DB::beginTransaction();
-			
-			if($request->input('inp-rekambaru')=='1'){
-			
-				$id_trans = DB::table('d_trans')->insertGetId([
-					'thang' => session('tahun'),
-					'kdunit' => session('kdunit'),
-					'id_alur' => 10,
-					'nourut' => $request->input('nourut'),
-					'kdtran' => $request->input('kdtran'),
-					'nodok' => $request->input('nobukti'),
-					'tgdok' => $request->input('tgbukti'),
-					'uraian' => $request->input('uraian'),
-					'id_proyek' => $request->input('id_proyek'),
-					'status' => 0,
-					'id_user' => session('id_user')
-				]);
+		DB::connection()->getPdo()->beginTransaction();
+
+		try{
+			$lanjut = false;
+			$error = '';
+		
+			if(count($request->input('rincian'))>0){
 				
-				if($id_trans){
-					
-					foreach($request->input('rincian') as $input){
-						$arr_insert[] = "select ".$id_trans.",'".$input["'kdakun'"]."','".$input["'kddk'"]."',".str_replace(",", "", $input["'nilai'"]).",".session('id_user')." from dual";
-					}
-					
-					$delete = DB::delete("
-						delete from d_trans_akun
-						where id_trans=?
-					",[
-						$id_trans
+				$arr_rincian = $request->input('rincian');
+				
+				if($request->input('inp-rekambaru')=='1'){
+				
+					$id_trans = DB::table('d_trans')->insertGetId([
+						'thang' => session('tahun'),
+						'kdunit' => session('kdunit'),
+						'id_alur' => 10,
+						'nourut' => $request->input('nourut'),
+						'kdtran' => $request->input('kdtran'),
+						'nodok' => $request->input('nobukti'),
+						'tgdok' => $request->input('tgbukti'),
+						'uraian' => $request->input('uraian'),
+						'id_proyek' => $request->input('id_proyek'),
+						'status' => 0,
+						'id_user' => session('id_user')
 					]);
 					
-					$insert = DB::insert("
-						insert into d_trans_akun(id_trans,kdakun,kddk,nilai,id_user)
-						".implode(" union all ", $arr_insert)."
-					");
-					
-					if($insert){
-						DB::commit();
-						return 'success';
+					if($id_trans){
+						
+						foreach($request->input('rincian') as $input){
+							$arr_insert[] = "select ".$id_trans.",'".$input["'kdakun'"]."','".$input["'kddk'"]."',".str_replace(",", "", $input["'nilai'"]).",".session('id_user')." from dual";
+						}
+						
+						$delete = DB::delete("
+							delete from d_trans_akun
+							where id_trans=?
+						",[
+							$id_trans
+						]);
+						
+						$insert = DB::insert("
+							insert into d_trans_akun(id_trans,kdakun,kddk,nilai,id_user)
+							".implode(" union all ", $arr_insert)."
+						");
+						
+						if($insert){
+							$lanjut = true;
+						}
+						else{
+							$error = 'Data akun gagal disimpan!';
+						}
+						
 					}
 					else{
-						return 'Data akun gagal disimpan!';
+						$error = 'Data header gagal disimpan!';
 					}
 					
 				}
 				else{
-					return 'Data header gagal disimpan!';
+					
+					$update = DB::update("
+						update d_trans
+						set kdtran=?,
+							nodok=?,
+							tgdok=?,
+							uraian=?,
+							id_proyek=?,
+							id_user=?,
+							updated_at=sysdate
+						where id=?
+					",[
+						$request->input('kdtran'),
+						$request->input('nobukti'),
+						$request->input('tgbukti'),
+						$request->input('uraian'),
+						$request->input('id_proyek'),
+						session('id_user'),
+						$request->input('inp-id')
+					]);
+					
+					if($update){
+						
+						foreach($request->input('rincian') as $input){
+							$arr_insert[] = "select ".$request->input('inp-id').",'".$input["'kdakun'"]."','".$input["'kddk'"]."',".str_replace(",", "", $input["'nilai'"]).",".session('id_user')." from dual";
+						}
+						
+						$delete = DB::delete("
+							delete from d_trans_akun
+							where id_trans=?
+						",[
+							$request->input('inp-id')
+						]);
+						
+						$insert = DB::insert("
+							insert into d_trans_akun(id_trans,kdakun,kddk,nilai,id_user)
+							".implode(" union all ", $arr_insert)."
+						");
+						
+						if($insert){
+							$lanjut = true;
+						}
+						else{
+							$error = 'Data gagal disimpan!';
+						}
+						
+					}
+					else{
+						$error = 'Data gagal diubah!';
+					}
+					
 				}
 				
 			}
 			else{
-				
-				$update = DB::update("
-					update d_trans
-					set kdtran=?,
-						nodok=?,
-						tgdok=?,
-						uraian=?,
-						id_proyek=?,
-						id_user=?,
-						updated_at=sysdate
-					where id=?
-				",[
-					$request->input('kdtran'),
-					$request->input('nobukti'),
-					$request->input('tgbukti'),
-					$request->input('uraian'),
-					$request->input('id_proyek'),
-					session('id_user'),
-					$request->input('inp-id')
-				]);
-				
-				if($update){
-					
-					foreach($request->input('rincian') as $input){
-						$arr_insert[] = "select ".$request->input('inp-id').",'".$input["'kdakun'"]."','".$input["'kddk'"]."',".str_replace(",", "", $input["'nilai'"]).",".session('id_user')." from dual";
-					}
-					
-					$delete = DB::delete("
-						delete from d_trans_akun
-						where id_trans=?
-					",[
-						$request->input('inp-id')
-					]);
-					
-					$insert = DB::insert("
-						insert into d_trans_akun(id_trans,kdakun,kddk,nilai,id_user)
-						".implode(" union all ", $arr_insert)."
-					");
-					
-					if($insert){
-						DB::commit();
-						return 'success';
-					}
-					else{
-						return 'Data gagal disimpan!';
-					}
-					
-				}
-				else{
-					return 'Data gagal diubah!';
-				}
-				
+				$error = 'Anda belum memilih kode akun!';
 			}
-			
+
+			if($lanjut){
+				DB::connection()->getPdo()->commit();
+				return 'success';
+			}
+			else{
+				DB::connection()->getPdo()->rollBack();
+				return $error;
+			}
+
 		}
-		else{
-			return 'Anda belum memilih kode akun!';
-		}		
+		catch(\Exception $e){
+			DB::connection()->getPdo()->rollBack();
+
+			if(PublicFunction::errorLog($request, substr($e->getMessage(),0,255))){
+				return 'Kesalahan lainnya, hubungi Administrator.';
+			}
+			else{
+				return 'Kesalahan lainnya, hubungi Administrator. Log error gagal disimpan.';
+			}
+		}
 	}
 	
 	public function hapus(Request $request)
 	{
+		DB::connection()->getPdo()->beginTransaction();
+
 		try{
-			DB::beginTransaction();
 			
 			$delete = DB::delete("
 				delete from d_trans_akun
@@ -441,17 +465,25 @@ class PembukuanJurnalPController extends Controller {
 				$request->input('id')
 			]);
 			
-			if($delete==true) {
-				DB::commit();
+			if($delete){
+				DB::connection()->getPdo()->commit();
 				return 'success';
 			}
-			else {
-				return 'Proses hapus gagal. Hubungi Administrator.';
+			else{
+				DB::connection()->getPdo()->rollBack();
+				return $error;
 			}
 			
 		}
 		catch(\Exception $e){
-			return 'Terdapat kesalahan lainnya, hubungi Administrator!';
+			DB::connection()->getPdo()->rollBack();
+
+			if(PublicFunction::errorLog($request, substr($e->getMessage(),0,255))){
+				return 'Kesalahan lainnya, hubungi Administrator.';
+			}
+			else{
+				return 'Kesalahan lainnya, hubungi Administrator. Log error gagal disimpan.';
+			}
 		}		
 	}
 	

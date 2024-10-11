@@ -358,7 +358,7 @@ class KasKecilProsesController extends Controller {
 								union all
 								
 								select	".$request->input('inp-id')." as id_trans,
-										'810001' as kdakun,
+										'810101' as kdakun,
 										'K' as kddk,
 										".$nilai." as nilai,
 										0 as grup
@@ -370,7 +370,7 @@ class KasKecilProsesController extends Controller {
 							
 							$query_insert = "
 								select	".$request->input('inp-id')." as id_trans,
-										'820001' as kdakun,
+										'820101' as kdakun,
 										'D' as kddk,
 										".$nilai." as nilai,
 										0 as grup
