@@ -246,19 +246,19 @@ class LaporanKeuanganBaruController extends Controller {
 			left join(
 				
 				select  substr(a.kdakun,1,4)||'00' as kdakun,
-						sum(a.debet)-sum(a.kredit) as nilai
-				from d_buku_besar a
+						sum(a.nr_debet)-sum(a.nr_kredit) as nilai
+				from d_buku_besar_dtl1 a
 				where a.thang='".session('tahun')."' and a.periode='".$periode."'
 				group by substr(a.kdakun,1,4)||'00'
 
 			) b on(a.kdakun=b.kdakun)
 			left join(
 				
-				select  substr(a.kdakun,1,2)||'0000' as kdakun,
-						sum(a.debet)-sum(a.kredit) as nilai
-				from d_buku_besar a
+				select  substr(a.kdakun,1,4)||'00' as kdakun,
+						sum(a.nr_debet)-sum(a.nr_kredit) as nilai
+				from d_buku_besar_dtl a
 				where a.thang='".session('tahun')."' and a.periode<='".$periode."'
-				group by substr(a.kdakun,1,2)||'0000'
+				group by substr(a.kdakun,1,4)||'00'
 
 			) c on(a.kdakun=c.kdakun)
 			order by a.kdakun
@@ -279,8 +279,8 @@ class LaporanKeuanganBaruController extends Controller {
 			left join(
 				
 				select  substr(a.kdakun,1,4)||'00' as kdakun,
-						sum(a.debet)-sum(a.kredit) as nilai
-				from d_buku_besar a
+						sum(a.nr_debet)-sum(a.nr_kredit) as nilai
+				from d_buku_besar_dtl1 a
 				where a.thang='".session('tahun')."' and a.periode='".$periode."'
 				group by substr(a.kdakun,1,4)||'00'
 
@@ -288,8 +288,8 @@ class LaporanKeuanganBaruController extends Controller {
 			left join(
 				
 				select  substr(a.kdakun,1,4)||'00' as kdakun,
-						sum(a.debet)-sum(a.kredit) as nilai
-				from d_buku_besar a
+						sum(a.nr_debet)-sum(a.nr_kredit) as nilai
+				from d_buku_besar_dtl a
 				where a.thang='".session('tahun')."' and a.periode<='".$periode."'
 				group by substr(a.kdakun,1,4)||'00'
 
@@ -312,8 +312,8 @@ class LaporanKeuanganBaruController extends Controller {
 			left join(
 				
 				select  substr(a.kdakun,1,4)||'00' as kdakun,
-						sum(a.kredit)-sum(a.debet) as nilai
-				from d_buku_besar a
+						sum(a.nr_kredit)-sum(a.nr_debet) as nilai
+				from d_buku_besar_dtl1 a
 				where a.thang='".session('tahun')."' and a.periode='".$periode."'
 				group by substr(a.kdakun,1,4)||'00'
 
@@ -321,8 +321,8 @@ class LaporanKeuanganBaruController extends Controller {
 			left join(
 				
 				select  substr(a.kdakun,1,4)||'00' as kdakun,
-						sum(a.kredit)-sum(a.debet) as nilai
-				from d_buku_besar a
+						sum(a.nr_kredit)-sum(a.nr_debet) as nilai
+				from d_buku_besar_dtl a
 				where a.thang='".session('tahun')."' and a.periode<='".$periode."'
 				group by substr(a.kdakun,1,4)||'00'
 
@@ -345,8 +345,8 @@ class LaporanKeuanganBaruController extends Controller {
 			left join(
 				
 				select  substr(a.kdakun,1,4)||'00' as kdakun,
-						sum(a.kredit)-sum(a.debet) as nilai
-				from d_buku_besar a
+						sum(a.nr_kredit)-sum(a.nr_debet) as nilai
+				from d_buku_besar_dtl1 a
 				where a.thang='".session('tahun')."' and a.periode='".$periode."'
 				group by substr(a.kdakun,1,4)||'00'
 
@@ -354,8 +354,8 @@ class LaporanKeuanganBaruController extends Controller {
 			left join(
 				
 				select  substr(a.kdakun,1,4)||'00' as kdakun,
-						sum(a.kredit)-sum(a.debet) as nilai
-				from d_buku_besar a
+						sum(a.nr_kredit)-sum(a.nr_debet) as nilai
+				from d_buku_besar_dtl a
 				where a.thang='".session('tahun')."' and a.periode<='".$periode."'
 				group by substr(a.kdakun,1,4)||'00'
 
@@ -365,8 +365,8 @@ class LaporanKeuanganBaruController extends Controller {
 
 		$rows5 = DB::select("
 			select  a.*,
-					nvl(b.nilai,0) as nilai,
-					nvl(c.nilai,0) as nilai_sd
+					nvl(b.nilai,nvl(d.nilai,0)) as nilai,
+					nvl(c.nilai,nvl(e.nilai,0)) as nilai_sd
 			from(
 				
 				select  a.kdakun,
@@ -378,8 +378,8 @@ class LaporanKeuanganBaruController extends Controller {
 			left join(
 				
 				select  substr(a.kdakun,1,4)||'00' as kdakun,
-						sum(a.kredit)-sum(a.debet) as nilai
-				from d_buku_besar a
+						sum(a.nr_kredit)-sum(a.nr_debet) as nilai
+				from d_buku_besar_dtl1 a
 				where a.thang='".session('tahun')."' and a.periode='".$periode."'
 				group by substr(a.kdakun,1,4)||'00'
 
@@ -387,12 +387,30 @@ class LaporanKeuanganBaruController extends Controller {
 			left join(
 				
 				select  substr(a.kdakun,1,4)||'00' as kdakun,
-						sum(a.kredit)-sum(a.debet) as nilai
-				from d_buku_besar a
+						sum(a.nr_kredit)-sum(a.nr_debet) as nilai
+				from d_buku_besar_dtl a
 				where a.thang='".session('tahun')."' and a.periode<='".$periode."'
 				group by substr(a.kdakun,1,4)||'00'
 
 			) c on(a.kdakun=c.kdakun)
+			left join(
+
+				-- ikhtisa rugi laba bulan ini
+				select  '320200' as kdakun, 
+						abs(sum(a.lr_kredit) - sum(a.lr_debet)) as nilai
+				from d_buku_besar_dtl1 a
+				where a.thang='2024' and a.periode='12'
+
+			) d on(a.kdakun=d.kdakun)
+			left join(
+
+				-- ikhtisa rugi laba sd bulan ini
+				select  '320200' as kdakun, 
+						abs(sum(a.lr_kredit) - sum(a.lr_debet)) as nilai
+				from d_buku_besar_dtl a
+				where a.thang='2024' and a.periode='12'
+
+			) e on(a.kdakun=e.kdakun)
 			order by a.kdakun
 		");
 
