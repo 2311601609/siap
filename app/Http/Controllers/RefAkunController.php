@@ -178,6 +178,7 @@ class RefAkunController extends Controller {
 						'nmakun' => $request->input('nmakun'),
 						'kddk' => $request->input('kddk'),
 						'kdlap' => $request->input('kdlap'),
+						'kdlapdtl' => $request->input('kdlapdtl'),
 						'lvl' => $request->input('lvl'),
 					]);
 					
@@ -201,12 +202,14 @@ class RefAkunController extends Controller {
 					set nmakun=?,
 						kddk=?,
 						kdlap=?,
+						kdlapdtl=?,
 						lvl=?
 					where kdakun=?
 				",[
 					$request->input('nmakun'),
 					$request->input('kddk'),
 					$request->input('kdlap'),
+					$request->input('kdlapdtl'),
 					$request->input('lvl'),
 					$request->input('inp-id')
 				]);

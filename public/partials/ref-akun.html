@@ -36,8 +36,6 @@
 										<label for="nmakun">Nama Akun</label>
 										<input type="text" id="nmakun" name="nmakun" class="form-control" maxlength="255">
 									</fieldset>
-								</div>
-								<div class="col-md-6">
 									<fieldset class="form-group">
 										<label for="lvl">Level Akun</label>
 										<select id="lvl" name="lvl" class="form-control chosen">
@@ -47,6 +45,8 @@
 											<option value="6">Level 4 (coa 6 digit | transaksi)</option>
 										</select>
 									</fieldset>
+								</div>
+								<div class="col-md-6">
 									<fieldset class="form-group">
 										<label for="kddk">Debet/ Kredit</label>
 										<select id="kddk" name="kddk" class="form-control chosen">
@@ -58,6 +58,17 @@
 									<fieldset class="form-group">
 										<label for="kdlap">Laporan</label>
 										<select id="kdlap" name="kdlap" class="form-control chosen">
+										</select>
+									</fieldset>
+									<fieldset class="form-group">
+										<label for="kdlapdtl">Laporan</label>
+										<select id="kdlapdtl" name="kdlapdtl" class="form-control chosen">
+											<option value="">N/A</option>
+											<option value="01">Level 1</option>
+											<option value="02">Level 2</option>
+											<option value="03">Level 3</option>
+											<option value="04">Level 4</option>
+											<option value="05">Level 5</option>
 										</select>
 									</fieldset>
 								</div>
@@ -216,6 +227,7 @@
 					jQuery('#nmakun').val(result.nmakun);
 					jQuery('#kddk').val(result.kddk);
 					jQuery('#kdlap').val(result.kdlap);
+					jQuery('#kdlapdtl').val(result.kdlapdtl);
 					jQuery('#lvl').val(result.lvl);
 					jQuery('#kdakun').prop('disabled', true);
 					jQuery('.chosen').trigger('change');
