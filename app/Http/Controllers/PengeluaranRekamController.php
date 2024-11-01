@@ -844,6 +844,7 @@ class PengeluaranRekamController extends Controller {
 
 		}
 		catch(\Exception $e){
+
 			DB::connection()->getPdo()->rollBack();
 
 			if(PublicFunction::errorLog($request, substr($e->getMessage(),0,255))){

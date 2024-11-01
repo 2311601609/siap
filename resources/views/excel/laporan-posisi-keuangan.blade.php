@@ -177,16 +177,19 @@
         @foreach($rows5 as $row)
         
         @php
-            $total5 += $row->nilai;
-            $total5_sd += $row->nilai_sd;
+            $nilai = $row->nilai;
+            $nilai_sd = $row->nilai_sd;
+
+            $total5 += $nilai;
+            $total5_sd += $nilai_sd;
         @endphp
 
         <tr>
             <td>{{ $row->kdakun }}</td>
             <td>{{ $row->nmakun }}</td>
             <td style="text-align:right;">0</td>
-            <td style="text-align:right;">{{ number_format($row->nilai) }}</td>
-            <td style="text-align:right;">{{ number_format($row->nilai_sd) }}</td>
+            <td style="text-align:right;">{{ number_format($nilai) }}</td>
+            <td style="text-align:right;">{{ number_format($nilai_sd) }}</td>
         </tr>
 
         @endforeach

@@ -340,10 +340,122 @@ class PembukuanPostingController extends Controller {
 							]);
 
 							if($insert){
-								$lanjut = true;
+								
+								$delete = DB::delete("
+									delete from d_buku_besar_dtl1
+									where thang='".session('tahun')."' and periode='".$periode."'
+								");
+								
+								$insert = DB::insert("
+									insert into d_buku_besar_dtl1(
+											thang,
+											periode,
+											kdakun,
+											nmakun,
+											kdlap,
+											sawal_debet,
+											sawal_kredit,
+											sawal_saldo,
+											mutasi_debet,
+											mutasi_kredit,
+											mutasi_saldo,
+											lr_debet,
+											lr_kredit,
+											nr_debet,
+											nr_kredit,
+											id_user
+									)
+									select  ? as thang,
+											? as periode,
+											a.kdakun,
+											a.nmakun,
+											a.kdlap,
+											a.sawal_debet,
+											a.sawal_kredit,
+											a.sawal_saldo,
+											a.mutasi_debet,
+											a.mutasi_kredit,
+											a.mutasi_saldo,
+											case
+												when a.kdlap='LR' and ((a.sawal_saldo + a.mutasi_saldo) >= 0)
+													then a.sawal_saldo + a.mutasi_saldo
+												else
+													0
+											end lr_debet,
+											case
+												when a.kdlap='LR' and ((a.sawal_saldo + a.mutasi_saldo) < 0)
+													then abs(a.sawal_saldo + a.mutasi_saldo)
+												else
+													0
+											end lr_kredit,
+											case
+												when a.kdlap='NR' and ((a.sawal_saldo + a.mutasi_saldo) >= 0)
+													then a.sawal_saldo + a.mutasi_saldo
+												else
+													0
+											end nr_debet,
+											case
+												when a.kdlap='NR' and ((a.sawal_saldo + a.mutasi_saldo) < 0)
+													then abs(a.sawal_saldo + a.mutasi_saldo)
+												else
+													0
+											end nr_kredit,
+											0 as id_user
+									from(
+
+										select  a.kdakun,
+												a.nmakun,
+												a.kdlap,
+												nvl(b.debet,0) as sawal_debet,
+												nvl(b.kredit,0) as sawal_kredit,
+												nvl(b.debet,0)-nvl(b.kredit,0) as sawal_saldo,
+												nvl(c.debet,0) as mutasi_debet,
+												nvl(c.kredit,0) as mutasi_kredit,
+												nvl(c.debet,0)-nvl(c.kredit,0) as mutasi_saldo
+										from t_akun a
+										left join(
+											
+											-- cari data saldo awal
+											select  a.kdakun,
+													sum(decode(a.kddk,'D',a.nilai,0)) as debet,
+													sum(decode(a.kddk,'K',a.nilai,0)) as kredit
+											from d_sawal a
+											where a.thang=?
+											group by a.kdakun
+
+										) b on(a.kdakun=b.kdakun)
+										left join(
+											
+											-- cari data mutasi akun
+											select  a.kdakun,
+													sum(a.debet) as debet,
+													sum(a.kredit) as kredit
+											from d_buku_besar a
+											where a.thang=? and a.periode=?
+											group by a.kdakun
+
+										) c on(a.kdakun=c.kdakun)
+										where b.kdakun is not null or c.kdakun is not null
+										
+									) a
+								",[
+									session('tahun'),
+									$periode,
+									session('tahun'),
+									session('tahun'),
+									$periode
+								]);
+
+								if($insert){
+									$lanjut = true;
+								}
+								else{
+									$error = 'Insert buku besar detil (bulan ini) gagal disimpan!';	
+								}
+
 							}
 							else{
-								$error = 'Insert buku besar detil gagal disimpan!';	
+								$error = 'Insert buku besar detil (sd bulan ini) gagal disimpan!';	
 							}
 
 						}

@@ -39,10 +39,19 @@
 										</select>
 									</fieldset>
 								</div>
-								<div class="col-md-6">
+								<div class="col-md-3">
 									<fieldset class="form-group">
 										<label for="periode">Periode</label>
 										<select id="periode" name="periode" class="form-control chosen">
+										</select>
+									</fieldset>
+								</div>
+								<div class="col-md-3">
+									<fieldset class="form-group">
+										<label for="coa">Tampilan</label>
+										<select id="coa" name="coa" class="form-control chosen">
+											<option value="1">COA dengan transaksi</option>
+											<option value="0">Seluruh COA</option>
 										</select>
 									</fieldset>
 								</div>
@@ -272,12 +281,13 @@
 
 			var lvl = $('#lvl').val();
 			var periode = $('#periode').val();
+			var coa = $('#coa').val();
 
-			if(periode!=='' && lvl!==''){
+			if(periode!=='' && lvl!=='' && coa!==''){
 
 				$('#div-tabel').show();
 
-				table.ajax.url(route+'?lvl='+lvl+'&periode='+periode).load();
+				table.ajax.url(route+'?lvl='+lvl+'&periode='+periode+'&coa='+coa).load();
 			
 				$.getJSON(route+'/total?periode='+periode, function(result){
 
