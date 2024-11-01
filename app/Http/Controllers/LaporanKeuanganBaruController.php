@@ -397,7 +397,7 @@ class LaporanKeuanganBaruController extends Controller {
 
 				-- ikhtisa rugi laba bulan ini
 				select  '320200' as kdakun, 
-						abs(sum(a.lr_kredit) - sum(a.lr_debet)) as nilai
+						sum(a.lr_kredit) - sum(a.lr_debet) as nilai
 				from d_buku_besar_dtl1 a
 				where a.thang='2024' and a.periode='12'
 
@@ -406,7 +406,7 @@ class LaporanKeuanganBaruController extends Controller {
 
 				-- ikhtisa rugi laba sd bulan ini
 				select  '320200' as kdakun, 
-						abs(sum(a.lr_kredit) - sum(a.lr_debet)) as nilai
+						sum(a.lr_kredit) - sum(a.lr_debet) as nilai
 				from d_buku_besar_dtl a
 				where a.thang='2024' and a.periode='12'
 
