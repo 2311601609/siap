@@ -1,0 +1,1070 @@
+SET DEFINE OFF;
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '120406');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '120407');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '120408');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '13', 'Investasi Ventura Bersama', '120601');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '13', 'Investasi Ventura Bersama', '120602');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '13', 'Investasi Ventura Bersama', '120701');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '13', 'Investasi Ventura Bersama', '120702');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '13', 'Investasi Ventura Bersama', '120703');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '13', 'Investasi Ventura Bersama', '121101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '13', 'Investasi Ventura Bersama', '121102');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '13', 'Investasi Ventura Bersama', '121103');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '13', 'Investasi Ventura Bersama', '121104');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '110501');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '110502');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '120501');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '120502');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '121401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '121402');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '121501');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '121502');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '510101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '510201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '510301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '510401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '530101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '530201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '530301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '14', 'Aset Real Estate', '530401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '15', 'Penempatan Properti Investasi', '120901');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '15', 'Penempatan Properti Investasi', '120902');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '15', 'Penempatan Properti Investasi', '120903');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '15', 'Penempatan Properti Investasi', '120904');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '15', 'Penempatan Properti Investasi', '120905');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '15', 'Penempatan Properti Investasi', '620401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '15', 'Penempatan Properti Investasi', '620402');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '15', 'Penempatan Properti Investasi', '620403');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '15', 'Penempatan Properti Investasi', '620404');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '15', 'Penempatan Properti Investasi', '620405');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '16', 'Penempatan Penyertaan pada Entitas', '120801');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '16', 'Penempatan Penyertaan pada Entitas', '120802');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '16', 'Penempatan Penyertaan pada Entitas', '120803');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '16', 'Penempatan Penyertaan pada Entitas', '730401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '16', 'Penempatan Penyertaan pada Entitas', '730402');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '16', 'Penempatan Penyertaan pada Entitas', '730403');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '17', 'Perolehan Aset Tetap', '121001');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '17', 'Perolehan Aset Tetap', '121002');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '17', 'Perolehan Aset Tetap', '121003');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '17', 'Perolehan Aset Tetap', '121004');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '17', 'Perolehan Aset Tetap', '121005');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '17', 'Perolehan Aset Tetap', '121006');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '18', 'Perolehan Aset Lain-Lain', '121601');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '18', 'Perolehan Aset Lain-Lain', '121602');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '18', 'Perolehan Aset Lain-Lain', '121603');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '19', 'Pengembangan SJUT, IT', '121201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '19', 'Pengembangan SJUT, IT', '121202');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '19', 'Pengembangan SJUT, IT', '121203');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '19', 'Pengembangan SJUT, IT', '121204');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '19', 'Pengembangan SJUT, IT', '121205');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('02', 'ARUS KAS DARI AKTIVITAS INVESTASI', '19', 'Pengembangan SJUT, IT', '121206');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('03', 'ARUS KAS DARI AKTIVITAS PENDANAAN', '20', 'Penyertaan Modal Daerah', '310101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('03', 'ARUS KAS DARI AKTIVITAS PENDANAAN', '21', 'Pinjamaan Bank/Daerah', '210701');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('03', 'ARUS KAS DARI AKTIVITAS PENDANAAN', '21', 'Pinjamaan Bank/Daerah', '210702');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('03', 'ARUS KAS DARI AKTIVITAS PENDANAAN', '21', 'Pinjamaan Bank/Daerah', '220301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('03', 'ARUS KAS DARI AKTIVITAS PENDANAAN', '21', 'Pinjamaan Bank/Daerah', '220302');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '01', 'Penerimaan Pengalihan Tanah dan bangunan', '210502');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '01', 'Penerimaan Pengalihan Tanah dan bangunan', '210602');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '01', 'Penerimaan Pengalihan Tanah dan bangunan', '220102');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '01', 'Penerimaan Pengalihan Tanah dan bangunan', '220402');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '01', 'Penerimaan Pengalihan Tanah dan bangunan', '410101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '01', 'Penerimaan Pengalihan Tanah dan bangunan', '410201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '01', 'Penerimaan Pengalihan Tanah dan bangunan', '410301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '01', 'Penerimaan Pengalihan Tanah dan bangunan', '410401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '01', 'Penerimaan Pengalihan Tanah dan bangunan', '430101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '01', 'Penerimaan Pengalihan Tanah dan bangunan', '430201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '01', 'Penerimaan Pengalihan Tanah dan bangunan', '430301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '01', 'Penerimaan Pengalihan Tanah dan bangunan', '430401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '02', 'Penerimaan Kerjasama Operasi', '210503');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '02', 'Penerimaan Kerjasama Operasi', '210603');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '02', 'Penerimaan Kerjasama Operasi', '220103');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '02', 'Penerimaan Kerjasama Operasi', '220403');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '03', 'Penerimaan Pengelolaan Aset', '210501');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '03', 'Penerimaan Pengelolaan Aset', '210601');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '03', 'Penerimaan Pengelolaan Aset', '220101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '03', 'Penerimaan Pengelolaan Aset', '220401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '03', 'Penerimaan Pengelolaan Aset', '420101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '03', 'Penerimaan Pengelolaan Aset', '420201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '03', 'Penerimaan Pengelolaan Aset', '420301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '03', 'Penerimaan Pengelolaan Aset', '420401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '03', 'Penerimaan Pengelolaan Aset', '440101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '03', 'Penerimaan Pengelolaan Aset', '440201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '03', 'Penerimaan Pengelolaan Aset', '440301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '03', 'Penerimaan Pengelolaan Aset', '440401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '04', 'Pembayaran Biaya Operasional', '210301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '04', 'Pembayaran Biaya Operasional', '210302');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '04', 'Pembayaran Biaya Operasional', '520101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '04', 'Pembayaran Biaya Operasional', '520201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '04', 'Pembayaran Biaya Operasional', '520301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '04', 'Pembayaran Biaya Operasional', '520401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '04', 'Pembayaran Biaya Operasional', '540101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '04', 'Pembayaran Biaya Operasional', '540201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '04', 'Pembayaran Biaya Operasional', '540301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '04', 'Pembayaran Biaya Operasional', '540401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '110301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '110302');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '110303');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '110304');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '110305');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '110306');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '110307');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '110308');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '110309');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '110310');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '220201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '220202');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '610101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '610102');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '610103');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '610104');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '610105');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620202');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620203');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620204');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620205');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620206');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620207');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620208');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620209');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620210');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620211');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620212');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620213');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620302');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620303');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620501');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620502');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620503');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620504');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620505');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620506');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620507');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620508');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620509');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620510');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620511');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620512');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620513');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620514');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620515');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620516');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620517');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620518');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620519');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620520');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620521');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620522');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620523');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620524');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620525');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620526');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620527');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620528');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '05', 'Pembayaran biaya Pemasaran, Kantor, Pemeliharaan dan Umum', '620529');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '220501');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620102');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620103');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620104');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620105');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620106');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620107');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620108');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620109');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620110');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620111');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620112');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620113');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620114');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620115');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620116');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620117');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620118');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620119');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620120');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620121');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620122');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620123');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620124');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620125');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620126');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620127');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620128');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620129');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620130');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '06', 'Pembayaran kepada Pegawai', '620131');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '07', 'Pendapatan Bunga', '710101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '07', 'Pendapatan Bunga', '710102');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '07', 'Pendapatan Bunga', '710201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '07', 'Pendapatan Bunga', '710202');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '08', 'Titipan biaya dan Utilitas', '210201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '08', 'Titipan biaya dan Utilitas', '210202');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '08', 'Titipan biaya dan Utilitas', '210203');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '08', 'Titipan biaya dan Utilitas', '210204');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '08', 'Titipan biaya dan Utilitas', '210205');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '08', 'Titipan biaya dan Utilitas', '210206');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '09', 'Lain-lain', '720101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '09', 'Lain-lain', '720102');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '09', 'Lain-lain', '720103');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '09', 'Lain-lain', '720201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '09', 'Lain-lain', '720202');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '09', 'Lain-lain', '720203');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '09', 'Lain-lain', '720301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '09', 'Lain-lain', '720302');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '09', 'Lain-lain', '720303');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '110401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '110402');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '110403');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '110404');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '110405');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '110406');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '110407');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '110408');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '121301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '121302');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210402');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210403');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210404');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210405');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210406');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210407');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210408');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210409');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210410');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210411');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210412');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210413');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210414');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210415');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210416');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '210417');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '730101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '730102');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '730103');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '730104');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '730105');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '730201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '730202');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '730301');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '10', 'Pembayaran Pajak', '730302');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '11', 'Pembayaran Hutang Usaha', '210101');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '11', 'Pembayaran Hutang Usaha', '210102');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '11', 'Pembayaran Hutang Usaha', '210103');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '110201');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '110202');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '110203');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '110204');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '110205');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '110206');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '110207');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '110208');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '120401');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '120402');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '120403');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '120404');
+Insert into T_LAP_LAK
+   (KATEGORI, NMKATEGORI, SUBKATEGORI, NMSUBKATEGORI, KDAKUN)
+ Values
+   ('01', 'ARUS KAS DARI AKTIVITAS OPERASI', '12', 'Pembayaran Piutang', '120405');
+COMMIT;
