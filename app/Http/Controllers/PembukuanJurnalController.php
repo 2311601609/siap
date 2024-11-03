@@ -902,12 +902,13 @@ class PembukuanJurnalController extends Controller {
 
 	public function neracaLajurExcelBaru()
 	{
-		if (request()->has('lvl') && request()->has('periode')) {
+		if (request()->has('lvl') && request()->has('periode') && request()->has('coa')) {
 
 			$lvl = explode(",", $_GET['lvl']);
 			$periode = $_GET['periode'];
+			$coa = $_GET['coa'];
 
-			if($lvl!=='' && $periode!==''){
+			if($lvl!=='' && $periode!=='' && $coa!==''){
 
 				$arr_query = [];
 				for($i=0;$i<count($lvl);$i++){
@@ -917,7 +918,7 @@ class PembukuanJurnalController extends Controller {
 					$nol = str_repeat('0', $zero);
 
 					$arr_query[] = "
-						select  SUBSTR(a.kdakun,1,".$substr.")||'".$nol."' as kdakun,
+						select  SUBSTR(a.kdakun,1,".$substr.")||'".$nol."' as kdakun_isi,
 								SUM(a.sawal_debet) AS sawal_debet,
 								SUM(a.sawal_kredit) AS sawal_kredit,
 								SUM(a.mutasi_debet) AS mutasi_debet,
@@ -933,14 +934,22 @@ class PembukuanJurnalController extends Controller {
 
 				}
 
+				$where = "";
+				if($coa=='1'){
+					$where = "where b.kdakun_isi is not null";
+				}
+
 				$sql = "
-					select  a.*,
-							b.nmakun
-					from(
+					select	a.kdakun,
+							a.nmakun,
+							b.*
+					from t_akun a
+					left join(
+
 						".implode(" union all ", $arr_query)."
-					) a
-					left join t_akun b on(a.kdakun=b.kdakun)
-					order by a.kdakun
+
+					) b on(a.kdakun=b.kdakun_isi)
+					".$where."
 				";
 
 				$rows = DB::select($sql);

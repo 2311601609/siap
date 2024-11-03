@@ -81,7 +81,7 @@
                 <div class="card-header">
 					<div class="clearfix">
 						<h4 class="card-title float-left">Data</h4>
-						<div class="actions float-right">
+						<!--<div class="actions float-right">
 							<button type="button" class="btn btn-primary mr-1" id="exportPrint">
 								<span class="d-flex align-items-center">
 									<span>Cetak</span>
@@ -97,7 +97,7 @@
 									<span>XLS</span>
 								</span>
 							</button>
-						</div>
+						</div>-->
 					</div>
                 </div>
                 <div class="card-body collapse show">
@@ -321,10 +321,11 @@
 		
 		$('#download').click(function(){
 			
-			if($('#lvl').val()!=='' && $('#periode').val()!==''){
+			if($('#lvl').val()!=='' && $('#periode').val()!=='' && $('#coa').val()!==''){
 				var lvl = $('#lvl').val();
 				var periode = $('#periode').val();
-				window.open(route+'/excel?lvl='+lvl+'&periode='+periode, '_blank');
+				var coa = $('#coa').val();
+				window.open(route+'/excel?lvl='+lvl+'&periode='+periode+'&coa='+coa, '_blank');
 			}
 			else{
 				alertify.error('Parameter tidak valid.');

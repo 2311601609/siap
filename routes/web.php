@@ -615,6 +615,8 @@ Route::middleware(['auth'])->group(function () {
 		Route::get('laba-rugi/excel', [LaporanKeuanganBaruController::class, 'labaRugiExcel']);
 		Route::get('posisi-keuangan', [LaporanKeuanganBaruController::class, 'posisiKeuangan']);
 		Route::get('posisi-keuangan/excel', [LaporanKeuanganBaruController::class, 'posisiKeuanganExcel']);
+		Route::get('arus-kas', [LaporanKeuanganBaruController::class, 'arusKas']);
+		Route::get('arus-kas/excel', [LaporanKeuanganBaruController::class, 'arusKasExcel']);
 	});
 
 	//route for realisasi
