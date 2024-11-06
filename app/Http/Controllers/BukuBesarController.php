@@ -642,7 +642,7 @@ class BukuBesarController extends Controller
 			left join d_trans b on(a.id_trans=b.id)
 			left join t_alur c on(b.id_alur=c.id)
 			left join t_alur_status d on(b.id_alur=d.id_alur and b.status=d.status)
-			where b.thang='".session('tahun')."' and d.is_final=1
+			where b.thang='".session('tahun')."'
 		";
 		
 		$arr_where = array();
