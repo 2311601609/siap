@@ -771,7 +771,7 @@ class PembukuanJurnalController extends Controller {
 								SUM(a.nr_debet) AS nr_debet,
 								SUM(a.nr_kredit) AS nr_kredit
 						from d_buku_besar_dtl a
-						where a.thang='".session('tahun')."' and a.periode<='".$periode."'
+						where a.thang='".session('tahun')."' and a.periode='".$periode."'
 						group by substr(a.kdakun,1,".$substr.")
 					";
 
@@ -928,7 +928,7 @@ class PembukuanJurnalController extends Controller {
 								SUM(a.nr_debet) AS nr_debet,
 								SUM(a.nr_kredit) AS nr_kredit
 						from d_buku_besar_dtl a
-						where a.thang='".session('tahun')."' and a.periode<='".$periode."'
+						where a.thang='".session('tahun')."' and a.periode='".$periode."'
 						group by substr(a.kdakun,1,".$substr.")
 					";
 
