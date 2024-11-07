@@ -162,7 +162,7 @@
                                 style="display: none"
                             >
                                 <span class="d-flex align-items-center">
-                                    <i class="ft-plus mr-1"></i>
+                                    <i class="ft-trash mr-1"></i>
                                     <span>Hapus</span>
                                 </span>
                             </button>
@@ -206,7 +206,7 @@
         $.get(route, function (result) {
             if (result == 1) {
                 //admin
-                $("#tambah").show();
+                $("#hapus").show();
             }
         });
 
@@ -425,46 +425,43 @@
         });
 
         //hapus
-        $("body")
-            .off("click", ".hapus")
-            .on("click", ".hapus", function () {
-                var id = this.id;
-                alertify.confirm("Hapus data ini?", function (c) {
-                    if (c) {
-                        $.get("token", function (token) {
-                            if (token) {
-                                $.ajax({
-                                    url: route + "/hapus",
-                                    method: "POST",
-                                    data: {
-                                        _token: token,
-                                        id: id,
-                                    },
-                                    success: function (result) {
-                                        if (result == "success") {
-                                            alertify.log(
-                                                "Proses hapus berhasil."
-                                            );
-                                            table.ajax.reload();
-                                        } else {
-                                            alertify.log(result);
-                                        }
-                                    },
-                                    error: function (result) {
+        $("#hapus").click(function () {
+            var id = this.id;
+            alertify.confirm("Hapus seluruh data log ini?", function (c) {
+                if (c) {
+                    $.get("token", function (token) {
+                        if (token) {
+                            $.ajax({
+                                url: route + "/hapus",
+                                method: "POST",
+                                data: {
+                                    _token: token
+                                },
+                                success: function (result) {
+                                    if (result == "success") {
                                         alertify.log(
-                                            "Koneksi pada aplikasi/database terputus. Hubungi Administrator."
+                                            "Proses hapus berhasil."
                                         );
-                                    },
-                                });
-                            } else {
-                                alertify.log(
-                                    "Proses hapus gagal. Silahkan refresh halaman browser anda."
-                                );
-                            }
-                        });
-                    }
-                });
+                                        table.ajax.reload();
+                                    } else {
+                                        alertify.log(result);
+                                    }
+                                },
+                                error: function (result) {
+                                    alertify.log(
+                                        "Koneksi pada aplikasi/database terputus. Hubungi Administrator."
+                                    );
+                                },
+                            });
+                        } else {
+                            alertify.log(
+                                "Proses hapus gagal. Silahkan refresh halaman browser anda."
+                            );
+                        }
+                    });
+                }
             });
+        });
 
     });
 </script>
