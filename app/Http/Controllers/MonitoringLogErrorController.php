@@ -106,34 +106,29 @@ class MonitoringLogErrorController extends Controller
 			$lanjut = false;
 			$error = '';
 
-			$status = $this->getDetail($id)->status;
-			$addendum = $this->getDetail($id)->addendum;
+			$now = new \DateTime();
+			$timestamp = $now->format('YmdHis');
 
-			if($status==0){
+			$rows = DB::select("
+				select count(*) as jml
+				from ".$this->table."
+			");
 
-				if($addendum==''){
+			if($rows[0]->jml>0){
 
-					$delete = DB::table($this->table.'_dtl')->where('id_kontrak','=',$id)->delete();
+				$insert = DB::insert("
+					create table ".$this->table."_".$timestamp." as
+					select	*
+					from ".$this->table."
+				");
 
-					$delete = DB::table($this->table.'_dok')->where('id_kontrak','=',$id)->delete();
-					
-					$delete = DB::table($this->table)->where('id','=',$id)->delete();
-					
-					if($delete) {
-						$lanjut = true;
-					} else {
-						$error = "Gagal menghapus data";		
-					}
-				
-				}
-				else{
-					$error = 'Data addendum tidak dapat dihapus lagi.';
-				}
-			
 			}
-			else{
-				$error = 'Data sudah diproses, tidak dapat dihapus lagi.';
-			}
+
+			DB::delete("
+				truncate table ".$this->table."
+			");
+
+			$lanjut = true;
 
 			if($lanjut){
 				DB::connection()->getPdo()->commit();
