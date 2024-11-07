@@ -39,6 +39,7 @@ use App\Http\Controllers\LaporanKeuanganBaruController;
 use App\Http\Controllers\LaporanRealisasiController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\MonitoringController;
+use App\Http\Controllers\MonitoringLogErrorController;
 use App\Http\Controllers\RefUserController;
 use App\Http\Controllers\RefUnitController;
 use App\Http\Controllers\RefAkunController;
@@ -651,6 +652,15 @@ Route::middleware(['auth'])->group(function () {
 			
 			Route::get('/{param}', [MonitoringController::class, 'saldoKas']);
 			
+		});
+
+		//Log Error
+		Route::group(['prefix' => 'log-error'], function () {
+				
+			Route::get('', [MonitoringLogErrorController::class, 'index']);
+			Route::get('data', [MonitoringLogErrorController::class, 'data']);
+			Route::get('pilih', [MonitoringLogErrorController::class, 'pilih'])->middleware('role:00.09');
+			Route::post('hapus', [MonitoringLogErrorController::class, 'hapus'])->middleware('role:00.99');
 		});
 		
 	});
