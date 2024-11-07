@@ -174,11 +174,11 @@ class PembukuanPostingController extends Controller {
 										when c.menu=1 /* tagihan */
 											then b.tgrekam
 										when c.menu in(2,3) /* penerimaan dan umk */
-											then b.tgcek
+											then nvl(b.tgcek,b.tgdok)
 										when c.menu=4 and a.grup in('0','1','2') /* buk rekam */
 											then b.tgrekam
 										when c.menu=4 and a.grup='3' /* buk bayar */
-											then b.tgcek
+											then nvl(b.tgcek,b.tgdok)
 										else /* kas kecil dan penyesuaian */
 											nvl(b.tgdok,b.tgrekam)
 									end as tgdok
