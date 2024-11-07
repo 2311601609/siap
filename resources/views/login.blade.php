@@ -6,12 +6,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <meta name="description" content="Apex admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
-    <meta name="keywords" content="admin template, Apex admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="description" content="Sistem Informasi Akuntansi Perusahaan Versi 2">
+    <meta name="keywords" content="SIAP V2, Sistem Informasi Akuntansi Perusahaan Versi 2">
     <meta name="author" content="PIXINVENT">
     <title>{{ $app_nama }} - Versi {{ $app_versi }}</title>
-    <link rel="shortcut icon" type="image/x-icon" href="template/Apex6/app-assets/img/ico/favicon.ico">
-    <link rel="shortcut icon" type="image/png" href="template/Apex6/app-assets/img/ico/favicon-32.png">
+    <link rel="shortcut icon" type="image/x-icon" href="template/Apex6/app-assets/img/logo-sarana-jaya.png">
+    <link rel="shortcut icon" type="image/png" href="template/Apex6/app-assets/img/logo-sarana-jaya.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
