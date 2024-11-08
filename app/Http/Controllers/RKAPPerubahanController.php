@@ -72,8 +72,11 @@ class RKAPPerubahanController extends Controller
 						end as status
 				from(
 
-					select  a.*
+					select  a.*,
+							b.kdunit,
+                            b.thang
 					from d_rkap_akun a
+					left join d_rkap b on(a.id_rkap=b.id)
 					where a.id_rkap=".$id_rkap."
 					
 				) a
@@ -81,8 +84,11 @@ class RKAPPerubahanController extends Controller
 				full join
 
 				(
-					select  a.*
+					select  a.*,
+							b.kdunit,
+                            b.thang
 					from d_rkap_akun a
+					left join d_rkap b on(a.id_rkap=b.id)
 					where a.id_rkap in(
 
 						select  max(id) as id
@@ -91,7 +97,7 @@ class RKAPPerubahanController extends Controller
 						
 					)
 					
-				) b on(a.kdsdana=b.kdsdana and a.kdakun=b.kdakun and a.id_proyek=b.id_proyek and a.id_program=b.id_program and a.id_giat=b.id_giat)
+				) b on(a.kdunit=b.kdunit and a.thang=b.thang and a.kdsdana=b.kdsdana and a.kdakun=b.kdakun and a.id_proyek=b.id_proyek and a.id_program=b.id_program and a.id_giat=b.id_giat)
 				
 			) a
 			left join t_sdana b on(a.kdsdana=b.kdsdana)
