@@ -93,7 +93,7 @@ class RKAPPerubahanController extends Controller
 
 						select  max(id) as id
 						from d_rkap
-						where id<>".$id_rkap." and status in(3,4)
+						where thang='".session('tahun')."' id<>".$id_rkap." and status in(3,4)
 						
 					)
 					
