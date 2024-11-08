@@ -579,7 +579,7 @@ class LaporanKeuanganBaruController extends Controller {
 			
 			$rows4 = DB::select("
 				select  sum(sawal_saldo) as saldo_awal_tahun,
-						sum(salwal_saldo) as saldo_bulan_lalu
+						sum(sawal_saldo) as saldo_bulan_lalu
 				from d_buku_besar_dtl
 				where substr(kdakun,1,4)='1101' and periode='".$periode."'
 			");
