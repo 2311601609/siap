@@ -92,10 +92,14 @@
 		if(getParameterByNameDetil('id_rkap')){
 			var id_rkap = getParameterByNameDetil('id_rkap');
 			var nourut = getParameterByNameDetil('nourut');
+			var kdunit = getParameterByNameDetil('kdunit');
+			var thang = getParameterByNameDetil('thang');
 		}
 		else{
 			var id_rkap = '';
 			var nourut = '';
+			var kdunit = '';
+			var thang = '';
 		}
 
 		if(getParameterByNameDetil('back')){
@@ -195,7 +199,7 @@
 			},
 			serverSide: true,
 			ajax: {
-				url: route + "/data?id_rkap=" + id_rkap,
+				url: route + "/data?id_rkap=" + id_rkap + "&thang=" + thang + "&kdunit=" + kdunit,
 			},
 			columns: [
 				{ data: "nmsdana", name: "nmsdana", className: "t-left" },
