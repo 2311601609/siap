@@ -235,32 +235,50 @@ class KontrakController extends Controller
 
 					$insert_detil = DB::insert("
 						insert into d_kontrak_dtl(id_kontrak,tahun,bulan,nilai,tgjtempo,fisik,nourut,id_user)
-						select  ".$id_kontrak." as id_kontrak,
+						select  a.id_kontrak,
 								a.tahun,
 								a.bulan,
-								round(".$nilai."/".$jmlbayar.",2) as nilai,
-								last_day(to_date(a.tahun||'-'||a.bulan,'yyyy-mm')) as tgjtempo,
-								round(100/".$jmlbayar.",2) as fisik,
-								row_number() over(order by a.tahun,a.bulan) as nourut,
-								".session('id_user')." as id_user
+								case
+									when a.nourut=".$jmlbayar."
+										then a.nilai + (".$nilai." - a.total)
+									else
+										a.nilai
+								end as nilai,
+								a.tgjtempo,
+								a.fisik,
+								a.nourut,
+								a.id_user
 						from(
 
-							WITH params AS (
-								SELECT TO_DATE('".$tgmulai."', 'YYYY-MM-DD') AS start_date, ".$jmlbayar." AS num_months FROM dual
-							),
-							date_series AS (
-								SELECT 
-									ADD_MONTHS(start_date, LEVEL - 1) AS generated_date
+							select  ".$id_kontrak." as id_kontrak,
+									a.tahun,
+									a.bulan,
+									floor(".$nilai."/".$jmlbayar.") as nilai,
+									last_day(to_date(a.tahun||'-'||a.bulan,'yyyy-mm')) as tgjtempo,
+									round(100/".$jmlbayar.",2) as fisik,
+									row_number() over(order by a.tahun,a.bulan) as nourut,
+									sum(floor(".$nilai."/".$jmlbayar.")) over(order by a.tahun,a.bulan) as total,
+									".session('id_user')." as id_user
+							from(
+
+								WITH params AS (
+									SELECT TO_DATE('".$tgmulai."', 'YYYY-MM-DD') AS start_date, ".$jmlbayar." AS num_months FROM dual
+								),
+								date_series AS (
+									SELECT 
+										ADD_MONTHS(start_date, LEVEL - 1) AS generated_date
+									FROM 
+										params
+									CONNECT BY LEVEL <= num_months
+								)
+								SELECT
+									TO_CHAR(generated_date, 'YYYY') AS tahun,
+									TO_CHAR(generated_date, 'MM') AS bulan
 								FROM 
-									params
-								CONNECT BY LEVEL <= num_months
-							)
-							SELECT
-								TO_CHAR(generated_date, 'YYYY') AS tahun,
-								TO_CHAR(generated_date, 'MM') AS bulan
-							FROM 
-								date_series
-								
+									date_series
+									
+							) a
+
 						) a
 					");
 

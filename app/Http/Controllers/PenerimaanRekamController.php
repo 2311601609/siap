@@ -258,11 +258,12 @@ class PenerimaanRekamController extends Controller {
 				select	a.kdakun,
 						floor(nvl(a.nilai,0)) as nilai,
 						(nvl(a.nilai,0)-(floor(nvl(a.nilai,0))))*100 as nilai_des,
-						b.kddk,
-						b.nilai as nilai1
+						c.kddk,
+						c.nilai as nilai1
 				from d_trans_akun a
-				left join t_akun_pajak b on(a.kdakun=b.kdakun and a.kddk=b.kddk)
-				where a.id_trans=? and grup=0
+				left join d_trans b on(a.id_trans=b.id)
+                left join t_trans_pajak c on(b.kdtran=c.id_trans and a.kdakun=c.kdakun and a.kddk=c.kddk)
+				where a.id_trans=? and a.grup=0
 			",[
 				$id
 			]);
