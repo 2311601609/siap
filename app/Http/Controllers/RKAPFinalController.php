@@ -63,10 +63,10 @@ class RKAPFinalController extends Controller
 		}
 
 		if(session('kdlevel')=='11' || session('kdlevel')=='08' || session('kdlevel')=='05'){ //staf teknis, manager teknis, gm teknis
-			$arr_where[] = "  and a.kdunit='".session('kdunit')."' ";
+			$arr_where[] = " a.kdunit='".session('kdunit')."' ";
 		}
 		elseif(session('kdlevel')=='03'){
-			$arr_where[] = "  and substr(a.kdunit,1,2)='".session('kdunit')."' ";
+			$arr_where[] = " substr(a.kdunit,1,2)='".session('kdunit')."' ";
 		}
 
 		$where = "";
