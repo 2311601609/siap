@@ -62,6 +62,13 @@ class RKAPFinalController extends Controller
 			}
 		}
 
+		if(session('kdlevel')=='11' || session('kdlevel')=='08' || session('kdlevel')=='05'){ //staf teknis, manager teknis, gm teknis
+			$arr_where[] = "  and a.kdunit='".session('kdunit')."' ";
+		}
+		elseif(session('kdlevel')=='03'){
+			$arr_where[] = "  and substr(a.kdunit,1,2)='".session('kdunit')."' ";
+		}
+
 		$where = "";
 		if(count($arr_where)>0){
 			$where = "where ".implode(" and ", $arr_where);
@@ -95,7 +102,7 @@ class RKAPFinalController extends Controller
 				left join t_program e on(a.id_program=e.id)
 				left join t_kegiatan f on(a.id_giat=f.id)
 				left join t_akun g on(a.kdakun=g.kdakun)
-				where a.thang='".session('tahun')."' and a.kdunit like '".session('kdunit')."%'
+				where a.thang='".session('tahun')."'
 				
 			) a
 			left join(
@@ -110,7 +117,7 @@ class RKAPFinalController extends Controller
 						sum(a.nilai) as realisasi
 				from d_trans_akun a
 				left join d_trans b on(a.id_trans=b.id)
-				where b.thang='".session('tahun')."' and b.kdunit like '".session('kdunit')."%'
+				where b.thang='".session('tahun')."'
 				group by b.kdunit,
 						b.thang,
 						b.id_proyek,
