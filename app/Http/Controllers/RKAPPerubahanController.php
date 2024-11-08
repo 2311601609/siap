@@ -38,9 +38,21 @@ class RKAPPerubahanController extends Controller
 	public function data()
 	{
 		$id_rkap = 0;
+		$kdunit = '';
+		$thang = '';
 		if(isset($_GET['id_rkap'])){
 			if($_GET['id_rkap']!==null && $_GET['id_rkap']!==''){
 				$id_rkap = $_GET['id_rkap'];
+			}
+		}
+		if(isset($_GET['kdunit'])){
+			if($_GET['kdunit']!==null && $_GET['kdunit']!==''){
+				$kdunit = $_GET['kdunit'];
+			}
+		}
+		if(isset($_GET['thang'])){
+			if($_GET['thang']!==null && $_GET['thang']!==''){
+				$thang = $_GET['thang'];
 			}
 		}
 
@@ -93,7 +105,7 @@ class RKAPPerubahanController extends Controller
 
 						select  max(id) as id
 						from d_rkap
-						where thang='".session('tahun')."' and id<>".$id_rkap." and status in(3,4)
+						where kdunit='".$kdunit."' and thang='".$thang."' and id<>".$id_rkap." and status in(3,4)
 						
 					)
 					

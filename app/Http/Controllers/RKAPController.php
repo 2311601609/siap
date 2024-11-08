@@ -72,6 +72,7 @@ class RKAPController extends Controller
 
 		$sql = "
 			select  a.id,
+					a.thang,
 					a.kdunit,
 					b.nmunit,
 					a.nourut,
@@ -153,6 +154,8 @@ class RKAPController extends Controller
 										href="#/rka/usulan/akun?
 										id_rkap='.$row->id.'&
 										nourut='.$row->nourut.'&
+										kdunit='.$row->kdunit.'&
+										thang='.$row->thang.'&
 										back=rka/usulan">
 										Rincian Akun
 									</a>
@@ -160,6 +163,8 @@ class RKAPController extends Controller
 										href="#/rka/usulan/perubahan?
 										id_rkap='.$row->id.'&
 										nourut='.$row->nourut.'&
+										kdunit='.$row->kdunit.'&
+										thang='.$row->thang.'&
 										back=rka/usulan">
 										Histori Perubahan
 									</a>
