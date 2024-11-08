@@ -106,7 +106,7 @@ class RefAkunDivisiController extends Controller
 		DB::connection()->getPdo()->beginTransaction();
 
 		try{
-			$lanjut;
+			$lanjut = false;
 			$error = false;
 			$kdunit = htmlspecialchars($request->input('kdunit'));
 			$kdakun = htmlspecialchars($request->input('kdakun'));
