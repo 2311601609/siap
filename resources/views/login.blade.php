@@ -81,7 +81,7 @@
                                                         </form>
                                                     </div>
                                                     <div id="form-otp" style="display: none;">
-                                                        <p>Masukan Kode OTP yang terkirim ke alamat email <b id="email">test@gmail.com</b>.</p>
+                                                        <p>Masukan Kode OTP yang terkirim ke alamat email <b id="email"></b>.</p>
                                                         <form id="form-ruh1" name="form-ruh1" onsubmit="return false">
                                                             <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                                                             <input type="hidden" id="token_user" name="token_user" />
@@ -178,6 +178,7 @@
                             $('#submit').prop('disabled', false);
                             if(result.success){    
                                 $('#token_user').val(result.token);
+                                $('#email').text(result.email);
                                 $('#form-otentikasi').hide();
                                 $('#form-otp').show();   
                             }
