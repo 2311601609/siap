@@ -94,7 +94,11 @@ class AuthenticateController extends Controller {
 										'otp_exp' => $exp
 									));
 
-									return response()->json(['success' => true, 'message' => 'Proses login berhasil.', 'token' => $token]);
+									$panjang = strlen($email);
+
+									$email = 'xxxxx'.substr($email,5,$panjang);
+
+									return response()->json(['success' => true, 'message' => 'Proses login berhasil.', 'token' => $token, 'email' => $email]);
 
 								}
 								else{
