@@ -1,153 +1,72 @@
 <?php namespace App\Http\Controllers;
 
-use DB;
-use Session;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use DB;
+use Session;
+use DataTables;
+use App\Libraries\PublicFunction;
 
 class RefUserController extends Controller {
 
-	public function index(Request $request)
+	public function index()
 	{
-		try{
-			$aColumns = array('id','username','nama','nik','nmlevel','nmunit','aktif');
-			/* Indexed column (used for fast and accurate table cardinality) */
-			$sIndexColumn = "id";
-			/* DB table to use */
-			$sTable = "select  a.id,
-								a.username,
-								a.nama,
-								a.nik,
-								d.nmlevel,
-								e.nmunit,
-								decode(a.aktif,'1','Aktif','0','Tidak Aktif','Default') as aktif
-						from t_user a
-						left outer join t_user_level b on(a.id=b.id_user and b.status='1')
-						left outer join t_user_unit c on(a.id=c.id_user and c.status='1')
-						left outer join t_level d on(b.kdlevel=d.kdlevel)
-						left outer join t_unit e on(c.kdunit=e.kdunit)
-						order by a.id desc";
-			
-			/*
-			 * Paging
-			 */ 
-			$sLimit = " ";
-			if((isset($_GET['iDisplayStart']))&&(isset($_GET['iDisplayLength']))){
-				$iDisplayStart=$_GET['iDisplayStart']+1;
-				$iDisplayLength=$_GET['iDisplayLength'];
-				$sSearch=$_GET['sSearch'];
-				if (($sSearch=='') && (isset( $iDisplayStart )) &&  ($iDisplayLength != '-1' )) 
-				{
-					$iDisplayEnd=$iDisplayStart+$iDisplayLength-1;
-					$sLimit = " WHERE NO BETWEEN '$iDisplayStart' AND '$iDisplayEnd'";
-				}
-			}
-			
-			/*
-			 * Ordering
-			 */
-			$sOrder = " ";
-			if((isset($_GET['iSortCol_0']))&&(isset($_GET['sSortDir_0']))){
-				$iSortCol_0=$_GET['iSortCol_0'];
-				$iSortDir_0=$_GET['sSortDir_0'];
-				if ( isset($iSortCol_0  ) )
-				{		
-					//modified ordering
-					for($i=0;$i<count($aColumns);$i++){
-						if($iSortCol_0==$i){
-							if($iSortDir_0=='asc'){
-								$sOrder = " ORDER BY ".$aColumns[$i]." DESC ";
-							}
-							else{
-								$sOrder = " ORDER BY ".$aColumns[$i]." ASC ";
-							}
-						}
-					}
-				}
-			}
-			
-			//modified filtering
-			$sWhere="";
-			if(isset($_GET['sSearch'])){
-				$sSearch=$_GET['sSearch'];
-				if((isset($sSearch))&&($sSearch!='')){
-					$sWhere=" where lower(nama) like lower('".$sSearch."%') or lower(nama) like lower('%".$sSearch."%') or
-									lower(nik) like lower('".$sSearch."%') or lower(nik) like lower('%".$sSearch."%') or
-									lower(username) like lower('".$sSearch."%') or lower(username) like lower('%".$sSearch."%')";
-				}
-			}
-			
-			/* Data set length after filtering */
-			$iFilteredTotal = 0;
-			$rows = DB::select("
-				SELECT COUNT(*) as JUMLAH FROM (".$sTable.") qry
-			");
-			$result = (array)$rows[0];
-			if($result){
-				$iFilteredTotal = $result['jumlah'];
-			}
-			
-			/* Total data set length */
-			$iTotal = 0;
-			$rows = DB::select("
-				SELECT COUNT(".$sIndexColumn.") as JUMLAH FROM (".$sTable.") qry
-			");
-			$result = (array)$rows[0];
-			if($result){
-				$iTotal = $result['jumlah'];
-			}
+		if(session('kdlevel')=='00'){
+			return 1;
+		}
+	}
 
-			/*
-			 * Format Output
-			 */
-			$sEcho="";
-			if(isset($_GET['sEcho'])){
-				$sEcho=$_GET['sEcho'];
-			}
-			$output = array(
-				"sEcho" => intval($sEcho),
-				"iTotalRecords" => $iTotal,
-				"iTotalDisplayRecords" => $iFilteredTotal,
-				"aaData" => array()
-			);
-			
-			$str=str_replace(" , ", " ", implode(", ", $aColumns));
-			
-			$sQuery = "SELECT * FROM ( SELECT ROWNUM AS NO,".$str." FROM ( SELECT * FROM (".$sTable.") ".$sOrder.") ".$sWhere." ) a ".$sLimit." ";
-			
-			$rows = DB::select($sQuery);
-			
-			foreach( $rows as $row )
-			{			
-				$aksi='';
-				if(session('kdlevel')=='00'){
-					$aksi='<center>
-							<button type="button" class="btn btn-raised btn-sm btn-icon btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-check"></i></button>
-							<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
-								<a id="'.$row->id.'" class="dropdown-item ubah" href="javascript:;">Ubah Data</a>
-								<a id="'.$row->id.'" class="dropdown-item hapus" href="javascript:;">Hapus Data</a>
-								<a id="'.$row->id.'" class="dropdown-item reset" href="javascript:;">Reset</a>
-							</div>
-						</center>';
-				}
-				
-				$output['aaData'][] = array(
-					$row->no,
-					$row->username,
-					$row->nama,
-					$row->nik,
-					$row->nmlevel,
-					$row->nmunit,
-					$row->aktif,
-					$aksi
-				);
-			}
-			
-			return response()->json($output);
-		}
-		catch(\Exception $e){
-			return 'Terdapat kesalahan lainnya!';
-		}
+	public function data()
+	{
+		$sql = "
+			select  a.id,
+					a.username,
+					a.nama,
+					a.nik,
+					d.nmlevel,
+					e.nmunit,
+					decode(a.aktif,'1','Aktif','0','Tidak Aktif','Default') as aktif
+			from t_user a
+			left outer join t_user_level b on(a.id=b.id_user and b.status='1')
+			left outer join t_user_unit c on(a.id=c.id_user and c.status='1')
+			left outer join t_level d on(b.kdlevel=d.kdlevel)
+			left outer join t_unit e on(c.kdunit=e.kdunit)
+			order by a.id desc
+		";
+
+		$query = DB::table(DB::raw("($sql) a"))
+				->selectRaw('a.*');
+
+		$datatables = DataTables::of($query)
+					->addIndexColumn()
+					->addColumn('aksi', function($row){
+
+						$crud = false;
+						if(session('kdlevel')=='00'){ // staf teknis divisi
+							$crud = true;
+						}
+
+						$crud_output = '';
+						if($crud){
+							$crud_output = '
+								<center>
+									<button type="button" class="btn btn-raised btn-sm btn-icon btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-check"></i></button>
+									<div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 38px, 0px); top: 0px; left: 0px; will-change: transform;">
+										<a id="'.$row->id.'" class="dropdown-item ubah" href="javascript:;">Ubah Data</a>
+										<a id="'.$row->id.'" class="dropdown-item hapus" href="javascript:;">Hapus Data</a>
+										<a id="'.$row->id.'" class="dropdown-item reset" href="javascript:;">Reset</a>
+									</div>
+								</center>
+							';
+						}
+						
+						return $crud_output;
+
+					})
+					->rawColumns(['aksi'])
+					->make(true);
+
+		return $datatables;
 	}
 	
 	public function pilih(Request $request, $id)
@@ -225,12 +144,29 @@ class RefUserController extends Controller {
 	
 	public function simpan(Request $request)
 	{
+		DB::connection()->getPdo()->beginTransaction();
+
 		try{
-			DB::beginTransaction();
-			
-			if(count($request->input('kdlevel'))>0){
+
+			$lanjut = false;
+			$error = false;
+
+			$username = htmlspecialchars($request->input('username'));
+			$nik = htmlspecialchars($request->input('nik'));
+			$nama = htmlspecialchars($request->input('nama'));
+			$email = htmlspecialchars($request->input('email'));
+			$kdlevel = $request->input('kdlevel');
+			$kdunit = $request->input('kdunit');
+			$aktif = htmlspecialchars($request->input('aktif'));
+			$id = $request->input('inp-id');
+			$baru = $request->input('inp-rekambaru');
+			if($id==null){
+				$id = 0;
+			}
+
+			if(count($kdlevel)>0){
 				
-				if($request->input('inp-rekambaru')=='1'){
+				if($baru=='1'){
 				
 					$password = md5('p4ssw0rd!');
 					
@@ -239,27 +175,27 @@ class RefUserController extends Controller {
 						from t_user
 						where username=? or nik=?
 					",[
-						$request->input('username'),
-						$request->input('nik')
+						$username,
+						$nik
 					]);
 					
 					if($rows[0]->jml==0){
 						
 						$id_user = DB::table('t_user')->insertGetId(
 							array(
-								'username' => $request->input('username'),
+								'username' => $username,
 								'pass' => $password,
-								'nama' => $request->input('nama'),
-								'nik' => $request->input('nik'),
-								'email' => $request->input('email'),
-								'aktif' => $request->input('aktif'),
+								'nama' => $nama,
+								'nik' => $nik,
+								'email' => $email,
+								'aktif' => $aktif,
 								'foto' => 'no-image.png',
 							)
 						);
 						
 						if($id_user) {
 							
-							$arr_level = $request->input('kdlevel');
+							$arr_level = $kdlevel;
 							
 							$arr_insert = array();
 							for($i=0;$i<count($arr_level);$i++){
@@ -277,9 +213,9 @@ class RefUserController extends Controller {
 							
 							if($insert){
 								
-								if($request->input('kdunit')!==null){
+								if($kdunit!==null){
 									
-									$arr_perusahaan = $request->input('kdunit');
+									$arr_perusahaan = $kdunit;
 							
 									$arr_insert1 = array();
 									for($j=0;$j<count($arr_perusahaan);$j++){
@@ -296,32 +232,30 @@ class RefUserController extends Controller {
 									");
 									
 									if($insert){
-										DB::commit();
-										return 'success';
+										$lanjut = true;
 									}
 									else{
-										return 'Unit gagal disimpan!';
+										$error = 'Unit gagal disimpan!';
 									}
 									
 								}
 								else{
-									DB::commit();
-									return 'success';
+									$lanjut = true;
 								}
 								
 							}
 							else{
-								return 'Level gagal disimpan!';
+								$error = 'Level gagal disimpan!';
 							}
 							
 						}
 						else{
-							return 'Proses simpan gagal. Hubungi Administrator.';
+							$error = 'Proses simpan gagal. Hubungi Administrator.';
 						}
 					
 					}
 					else{
-						return 'Username ini sudah ada!';
+						$error = 'Username ini sudah ada!';
 					}
 					
 				}
@@ -334,16 +268,16 @@ class RefUserController extends Controller {
 							aktif=?
 						where id=?
 					",[
-						$request->input('nama'),
-						$request->input('email'),
-						$request->input('aktif'),
+						$nama,
+						$email,
+						$aktif,
 						$request->input('inp-id')
 					]);
 					
 					if($update){
 						
-						$id_user = $request->input('inp-id');
-						$arr_level = $request->input('kdlevel');
+						$id_user = $id;
+						$arr_level = $kdlevel;
 							
 						$arr_insert = array();
 						for($i=0;$i<count($arr_level);$i++){
@@ -368,9 +302,9 @@ class RefUserController extends Controller {
 						
 						if($insert){
 							
-							if($request->input('kdunit')!==null){
+							if($kdunit!==null){
 								
-								$arr_perusahaan = $request->input('kdunit');
+								$arr_perusahaan = $kdunit;
 						
 								$arr_insert1 = array();
 								for($j=0;$j<count($arr_perusahaan);$j++){
@@ -394,39 +328,53 @@ class RefUserController extends Controller {
 								");
 								
 								if($insert){
-									DB::commit();
-									return 'success';
+									$lanjut = true;
 								}
 								else{
-									return 'Unit gagal disimpan!';
+									$error = 'Unit gagal disimpan!';
 								}
 								
 							}
 							else{
-								DB::commit();
-								return 'success';
+								$lanjut = true;
 							}
 							
 						}
 						else{
-							return 'Level gagal disimpan!';
+							$error = 'Level gagal disimpan!';
 						}
 						
 					}
 					else{
-						return 'Data gagal diubah!';
+						$error = 'Data gagal diubah!';
 					}
 					
 				}
 				
 			}
 			else{
-				return 'Level belum dipilih';
+				$error = 'Level belum dipilih';
+			}
+
+			if($lanjut){
+				DB::connection()->getPdo()->commit();
+				return 'success';
+			}
+			else{
+				DB::connection()->getPdo()->rollBack();
+				return $error;
 			}
 						
 		}
 		catch(\Exception $e){
-			return 'Terdapat kesalahan lainnya!';
+			DB::connection()->getPdo()->rollBack();
+
+			if(PublicFunction::errorLog($request, substr($e->getMessage(),0,255))){
+				return 'Kesalahan lainnya, hubungi Administrator.';
+			}
+			else{
+				return 'Kesalahan lainnya, hubungi Administrator. Log error gagal disimpan.';
+			}
 		}		
 	}
 	

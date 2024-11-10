@@ -130,33 +130,36 @@
 </section>
 
 <script>
-	jQuery(document).ready(function(){
+	$(document).ready(function(){
+
+		var route = 'ref/user';
 	
-		jQuery.fn.dataTable.ext.errMode = 'none';
+		$.fn.dataTable.ext.errMode = 'none';
 		
 		//aktivasi chosen
-		jQuery('.chosen').select2();
+		$('.chosen').select2();
 		
-		jQuery.get('cek/level', function(result){
-			if(result=='00'){ //admin
-				jQuery('#tambah').show();
+		//cek permission create
+		$.get(route, function(result){
+			if(result==1){ //admin
+				$('#tambah').show();
 			}
 		});
 				
 		//ref level user
-		jQuery.get('dropdown/level', function(result){
-			jQuery('#kdlevel').html(result).trigger('change');
+		$.get('dropdown/level', function(result){
+			$('#kdlevel').html(result).trigger('change');
 		});
 		
 		//ref perusahaan
-		jQuery.get('dropdown/unit/4', function(result){
-			jQuery('#kdunit').html(result).trigger('change');
+		$.get('dropdown/unit/4', function(result){
+			$('#kdunit').html(result).trigger('change');
 		});
 		
-		jQuery.extend({
+		$.extend({
 			getValues: function(url) {
 				var result = null;
-				jQuery.ajax({
+				$.ajax({
 					url: url,
 					type: 'get',
 					async: false,
@@ -168,31 +171,46 @@
 			}
 		});
 		
-		var token1 = jQuery.getValues('token');
+		var token1 = $.getValues('token');
 		
 		//tampilan default
 		function form_default() {
-			jQuery('input,select,textarea').val('');
-			jQuery('.warning, #div-form').hide();
-			jQuery('#div-tabel').show();
-			jQuery('.chosen').trigger('change');
-			jQuery('#simpan').prop('disabled', false);
+			$('input,select,textarea').val('');
+			$('.warning, #div-form').hide();
+			$('#div-tabel').show();
+			$('.chosen').trigger('change');
+			$('#simpan').prop('disabled', false);
 		}
 		
 		//aktivasi tampilan default
 		form_default();
 		
 		//klik tambah
-		jQuery('#tambah').click(function(){
-			jQuery('#username,#nik').prop('disabled',false);
-			jQuery('#inp-rekambaru').val('1');
-			jQuery('#div-form').show();
-			jQuery('#div-tabel').hide();
+		$('#tambah').click(function(){
+			$('#username,#nik').prop('disabled',false);
+			$('#inp-rekambaru').val('1');
+			$('#aktif').val('2').trigger('change');
+			$('#div-form').show();
+			$('#div-tabel').hide();
 		});
 		
 		//data tabel
-		var table=jQuery('#tabel-ruh').DataTable({
-			bProcessing:true,
+		var table = $('#tabel-ruh').DataTable({
+			buttons: [
+				{
+					extend: 'excel',
+					title: 'Ref Pengguna'
+				},
+				{
+					extend: 'pdf',
+					title: 'Ref Pengguna'
+				},
+				{
+					extend: 'print',
+					title: 'Ref Pengguna'
+				}
+			],
+			processing: true,
 			language:{
 			    "decimal":        "",
 			    "emptyTable":     "Tidak ada data tersedia",
@@ -217,9 +235,20 @@
 			        "sortDescending": ": aktifkan untuk mengurutkan kolom (desc)"
 			    }
 			},
-			aaSorting: [],
-			bServerSide: true,
-			sAjaxSource: "ref/user"
+			serverSide: true,
+			ajax: {
+				url: route + "/data",
+			},
+			columns: [
+				{ data: "DT_RowIndex", name: "DT_RowIndex", className: "t-center", orderable: false, searchable: false },
+				{ data: "username", name: "username", className: "t-left" },
+				{ data: "nama", name: "nama", className: "t-left" },
+				{ data: "nik", name: "nik", className: "t-left" },
+				{ data: "nmlevel", name: "nmlevel", className: "t-left" },
+				{ data: "nmunit", name: "nmunit", className: "t-left" },
+				{ data: "aktif", name: "aktif", className: "t-left" },
+				{ data: "aksi", name: "aksi", className: "t-center", orderable: false, searchable: false },
+			],
 		});
 		
 		//validasi isian form
@@ -227,8 +256,8 @@
 			var arr_id = str_id.split(',');
 			var next = true;
 			for(x = 0; x < arr_id.length; x++){
-				if(jQuery('#'+arr_id[x]).val()==''){
-					jQuery('#'+arr_id[x]).addClass('is-invalid');
+				if($('#'+arr_id[x]).val()==''){
+					$('#'+arr_id[x]).addClass('is-invalid');
 					next = false;
 				}
 			}
@@ -237,98 +266,98 @@
 		
 		//cari data user yang akan di edit berdasarkan id user
 		function cari_data(id){
-			jQuery('.chosen').val('').trigger('change');
-			jQuery.getJSON('ref/user/pilih/'+id, function(result){
+			$('.chosen').val('').trigger('change');
+			$.getJSON(route + '/pilih/' + id, function(result){
 				if(result.error==false) {
 					var arr_level = result.kdlevel.split(",");
 					var arr_unit = result.kdunit.split(",");
-					jQuery('#inp-id').val(id);
-					jQuery('#inp-rekambaru').val('0');
-					jQuery('#username').val(result.username);
-					jQuery('#nama').val(result.nama);
-					jQuery('#nik').val(result.nik);
-					jQuery('#email').val(result.email);
-					jQuery('#kdlevel').val(arr_level);
-					jQuery('#kdunit').val(arr_unit);
-					jQuery('#aktif').val(result.aktif);
-					jQuery('.chosen').trigger('change');
-					jQuery('#username,#nik').prop('disabled', true);
+					$('#inp-id').val(id);
+					$('#inp-rekambaru').val('0');
+					$('#username').val(result.username);
+					$('#nama').val(result.nama);
+					$('#nik').val(result.nik);
+					$('#email').val(result.email);
+					$('#kdlevel').val(arr_level);
+					$('#kdunit').val(arr_unit);
+					$('#aktif').val(result.aktif);
+					$('.chosen').trigger('change');
+					$('#username,#nik').prop('disabled', true);
 				}
 			});
 		}
 		
 		//klik ubah
-		jQuery('body').off('click', '.ubah').on('click', '.ubah', function(){
+		$('body').off('click', '.ubah').on('click', '.ubah', function(){
 			var id = this.id;
 			cari_data(id);
-			jQuery('#div-tabel').hide();
-			jQuery('#div-form').show();
-			jQuery('#inp-id').val(id);
-			jQuery('#inp-rekambaru').val('0');
+			$('#div-tabel').hide();
+			$('#div-form').show();
+			$('#inp-id').val(id);
+			$('#inp-rekambaru').val('0');
 		});
 		
 		//klik batal
-		jQuery('.batal').click(function(){
+		$('.batal').click(function(){
 			form_default();
 		});
 		
 		//klik simpan
-		jQuery('#simpan').click(function(){
-			jQuery(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
-			jQuery(this).prop('disabled',true);
+		$('#simpan').click(function(){
+			$(this).html('<span class="loading"><i class="fa fa-refresh"></i> Loading.....</span>');
+			$(this).prop('disabled',true);
 			var next = form_valid('username,nik,nama,email,kdlevel,aktif');
 			if(next==true){
-				jQuery.get('token', function(token){
+				$.get('token', function(token){
 					if(token){
-						jQuery('#_token').val(token);
-						var data = jQuery('#form-ruh').serialize();
-						jQuery.ajax({
-							url: 'ref/user',
+						$('#_token').val(token);
+						var data = $('#form-ruh').serialize();
+						$.ajax({
+							url: route,
 							method: 'POST',
 							data: data,
 							success: function(result){
 								if(result=='success') {
-									jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-									jQuery('#simpan').prop('disabled',false);
+									$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan').prop('disabled',false);
 									alertify.log('Proses simpan berhasil');
 									form_default();
 									table.ajax.reload();
 								} else {
-									jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-									jQuery('#simpan').prop('disabled',false);
+									$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+									$('#simpan').prop('disabled',false);
 									alertify.log(result);
 								} 
 							},
 							error: function(result){
-								jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-								jQuery('#simpan').prop('disabled',false);
+								$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+								$('#simpan').prop('disabled',false);
 								alertify.log('Data tidak dapat disimpan. Koneksi pada aplikasi/database terputus atau data sudah pernah direkam atau format data salah. Hubungi Administrator.');
 							}
 						})
 					} 
 					else{
-						jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-						jQuery('#simpan').prop('disabled',false);
+						$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+						$('#simpan').prop('disabled',false);
 						alertify.log('Sesi telah habis, silahkan refresh browser Anda!');
 					}
 				});
 			}
 			else{
-				jQuery('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
-				jQuery('#simpan').prop('disabled',false);
+				$('#simpan').html('<i class="fa fa-check-square-o"></i> Simpan');
+				$('#simpan').prop('disabled',false);
 				alertify.log('Data tidak dapat dikosongkan!');
 			}
 		});
 		
 		//hapus
-		jQuery('body').off('click', '.hapus').on('click', '.hapus', function(){
+		$('body').off('click', '.hapus').on('click', '.hapus', function(){
 			var id = this.id;
 			alertify.confirm('Hapus data ini?', function(c){
 				if(c) {
-					jQuery.get('token', function(token){
+					$.get('token', function(token){
 						if(token) {
-							jQuery.ajax({
-								url:'ref/user/hapus',
+							$.ajax({
+								url: route + '/hapus',
 								method:'POST',
 								data:{
 									_token:token, 
@@ -355,14 +384,14 @@
 		});
 		
 		//reset
-		jQuery('body').off('click', '.reset').on('click', '.reset', function(){
+		$('body').off('click', '.reset').on('click', '.reset', function(){
 			var id = this.id;
 			alertify.confirm('Reset data ini?', function(c){
 				if(c) {
-					jQuery.get('token', function(token){
+					$.get('token', function(token){
 						if(token) {
-							jQuery.ajax({
-								url:'ref/user/reset',
+							$.ajax({
+								url: route + '/reset',
 								method:'POST',
 								data:{
 									_token:token, 
