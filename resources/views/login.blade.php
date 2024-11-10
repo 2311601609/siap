@@ -67,17 +67,30 @@
                                                 </div>
                                                 <div class="col-lg-6 col-12 px-4 py-3">
                                                     <h4 class="mb-2 card-title">SIAP V2</h4>
-                                                    <p>Selamat datang,<br>masukan akun pengguna Anda.</p>
-                                                    <form id="form-ruh" name="form-ruh" onsubmit="return false">
-                                                        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                                                        <input type="text" class="form-control mb-3" placeholder="Username" id="username" name="username">
-                                                        <input type="password" class="form-control mb-3" placeholder="Password" id="password" name="password">
-                                                        <select class="form-control mb-3" id="tahun" name="tahun">
-                                                        </select>
-                                                        <div class="d-flex justify-content-between flex-sm-row flex-column">
-                                                            <button type="submit" id="submit" class="btn btn-primary">Masuk</button>
-                                                        </div>
-                                                    </form>
+                                                    <div id="form-otentikasi">
+                                                        <p>Selamat datang,<br>masukan akun pengguna Anda.</p>
+                                                        <form id="form-ruh" name="form-ruh" onsubmit="return false">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                                            <input type="text" class="form-control mb-3" placeholder="Username" id="username" name="username">
+                                                            <input type="password" class="form-control mb-3" placeholder="Password" id="password" name="password">
+                                                            <select class="form-control mb-3" id="tahun" name="tahun">
+                                                            </select>
+                                                            <div class="d-flex justify-content-between flex-sm-row flex-column">
+                                                                <button type="submit" id="submit" class="btn btn-primary">Masuk</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div id="form-otp" style="display: none;">
+                                                        <p>Masukan Kode OTP yang terkirim ke alamat email <b id="email">test@gmail.com</b>.</p>
+                                                        <form id="form-ruh1" name="form-ruh1" onsubmit="return false">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                                                            <input type="hidden" id="token_user" name="token_user" />
+                                                            <input type="password" class="form-control mb-3" placeholder="5 digit token OTP" id="otp" name="otp">
+                                                            <div class="d-flex justify-content-between flex-sm-row flex-column">
+                                                                <button type="submit" id="submit1" class="btn btn-primary">Konfirmasi</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -164,7 +177,9 @@
                             $('#submit').html('Masuk');
                             $('#submit').prop('disabled', false);
                             if(result.success){    
-                                window.location.href='./';
+                                $('#token_user').val(result.token);
+                                $('#form-otentikasi').hide();
+                                $('#form-otp').show();   
                             }
                         },
                         error:function(result){
@@ -178,6 +193,47 @@
                     alertify.log('Kolom username/password tidak dapat dikosongkan!');
                     $('#submit').html('Masuk');
                     $('#submit').prop('disabled', false);
+                }
+                
+            });
+
+            //login         
+            $('#submit1').click(function(){
+            
+                //bouncing for awhile...
+                doBounce($('#login'), 3, '10px', 100);
+            
+                $(this).prop('disabled',true);
+                $(this).html('<span class="loading">Sedang proses.....</span>');
+                var lanjut=true;
+                if($('#otp').val()==''){
+                    lanjut=false;
+                }
+                if(lanjut==true){
+                    var data=$('#form-ruh1').serialize();
+                    $.ajax({
+                        url:'auth/otp',
+                        data:data,
+                        method:'POST',
+                        success:function(result){
+                            alertify.log(result.message);
+                            $('#submit1').html('Konfirmasi');
+                            $('#submit1').prop('disabled', false);
+                            if(result.success){    
+                                window.location.href = './';
+                            }
+                        },
+                        error:function(result){
+                            alertify.log(result.message);
+                            $('#submit1').html('Konfirmasi');
+                            $('#submit1').prop('disabled', false);
+                        }
+                    });
+                }
+                else{
+                    alertify.log('Kolom username/password tidak dapat dikosongkan!');
+                    $('#submit1').html('Konfirmasi');
+                    $('#submit1').prop('disabled', false);
                 }
                 
             });

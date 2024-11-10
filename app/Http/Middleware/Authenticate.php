@@ -64,7 +64,7 @@ class Authenticate
                                 
                                 if(count($rows)>0){
                                                 
-                                    if($rows[0]->aktif=='1'){
+                                    if($rows[0]->aktif=='1' || $rows[0]->aktif=='2'){
 
                                         session([
                                             'authenticated' => true,
@@ -77,6 +77,7 @@ class Authenticate
                                             'nmlevel' => $rows[0]->nmlevel,
                                             'kdunit' => $rows[0]->kdunit,
                                             'nmunit' => $rows[0]->nmunit,
+                                            'status' => $rows[0]->aktif,
                                             'app_versi' => '',
                                             'app_nama' => '',
                                             'app_ket' => '',

@@ -40,6 +40,7 @@ class AuthenticateController extends Controller {
 					select	id,
 							username,
 							pass,
+							email,
 							aktif
 					from t_user
 					where username=?
@@ -52,34 +53,58 @@ class AuthenticateController extends Controller {
 					if($rows[0]->pass==md5($password)){
 					
 						if($rows[0]->aktif=='1' || $rows[0]->aktif=='2'){
-						
-							$lifetime = \config('jwt.lifetime'); //60 detik * 30 menit * 1 jam = setengah jam
-							$issued = time();
-							$exp = time()+$lifetime;
-							
-							$header = '{
-										"typ":"JWT",
-										"alg":"HS256"
-									}';
 
-							$payload = '{
-										"iss":"'.\config('app.name').'",
-										"exp":'.$exp.',
-										"issued":'.$issued.',
-										"username":"'.$username.'",
-										"tahun":"'.$tahun.'"
+							if($rows[0]->email!==''){
+
+								$email = $rows[0]->email;
+
+								$lifetime = \config('jwt.lifetime'); //60 detik * 30 menit * 1 jam = setengah jam
+								$issued = time();
+								$exp = time()+$lifetime;
+								
+								$header = '{
+											"typ":"JWT",
+											"alg":"HS256"
 										}';
 
-							$key = \config('jwt.key');
+								$payload = '{
+											"iss":"'.\config('app.name').'",
+											"exp":'.$exp.',
+											"issued":'.$issued.',
+											"username":"'.$username.'",
+											"tahun":"'.$tahun.'"
+											}';
 
-							$JWT = new \App\Libraries\jwtphp\JWT;
+								$key = \config('jwt.key');
 
-							$token = $JWT->encode($header, $payload, $key);
+								$JWT = new \App\Libraries\jwtphp\JWT;
 
-							//create cookie with token
-							setcookie('siap_token', $token, null, "/"); // 86400 = 1 day
+								$token = $JWT->encode($header, $payload, $key);
 
-							return response()->json(['success' => true, 'message' => 'Proses login berhasil.']);
+								$kirimOTP = PublicFunction::kirimOTP($email);
+
+								if($kirimOTP['success']){
+
+									$otp = $kirimOTP['otp'];
+									$lifetime = $kirimOTP['lifetime'];
+									$exp = time() + $lifetime;
+
+									session(array(
+										'otp' => $otp,
+										'otp_exp' => $exp
+									));
+
+									return response()->json(['success' => true, 'message' => 'Proses login berhasil.', 'token' => $token]);
+
+								}
+								else{
+									return response()->json(['success' => false, 'message' => $kirimOTP['message']]);	
+								}
+
+							}
+							else{
+								return response()->json(['success' => false, 'message' => 'Email user tidak valid.']);	
+							}
 							
 						}
 						else{
@@ -94,6 +119,64 @@ class AuthenticateController extends Controller {
 				}
 				else{
 					return response()->json(['success' => false, 'message' => 'Username tidak terdaftar.']);
+				}
+				
+			}
+			else{
+				return response()->json(['success' => false, 'message' => 'Parameter tidak valid.']);
+			}
+
+		}
+		catch(\Exception $e){
+			if(PublicFunction::errorLog($request, substr($e->getMessage(),0,255))){
+				return response()->json(['success' => false, 'message' => 'Kesalahan lainnya, hubungi Administrator.']);
+			}
+			else{
+				return response()->json(['success' => false, 'message' => 'Kesalahan lainnya, hubungi Administrator. Log error gagal disimpan.']);
+			}
+		}
+	}
+
+	public function otp(Request $request)
+	{
+		try{
+			$otp = htmlspecialchars($request->input('otp'));
+			$token_user = htmlspecialchars($request->input('token_user'));
+			
+			if(	$otp!==null && $token_user!==null &&
+				$otp!=='' && $token_user!==''){
+
+				$otp_status = \config('otp.status');
+
+				if($otp_status){
+
+					if($otp==session('otp')){
+
+						$current = time();
+						
+						if($current<=session('otp_exp')){
+	
+							setcookie('siap_token', $token_user, null, "/"); // 86400 = 1 day
+	
+							return response()->json(['success' => true, 'message' => 'Kode OTP valid, Anda akan diredirect ke halaman utama.']);	
+	
+						}
+						else{
+							return response()->json(['success' => false, 'message' => 'Kode OTP expired, refresh halaman browser Anda.']);	
+						}
+	
+					}
+					else{
+						return response()->json(['success' => false, 'message' => 'Kode OTP tidak valid, cek kembali kode OTP yang terkirim ke email Anda.']);
+					}
+
+				}
+				else{
+
+					setcookie('siap_token', $token_user, null, "/"); // 86400 = 1 day
+	
+					return response()->json(['success' => true, 'message' => 'Kode OTP valid, Anda akan diredirect ke halaman utama.']);	
+
 				}
 				
 			}

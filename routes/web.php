@@ -81,6 +81,7 @@ Route::group(['prefix' => 'auth'], function () {
 	Route::get('tahun', [DropdownController::class, 'tahun']);
     Route::get('logout', [AuthenticateController::class, 'logout']);
 	Route::post('', [AuthenticateController::class, 'login']);
+	Route::post('otp', [AuthenticateController::class, 'otp']);
 
 });
 
@@ -671,10 +672,11 @@ Route::middleware(['auth'])->group(function () {
 		Route::group(['prefix' => 'user'], function(){
 			
 			Route::get('', [RefUserController::class, 'index'])->middleware('role:00');
-			Route::get('/pilih/{param}', [RefUserController::class, 'pilih'])->middleware('role:00');
+			Route::get('data', [RefUserController::class, 'data'])->middleware('role:00');
+			Route::get('pilih/{param}', [RefUserController::class, 'pilih'])->middleware('role:00');
 			Route::post('', [RefUserController::class, 'simpan'])->middleware('role:00');
-			Route::post('/hapus', [RefUserController::class, 'hapus'])->middleware('role:00');
-			Route::post('/reset', [RefUserController::class, 'reset'])->middleware('role:00');
+			Route::post('hapus', [RefUserController::class, 'hapus'])->middleware('role:00');
+			Route::post('reset', [RefUserController::class, 'reset'])->middleware('role:00');
 			
 		});
 		
