@@ -8,6 +8,42 @@ use App\Libraries\PublicFunction;
 
 class ProfileController extends Controller {
 
+	/**
+	 * description 
+	 */
+	private function checkPassword($pwd) {
+		
+		$error  =array();
+		
+		if( strlen($pwd) < 8 ) {
+			$error[] = "Password too short! ";
+		}
+
+		if( strlen($pwd) > 20 ) {
+			$error[] = "Password too long! ";
+		}
+
+		if( !preg_match("#[0-9]+#", $pwd) ) {
+			$error[] = "Password must include at least one number! ";
+		}
+
+		if( !preg_match("#[a-z]+#", $pwd) ) {
+			$error[] = "Password must include at least one letter! ";
+		}
+
+		if( !preg_match("#[A-Z]+#", $pwd) ) {
+			$error[] = "Password must include at least one CAPS! ";
+		}
+
+		if( !preg_match("#\W+#", $pwd) ) {
+			$error[] = "Password must include at least one symbol! ";
+		}
+
+		if(count($error)>0){
+			return $error;
+		}
+	}
+
 	public function index()
 	{
 		$data['error'] = true;
@@ -141,7 +177,16 @@ class ProfileController extends Controller {
 						
 						if(md5($request->input('password'))==$password){
 							
-							$password = md5($request->input('password1'));
+							$password = $request->input('password1');
+
+							$cek = $this->checkPassword($password);
+	
+							if($cek){
+								$lanjut = false;
+								$error = implode(", ", $cek);
+							}
+
+							$password = md5($password);
 							
 						}
 						else{
