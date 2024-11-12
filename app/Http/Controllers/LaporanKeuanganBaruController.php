@@ -467,7 +467,7 @@ class LaporanKeuanganBaruController extends Controller {
 
 				-- saldo bulan ini
 				select  a.kdakun,
-						sum(a.debet - a.kredit) as saldo
+						sum(a.kredit - a.debet) as saldo
 				from d_buku_besar a
 				where a.thang='".session('tahun')."' and a.periode='".$periode."'
 				group by a.kdakun
@@ -477,7 +477,7 @@ class LaporanKeuanganBaruController extends Controller {
 
 				-- saldo bulan ini
 				select  a.kdakun,
-						sum(a.debet - a.kredit) as saldo
+						sum(a.kredit - a.debet) as saldo
 				from d_buku_besar a
 				where a.thang='".session('tahun')."' and a.periode<='".$periode."'
 				group by a.kdakun
@@ -509,7 +509,7 @@ class LaporanKeuanganBaruController extends Controller {
 
 				-- saldo bulan ini
 				select  a.kdakun,
-						sum(a.debet - a.kredit) as saldo
+						sum(a.kredit - a.debet) as saldo
 				from d_buku_besar a
 				where a.thang='".session('tahun')."' and a.periode='".$periode."'
 				group by a.kdakun
@@ -519,7 +519,7 @@ class LaporanKeuanganBaruController extends Controller {
 
 				-- saldo bulan ini
 				select  a.kdakun,
-						sum(a.debet - a.kredit) as saldo
+						sum(a.kredit - a.debet) as saldo
 				from d_buku_besar a
 				where a.thang='".session('tahun')."' and a.periode<='".$periode."'
 				group by a.kdakun
@@ -551,7 +551,7 @@ class LaporanKeuanganBaruController extends Controller {
 
 				-- saldo bulan ini
 				select  a.kdakun,
-						sum(a.debet - a.kredit) as saldo
+						sum(a.kredit - a.debet) as saldo
 				from d_buku_besar a
 				where a.thang='".session('tahun')."' and a.periode='".$periode."'
 				group by a.kdakun
@@ -561,7 +561,7 @@ class LaporanKeuanganBaruController extends Controller {
 
 				-- saldo bulan ini
 				select  a.kdakun,
-						sum(a.debet - a.kredit) as saldo
+						sum(a.kredit - a.debet) as saldo
 				from d_buku_besar a
 				where a.thang='".session('tahun')."' and a.periode<='".$periode."'
 				group by a.kdakun
@@ -591,7 +591,7 @@ class LaporanKeuanganBaruController extends Controller {
 
 			$rows4 = DB::select("
 				select  sum(sawal_saldo) as saldo_awal_tahun,
-						sum(nr_debet-nr_kredit) as saldo_bulan_lalu
+						sum(nr_kredit-nr_debet) as saldo_bulan_lalu
 				from d_buku_besar_dtl
 				where substr(kdakun,1,4)='1101' and periode='".$periode_lalu."'
 			");
