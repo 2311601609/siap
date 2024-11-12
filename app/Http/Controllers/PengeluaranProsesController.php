@@ -244,10 +244,12 @@ class PengeluaranProsesController extends Controller {
 			",[
 				$id
 			]);
-			
+
 			$lampiran = '<ul>';
+			$nmfile = '';
 			foreach($rows as $row){
-				$lampiran .= '<li><a href="penerimaan/rekam/download/'.$row->id.'" target="_blank" title="Download Lampiran">'.$row->uraian.'</li>';
+				$lampiran .= '<li><a href="pengeluaran-lampiran/download?nmfile='.$row->nmfile.'" target="_blank" title="Download Lampiran">'.$row->uraian.'</li>';
+				$nmfile = $row->nmfile;
 			}
 			$lampiran .= '</ul>';
 			
