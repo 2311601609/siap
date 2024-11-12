@@ -148,16 +148,16 @@
             <td style="background-color: #6495ED;text-align:right;color: #FFF;">0</td>
             <td style="background-color: #6495ED;text-align:right;color: #FFF;">
                 @if($selisih>0)
-                    ({{ number_format(abs($selisih)) }})
-                @else
                     {{ number_format(abs($selisih)) }}
+                @else
+                    ({{ number_format(abs($selisih)) }})
                 @endif
             </td>
             <td style="background-color: #6495ED;text-align:right;color: #FFF;">
                 @if($selisih_sd>0)
-                    ({{ number_format(abs($selisih_sd)) }})
-                @else
                     {{ number_format(abs($selisih_sd)) }}
+                @else
+                    ({{ number_format(abs($selisih_sd)) }})
                 @endif
             </td>
         </tr>
@@ -171,18 +171,10 @@
             <td style="background-color: #6495ED;text-align:center;color: #FFF;">KAS DAN SETARA KAS PADA AKHIR PERIODE</td>
             <td style="background-color: #6495ED;text-align:right;color: #FFF;">0</td>
             <td style="background-color: #6495ED;text-align:right;color: #FFF;">
-                @if($selisih>0)
-                    {{ number_format($rows4->saldo_bulan_lalu - abs($selisih)) }}
-                @else
-                    {{ number_format($rows4->saldo_bulan_lalu + abs($selisih)) }}
-                @endif
+                {{ number_format($rows4->saldo_bulan_lalu + $selisih) }}
             </td>
             <td style="background-color: #6495ED;text-align:right;color: #FFF;">
-                @if($selisih_sd>0)
-                    {{ number_format($rows4->saldo_awal_tahun - abs($selisih_sd)) }}
-                @else
-                    {{ number_format($rows4->saldo_awal_tahun + abs($selisih_sd)) }}
-                @endif
+                {{ number_format($rows4->saldo_awal_tahun + $selisih_sd) }}
             </td>
         </tr>
 
