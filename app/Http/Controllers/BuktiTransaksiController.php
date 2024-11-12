@@ -827,26 +827,12 @@ class BuktiTransaksiController extends TableController
 				'realisasi' => $realisasi,
 				'sisa' => $pagu-$realisasi
 			);
-		
-			//~ return view('bukti.uang-keluar', $data);
-			$html_out = view('bukti.kuitansi', $data);
 
-			$mpdf = new Mpdf([
-				'mode' => 'utf-8',
-				'format' => 'A4-L',
-				'margin_left' => 8,
-				'margin_right' => 70,
-				'margin_top' => 8,
-				'margin_bottom' => 8,
-			]);
+			$pdf = Pdf::loadView('bukti.kuitansi', $data);
 
-			//mode portrait or landscape
-			$mpdf->AddPage('L');
+			$pdf->setPaper('letter', 'potraits')->setWarnings(false)->save('bukti-tanda-terima-'.$data['nourut'].'.pdf');
 
-			//write content to PDF
-			$mpdf->writeHTML($html_out);
-			$mpdf->Output('Bukti Uang Muka.pdf', 'I');
-			exit;
+			return $pdf->stream();
 			
 		}
 		else{
