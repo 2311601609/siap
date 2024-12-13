@@ -189,7 +189,7 @@ class RKAPController extends Controller
 		DB::connection()->getPdo()->beginTransaction();
 
 		try{
-			$lanjut;
+			$lanjut = false;
 			$error = false;
 			$nourut = htmlspecialchars($request->input('nourut'));
 			$nodok = htmlspecialchars($request->input('nodok'));
