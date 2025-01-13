@@ -1,5 +1,6 @@
 <body>
-  <header>
+<img src="https://www.budiluhur.ac.id/wp-content/uploads/2024/06/Logo-Universitas-Budi-Luhur-Horizontal-PMB-WHITE-1-1.png">
+    <header>
     <h1>Sistem Informasi Akuntansi Perusahaan (SIAP)</h1>
   </header>
   
