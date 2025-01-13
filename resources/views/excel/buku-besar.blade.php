@@ -7,7 +7,7 @@
 <table width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000;font-size:12px; width: 100%;">
     <tbody>
         <tr>
-            <td colspan="13" style="text-align:center;font-size: 20px;background-color: #FFD700;">PERUMDA PEMBANGUNAN SARANA JAYA</td>
+            <td colspan="13" style="text-align:center;font-size: 20px;background-color: #FFD700;">PERUSAHAAN XYZ</td>
         </tr>
         <tr>
             <td colspan="13" style="text-align:center;font-size: 20px;background-color: #FFD700;">Laporan Buku Besar</td>

@@ -7,7 +7,7 @@
 <table width="100%" border="1" cellspacing="0" cellpadding="10" style="border: 1px solid #000;font-size:12px;">
 	<thead>
 		<tr>
-			<th rowspan="2">PERUMDA SARANA JAYA</th>
+			<th rowspan="2">PERUSAHAAN XYZ</th>
 			<th rowspan="2">Pengeluaran Kas/ Bank untuk Uang Muka Kerja</th>
 			<th>Dokumen No. : {{$nourut}}</th>
 		</tr>

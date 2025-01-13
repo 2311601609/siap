@@ -10,8 +10,8 @@
     <meta name="keywords" content="SIAP V2, Sistem Informasi Akuntansi Perusahaan Versi 2">
     <meta name="author" content="PIXINVENT">
     <title>{{ $app_nama }} - Versi {{ $app_versi }}</title>
-    <link rel="shortcut icon" type="image/x-icon" href="template/Apex6/app-assets/img/logo-sarana-jaya.png">
-    <link rel="shortcut icon" type="image/png" href="template/Apex6/app-assets/img/logo-sarana-jaya.png">
+    <link rel="shortcut icon" type="image/x-icon" href="template/Apex6/app-assets/img/logo.png">
+    <link rel="shortcut icon" type="image/png" href="template/Apex6/app-assets/img/logo.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -66,7 +66,7 @@
                                                     <img src="template/Apex6/app-assets/img/gallery/login.png" alt="" class="img-fluid" width="300" height="230">
                                                 </div>
                                                 <div class="col-lg-6 col-12 px-4 py-3">
-                                                    <h4 class="mb-2 card-title">SIAP V2</h4>
+                                                    <h4 class="mb-2 card-title">Sistem Informasi Akuntansi Perusahaan (SIAP)</h4>
                                                     <div id="form-otentikasi">
                                                         <p>Selamat datang,<br>masukan akun pengguna Anda.</p>
                                                         <form id="form-ruh" name="form-ruh" onsubmit="return false">

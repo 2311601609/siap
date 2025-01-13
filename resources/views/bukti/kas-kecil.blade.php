@@ -7,7 +7,7 @@
 <table width="100%" border="0" cellspacing="0" cellpadding="10" style="border: 1px solid #000;font-size:10px;">
 	<thead>
 		<tr>
-			<th>PEMERINTAH DAERAH KHUSUS IBUKOTA JAKARTA<br><u>PERUSAHAAN UMUM DAERAH PEMBANGUNAN SARANA JAYA</u></th>
+			<th>PEMERINTAH DAERAH KHUSUS IBUKOTA JAKARTA<br><u>PERUSAHAAN XYZ</u></th>
 			<th>&nbsp;</th>
 			<th style="text-align:left;font-size:8px;">Lembar :<br>1. Sub Div Akuntansi<br>2. Arsip</th>
 		</tr>

@@ -23,7 +23,7 @@ class AppController extends Controller {
 
 			// Create menu....
 			$menus = DB::select("
-				SELECT * FROM t_menu WHERE aktif='1' AND kdlevel LIKE '%+".session('kdlevel')."+%' AND parent_id=0  ORDER BY nourut
+				SELECT * FROM t_menu WHERE aktif1='1' AND kdlevel LIKE '%+".session('kdlevel')."+%' AND parent_id=0  ORDER BY nourut
 			");
 			
 			foreach($menus as $menu) {
@@ -89,7 +89,7 @@ class AppController extends Controller {
 										<ul class="menu-content">';
 
 						$sub_menus = DB::select("
-							SELECT * FROM t_menu WHERE aktif='1' AND kdlevel LIKE '%+".session('kdlevel')."+%' AND parent_id='".$menu->id."' ORDER BY nourut
+							SELECT * FROM t_menu WHERE aktif1='1' AND kdlevel LIKE '%+".session('kdlevel')."+%' AND parent_id='".$menu->id."' ORDER BY nourut
 						");
 
 						//bentuk sub menu

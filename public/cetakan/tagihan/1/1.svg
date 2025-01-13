@@ -46,5 +46,5 @@ fill: #AAA;
 <path d="M592.5 493.2h101v.8h-101v-.8Z" class="g1"/>
 <path d="M693.5 493.2H816.1v.8H693.5v-.8Z" class="g1"/>
 <path d="M106.8 663.4h5v80.1h-5V663.4Z" class="g1"/>
-<image clip-path="url(#c0)" preserveAspectRatio="none" x="107" y="84" width="167" height="73" xlink:href="img/1.png"/>
+<image clip-path="url(#c0)" preserveAspectRatio="none" x="107" y="84" width="167" height="73"/>
 </svg>

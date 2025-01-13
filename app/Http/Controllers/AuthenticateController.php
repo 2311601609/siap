@@ -288,6 +288,8 @@ class AuthenticateController extends Controller {
 	
 	public function logout()
 	{
+		$base_url = \config('app.url');
+
 		\Session::flush();
 
 		\Cookie::queue(\Cookie::forget('siap_token'));
@@ -299,7 +301,7 @@ class AuthenticateController extends Controller {
 			}
 		}
 
-		return redirect()->guest('/auth'.$error);
+		return redirect()->guest($base_url.'auth'.$error);
 	}
 
 	public function hapus_sesi_upload(Request $request)

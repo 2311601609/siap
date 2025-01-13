@@ -10,7 +10,7 @@
 			<th colspan="3">&nbsp;</th>
 		</tr>
 		<tr>
-			<th colspan="3"><h3>PERUSAHAAN UMUM DAERAH PEMBANGUNAN SARANA JAYA<br/>PEMERINTAH DAERAH KHUSUS IBUKOTA JAKARTA</h3></th>
+			<th colspan="3"><h3>PERUSAHAAN XYZ<br/>PEMERINTAH DAERAH KHUSUS IBUKOTA JAKARTA</h3></th>
 		</tr>
 		<tr>
 			<th colspan="3">&nbsp;</th>

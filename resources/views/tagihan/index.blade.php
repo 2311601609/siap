@@ -123,7 +123,7 @@
 <span id="tm_1" class="t s8">2. Kwitansi akan dikeluarkan setelah dana diterima </span>
 <span id="tn_1" class="t s8">3. Pembayaran dengan cek dan giro agar dibuat a/n PD. Pembangunan Sarana Jaya </span>
 <span id="to_1" class="t s8">4. Untuk menghindari denda keterlambatan, pembayaran dilakukan sebelum jatuh tempo </span>
-<span id="tp_1" class="t s9">Perumda Pembangunan Sarana Jaya </span>
+<span id="tp_1" class="t s9">Perusahaan XYZ </span>
 <span id="tq_1" class="t s0">Gedung Sarana Jaya Lantai 3-4 </span>
 <span id="tr_1" class="t s0">Jl. Budi Kemuliaan I No. 1 Jakarta Pusat, Indonesia </span>
 <span id="ts_1" class="t s0">+6221 - 352 2667 - info@sarana-jaya.co.id </span>

@@ -19,6 +19,8 @@ class Authenticate
     
     public function handle($request, Closure $next)
     {
+        $base_url = \config('app.url');
+
         try{
 
             if( isset($_COOKIE['siap_token']) ){
@@ -93,7 +95,7 @@ class Authenticate
                                         }
                                         else
                                         {
-                                            return redirect()->guest('auth/logout?error=06');
+                                            return redirect()->guest($base_url.'auth/logout?error=06');
                                         }
                                     }
 
@@ -104,7 +106,7 @@ class Authenticate
                                     }
                                     else
                                     {
-                                        return redirect()->guest('auth/logout?error=05');
+                                        return redirect()->guest($base_url.'auth/logout?error=05');
                                     }
                                 }
 
@@ -120,7 +122,7 @@ class Authenticate
                             }
                             else
                             {
-                                return redirect()->guest('auth/logout?error=04');
+                                return redirect()->guest($base_url.'auth/logout?error=04');
                             }
                         }
 
@@ -131,7 +133,7 @@ class Authenticate
                         }
                         else
                         {
-                            return redirect()->guest('auth/logout?error=03');
+                            return redirect()->guest($base_url.'auth/logout?error=03');
                         }
                     }
                     
@@ -142,7 +144,7 @@ class Authenticate
                     }
                     else
                     {
-                        return redirect()->guest('auth/logout?error=02');
+                        return redirect()->guest($base_url.'auth/logout?error=02');
                     }
                 }
                 
@@ -154,7 +156,7 @@ class Authenticate
                 }
                 else
                 {
-                    return redirect()->guest('auth/logout?error=01');
+                    return redirect()->guest($base_url.'auth/logout?error=01');
                 }
             }
 
@@ -166,7 +168,7 @@ class Authenticate
             }
             else
             {
-                return redirect()->guest('auth/logout?error=09');
+                return redirect()->guest($base_url.'auth/logout?error=09');
             }
 
         }

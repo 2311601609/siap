@@ -7,7 +7,7 @@
 <table width="100%" cellspacing="0" cellpadding="1" style="border: 1px solid #000;font-size:12px; width: 100%;">
     <tbody>
         <tr>
-            <td colspan="10" style="text-align:left;font-size: 15px;background-color: #FFF;">PERUMDA PEMBANGUNAN SARANA JAYA</td>
+            <td colspan="10" style="text-align:left;font-size: 15px;background-color: #FFF;">PERUSAHAAN XYZ</td>
         </tr>
         <tr>
             <td colspan="10" style="text-align:left;font-size: 15px;background-color: #FFF;">LAPORAN LABA (RUGI) PERIODE {{ $params['tgl_pelaporan'] }}</td>

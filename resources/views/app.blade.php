@@ -10,8 +10,8 @@
     <meta name="keywords" content="SIAP V2, Sistem Informasi Akuntansi Perusahaan Versi 2">
     <meta name="author" content="PIXINVENT">
     <title>{{ $app_nama }} - {{ $app_versi }}</title>
-    <link rel="shortcut icon" type="image/x-icon" href="template/Apex6/app-assets/img/logo-sarana-jaya.png">
-    <link rel="shortcut icon" type="image/png" href="template/Apex6/app-assets/img/logo-sarana-jaya.png">
+    <link rel="shortcut icon" type="image/x-icon" href="template/Apex6/app-assets/img/logo.png">
+    <link rel="shortcut icon" type="image/png" href="template/Apex6/app-assets/img/logo.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-touch-fullscreen" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -118,7 +118,7 @@
                 <div class="logo clearfix">
                   <a class="logo-text float-left" ui-sref="/">
                     <!--<div class="logo-img"><img src="template/Apex6/app-assets/img/logo.png" alt="Apex Logo" /></div>-->
-                    <span class="text">SIAP V2</span>
+                    <span class="text">SIAP</span>
                   </a>
                   <a class="nav-toggle d-none d-lg-none d-xl-block" id="sidebarToggle" href="javascript:;">
                     <i class="toggle-icon ft-toggle-right" data-toggle="expanded"></i>

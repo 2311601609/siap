@@ -460,7 +460,7 @@ class KontrakController extends Controller
 		$dropdown = '';
 		if(session('kdlevel')=='11'){ // staf teknis divisi
 			if($output->status==0){ //rekam
-				$dropdown = '<option value="1">Kirim data</option>';
+				$dropdown = '<option value="2">Kirim data</option>';
 			}
 		}
 		elseif(session('kdlevel')=='08'){ // manager (JM)
