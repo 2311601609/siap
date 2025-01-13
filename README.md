@@ -44,6 +44,16 @@
   </section>
 
   <section>
+    <h2>Platform</h2>
+    <ul>
+      <li>Bahasa pemrograman PHP Versi 8</li>
+      <li>Laravel Versi 10</li>
+      <li>Angular JS Versi 2</li>
+      <li>Oracle DB Free Edition</li>
+    </ul>
+  </section>
+
+  <section>
     <h2>Instalasi</h2>
     <p>Ikuti langkah-langkah berikut untuk menjalankan proyek ini:</p>
     <div class="code">
