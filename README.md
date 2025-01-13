@@ -1,66 +1,57 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Sistem Informasi Akuntansi Perusahaan (SIAP)
+Deskripsi
+Sistem Informasi Akuntansi Perusahaan (SIAP) adalah proyek yang dirancang untuk mengembangkan solusi digital bagi perusahaan dalam mengelola data keuangan secara efisien, akurat, dan transparan. Proyek ini merupakan bagian dari tugas mata kuliah Perancangan Perangkat Lunak di Program Studi Magister Ilmu Komputer, Universitas Budi Luhur.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+SIAP dirancang untuk mengatasi tantangan sistem manual yang sering kali memakan waktu, rentan terhadap kesalahan manusia, dan tidak terintegrasi. Dengan SIAP, perusahaan dapat mengotomatiskan proses akuntansi, meningkatkan akurasi data, dan menyediakan informasi keuangan yang relevan untuk pengambilan keputusan yang lebih baik.
 
-## About Laravel
+Fitur Utama
+SIAP dikembangkan dengan modul-modul utama berikut:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Penganggaran: Pembuatan dan monitoring realisasi anggaran secara real-time.
+Kontrak: Pengelolaan data kontrak pelanggan, jadwal pembayaran, dan persyaratan kontrak.
+Penagihan (Akrual): Otomasi proses penagihan dan pelacakan piutang.
+Penerimaan: Pencatatan penerimaan kas dan bank, termasuk pembayaran pelanggan.
+Uang Muka Kegiatan (UMK): Manajemen uang muka untuk kegiatan tertentu.
+Pengeluaran (BUK): Pencatatan pengeluaran kas dan bank, termasuk pembayaran kepada supplier.
+Kas Kecil (Transito Kas Bendahara): Pengelolaan transaksi kas kecil dan rekonsiliasi kas besar.
+Laporan Keuangan: Generasi laporan otomatis seperti neraca, arus kas, laba rugi, dan laporan realisasi anggaran.
+Keunggulan Utama
+COA Dinamis: Pembuatan akun (COA) secara dinamis yang dapat dimapping ke transaksi otomatis, memudahkan pengguna non-akuntansi.
+Integrasi Modul: Data dari satu modul terupdate otomatis ke modul lainnya.
+Aksesibilitas: Sistem berbasis web yang dapat diakses kapan saja dan di mana saja.
+Keamanan: Sistem dilengkapi fitur keamanan untuk melindungi data keuangan perusahaan.
+Tujuan Pengembangan
+Meningkatkan efisiensi proses akuntansi dengan mengotomatiskan pencatatan dan pelaporan.
+Memastikan akurasi data melalui integrasi sistem yang terpusat.
+Memberikan laporan keuangan yang komprehensif untuk mendukung pengambilan keputusan.
+Meningkatkan transparansi bagi stakeholder melalui aksesibilitas informasi keuangan.
+Instalasi
+Clone repository ini:
+bash
+Salin kode
+git clone https://github.com/username/repository-name.git
+Instalasi dependensi backend dan frontend sesuai framework yang digunakan (misalnya Laravel dan Vue.js).
+Atur file konfigurasi seperti database di .env.
+Jalankan migrasi database dan seed data awal:
+bash
+Salin kode
+php artisan migrate --seed
+Jalankan server lokal:
+bash
+Salin kode
+php artisan serve
+Kontribusi
+Proyek ini terbuka untuk kontribusi. Anda dapat membantu dengan cara:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Menambahkan fitur baru.
+Memperbaiki bug.
+Mengoptimalkan performa sistem.
+Silakan kirimkan pull request atau ajukan masalah di halaman Issues.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Lisensi
+Proyek ini dilisensikan di bawah MIT License.
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Kontak
+Nama: Eko Firmansyah, Hanafi Firdaus
+Email: 2311601609@student.budiluhur.ac.id, 2311601583@budiluhur.ac.id
+Universitas: Universitas Budi Luhur
