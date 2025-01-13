@@ -4,8 +4,7 @@
     <h1>Sistem Informasi Akuntansi Perusahaan (SIAP)</h1>
   </header>
   <section>
-    <h2>Sponsored by</h2>
-    <p><strong>Setyawan Widyarto, Ph.D.</strong></p>
+    <p>Sponsored by : <strong>Setyawan Widyarto, Ph.D.</strong></p>
       https://github.com/swidyarto
   </section>  
   <section>
