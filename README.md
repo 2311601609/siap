@@ -3,7 +3,11 @@
     <header>
     <h1>Sistem Informasi Akuntansi Perusahaan (SIAP)</h1>
   </header>
-  
+  <section>
+    <h2>Sponsored by</h2>
+    <p><strong>Setyawan Widyarto, Ph.D.</strong></p>
+      https://github.com/swidyarto
+  </section>  
   <section>
     <h2>Deskripsi</h2>
     <p><strong>Sistem Informasi Akuntansi Perusahaan (SIAP)</strong> adalah solusi digital yang dirancang untuk meningkatkan efisiensi dan akurasi pengelolaan data keuangan perusahaan. Proyek ini dikembangkan sebagai bagian dari tugas mata kuliah <em>Perancangan Perangkat Lunak</em> di Program Studi Magister Ilmu Komputer, Universitas Budi Luhur.</p>
