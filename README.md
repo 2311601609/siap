@@ -48,13 +48,13 @@
     <div class="code">
       git clone https://github.com/2311601609/siap.git
     </div>
-    <p>Instalasi dependensi backend dan frontend, atur file konfigurasi seperti <code>.env</code>, lalu jalankan migrasi:</p>
+    <p>Instalasi dependensi backend dan frontend, atur file konfigurasi seperti <code>.env</code>, lalu jalankan :</p>
     <div class="code">
-      php artisan migrate --seed
+      COMPOSER_MEMORY_LIMIT=-1 composer install
     </div>
-    <p>Jalankan server lokal:</p>
+    <p>, lalu jalankan :</p>
     <div class="code">
-      php artisan serve
+      php artisan config: clear
     </div>
   </section>
 
